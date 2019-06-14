@@ -1,45 +1,90 @@
 @import '../style/var';
+// .van-dialog,.van-dialog--desctiption {
+//     padding:0 20px 20px 20px;
+//     box-sizing: border-box;
+//     &__footer {
+//       overflow: hidden;
+//       user-select: none;
 
+//       &--buttons {
+//         border-radius: 25px;       
+//         .van-button {
+//           flex: 1;
+//         }
+//       }
+//     }
+// }
 .van-dialog {
   position: fixed;
   top: 50%;
   left: 50%;
-  width: @dialog-width;
   overflow: hidden;
+  width: @dialog-width;
   font-size: @dialog-font-size;
-  background-color: @dialog-background-color;
+  transition: @dialog-transition;
   border-radius: @dialog-border-radius;
+  background-color: @dialog-background-color;
   transform: translate3d(-50%, -50%, 0);
   backface-visibility: hidden; // avoid blurry text after scale animation
-  transition: @dialog-transition;
+  @my-selector: van-dialog;
+  &&--description {
+    padding:0 20px 20px 20px;
+    box-sizing: border-box;
+    .@{my-selector}__footer {
+      overflow: hidden;
+      user-select: none;
+      &--buttons{
+        justify-content: space-between;
+      }
 
+      .van-button {
+        border-radius: 25px;
+        flex: unset;  
+        // width: 46%;     
+      }
+    }
+    .@{my-selector}__cancel{
+      background:@white;
+      color:@black-default;
+      border:1px solid @black-default;
+      margin-right: 15px;
+    }
+    
+  }
   &__header {
-    padding-top: @dialog-header-padding-top;
-    font-weight: @dialog-header-font-weight;
     text-align: center;
-
+    font-weight: @dialog-header-font-weight;
+    padding-top: @dialog-header-padding-top;
+    &--left {
+      text-align: left;
+    }
+    &--right {
+      text-align: right;
+    }
     &--isolated {
       padding: @dialog-header-isolated-padding;
     }
   }
 
   &__message {
-    max-height: @dialog-message-max-height;
     padding: @dialog-message-padding;
-    overflow-y: auto;
     font-size: @dialog-message-font-size;
     line-height: @dialog-message-line-height;
-
-    // allow newline charactor
-    white-space: pre-wrap;
+    max-height: @dialog-message-max-height;
+    overflow-y: auto;
     text-align: center;
     -webkit-overflow-scrolling: touch;
 
-    &--has-title {
-      padding-top: @dialog-has-title-message-padding-top;
-      color: @dialog-has-title-message-text-color;
-    }
+    // allow newline charactor
+    white-space: pre-wrap;
 
+    &--has-title {
+      color: @dialog-has-title-message-text-color;
+      padding-top: @dialog-has-title-message-padding-top;
+    }
+    &&--left,&&--right {
+      padding: @dialog-message-padding 0;
+    }
     &--left {
       text-align: left;
     }
@@ -48,7 +93,18 @@
       text-align: right;
     }
   }
-
+  &__cancel {
+    background:@gray-dark;
+    color:@black-default;
+  }
+  &__confirm {
+    background:@red;
+    color:@white;
+  }
+  &__footer::after{
+    // border: 0 solid #fff;
+    border: none;
+  }
   &__footer {
     overflow: hidden;
     user-select: none;
@@ -57,7 +113,7 @@
       display: flex;
 
       .van-button {
-        flex: 1;
+        // flex: 1;
       }
     }
   }
@@ -74,12 +130,12 @@
   }
 
   &-bounce-enter {
-    transform: translate3d(-50%, -50%, 0) scale(0.7);
     opacity: 0;
+    transform: translate3d(-50%, -50%, 0) scale(0.7);
   }
 
   &-bounce-leave-active {
-    transform: translate3d(-50%, -50%, 0) scale(0.9);
     opacity: 0;
+    transform: translate3d(-50%, -50%, 0) scale(0.9);
   }
 }

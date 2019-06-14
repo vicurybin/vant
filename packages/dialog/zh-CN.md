@@ -149,6 +149,7 @@ export default {
 | title | 标题 | `String` | - | - |
 | message | 文本内容，支持通过`\n`换行 | `String` | - | - |
 | messageAlign | 内容对齐方式，可选值为`left` `right` | `String` | `center` | 1.5.0 |
+| 私titleAlign | 标题对齐方式，可选值为`left` `right` | `String` | `center` | 1.5.0 |
 | className | 自定义类名 | `String | Array | Object` | - | 1.1.7 |
 | showConfirmButton | 是否展示确认按钮 | `Boolean` | `true` | - |
 | showCancelButton | 是否展示取消按钮 | `Boolean` | `false` | - |
@@ -161,7 +162,7 @@ export default {
 | lockScroll | 是否锁定背景滚动 | `Boolean` | `true` | - |
 | beforeClose | 关闭前的回调函数，<br>调用 done() 后关闭弹窗，<br>调用 done(false) 阻止弹窗关闭 | `(action, done) => void` | - | 1.1.6 |
 | getContainer | 指定挂载的节点，可以传入选择器，<br>或一个返回节点的函数 | `String | () => HTMLElement` | `body` | 1.6.11 |
-
+| 私isDescriptionType | 是否启用描述模式，描述模式适合显示多文本，容器有padding值，按钮为圆角| `Boolean` | - | 1.6.11 |
 ### Props
 
 通过组件调用 `Dialog` 时，支持以下 Props：
@@ -172,6 +173,7 @@ export default {
 | title | 标题 | `String` | - | - |
 | message | 内容 | `String` | - | - |
 | message-align | 内容对齐方式，可选值为`left` `right` | `String` | `center` | 1.5.0 |
+| 私titleAlign | 标题对齐方式，可选值为`left` `right` | `String` | `center` | 1.5.0 |
 | show-confirm-button | 是否展示确认按钮 | `Boolean` |  `true` | - |
 | show-cancel-button | 是否展示取消按钮 | `Boolean` |  `false` | - |
 | cancel-button-text | 取消按钮文案 | `String` | `取消` | - |
@@ -183,6 +185,7 @@ export default {
 | lock-scroll | 是否锁定背景滚动 | `Boolean` | `true` | - |
 | before-close | 关闭前的回调函数，<br>调用 done() 后关闭弹窗，<br>调用 done(false) 阻止弹窗关闭 | `(action, done) => void` | - | 1.1.6 |
 | get-container | 指定挂载的节点，可以传入选择器，<br>或一个返回节点的函数 | `String | () => HTMLElement` | `body` | 1.1.6 |
+| 私isDescriptionType | 是否启用描述模式，描述模式适合显示多文本，容器有padding值，按钮为圆角| `Boolean` | - | 1.6.11 |
 
 ### Events
 

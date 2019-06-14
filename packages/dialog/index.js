@@ -53,6 +53,7 @@ Dialog.defaultOptions = {
   lockScroll: true,
   beforeClose: null,
   messageAlign: '',
+  titleAlign: '',
   getContainer: 'body',
   cancelButtonText: '',
   cancelButtonColor: null,
@@ -61,6 +62,7 @@ Dialog.defaultOptions = {
   showConfirmButton: true,
   showCancelButton: false,
   closeOnClickOverlay: false,
+  isDescriptionType: false,
   callback: action => {
     instance[action === 'confirm' ? 'resolve' : 'reject'](action);
   }

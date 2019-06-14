@@ -14,11 +14,13 @@ export default sfc({
     callback: Function,
     beforeClose: Function,
     messageAlign: String,
+    titleAlign: String,
     cancelButtonText: String,
     cancelButtonColor: String,
     confirmButtonText: String,
     confirmButtonColor: String,
     showCancelButton: Boolean,
+    isDescriptionType: Boolean,
     showConfirmButton: {
       type: Boolean,
       default: true
@@ -77,13 +79,12 @@ export default sfc({
       return;
     }
 
-    const { title, message, messageAlign } = this;
+    const { title, message, messageAlign, titleAlign } = this;
     const children = this.slots();
 
     const Title = title && (
-      <div class={bem('header', { isolated: !message && !children })}>{title}</div>
+      <div class={bem('header', { isolated: !message && !children, [titleAlign]: titleAlign })}>{title}</div>
     );
-
     const Content = (children || message) && (
       <div class={bem('content')}>
         {children || (
@@ -127,12 +128,7 @@ export default sfc({
 
     return (
       <transition name="van-dialog-bounce">
-        <div
-          vShow={this.value}
-          role="dialog"
-          aria-labelledby={title || message}
-          class={[bem(), this.className]}
-        >
+        <div vShow={this.value} class={[bem({ description: this.isDescriptionType }), this.className]}>
           {Title}
           {Content}
           {ButtonGroup}
