@@ -2,9 +2,7 @@
   <demo-section>
     <demo-block :title="$t('type')">
       <div class="demo-button-row">
-        <van-button type="default"
-          size="small"
-        >{{ $t('default') }}</van-button>
+        <van-button type="default">{{ $t('default') }}</van-button>
         <van-button type="primary">{{ $t('primary') }}</van-button>
         <van-button type="info">{{ $t('info') }}</van-button>
       </div>

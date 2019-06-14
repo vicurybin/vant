@@ -16,8 +16,8 @@ then
   git commit -am "[release] $VERSION"
 
   # publish
-  git push origin 1.x
-  git push origin refs/tags/v$VERSION
+  # git push origin 1.x
+  # git push origin refs/tags/v$VERSION
 
   if [[ $VERSION =~ [beta] ]]
   then
