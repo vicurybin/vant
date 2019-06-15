@@ -21,6 +21,7 @@ export type ActionSheetItem = {
 
 export type ActionSheetProps = PopupMixinProps & {
   title?: string;
+  titleAlign: string;
   actions: ActionSheetItem[];
   cancelText?: string;
   closeOnClickAction?: boolean;
@@ -35,7 +36,7 @@ function ActionSheet(
   slots: DefaultSlots,
   ctx: RenderContext<ActionSheetProps>
 ) {
-  const { title, cancelText } = props;
+  const { title, titleAlign, cancelText } = props;
 
   function onInput(value: boolean) {
     emit(ctx, 'input', value);
@@ -53,7 +54,7 @@ function ActionSheet(
   function Header() {
     if (title) {
       return (
-        <div class={[bem('header'), 'van-hairline--bottom']}>
+        <div class={[bem('header', { [titleAlign]: titleAlign }), 'van-hairline--bottom']}>
           {title}
           <Icon name="close" class={bem('close')} onClick={onCancel} />
         </div>
@@ -144,6 +145,10 @@ function ActionSheet(
 ActionSheet.props = {
   ...PopupMixin.props,
   title: String,
+  titleAlign: {
+    type: String,
+    default: 'center',
+  },
   actions: Array,
   cancelText: String,
   closeOnClickAction: Boolean,

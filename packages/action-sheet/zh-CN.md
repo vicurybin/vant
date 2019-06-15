@@ -102,6 +102,7 @@ export default {
 |------|------|------|------|------|
 | actions | 菜单选项 | `Array` | `[]` | - |
 | title | 标题 | `String` | - | - |
+| 私titleAlign | 标题位置,可选left | `String` | center | - |
 | cancel-text | 取消按钮文字 | `String` | - | - |
 | overlay | 是否显示遮罩层 | `Boolean` | `true` | - |
 | close-on-click-action | 是否在点击选项后关闭 | `Boolean` | `false` | 2.0.0 |
