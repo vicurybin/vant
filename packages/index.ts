@@ -85,7 +85,7 @@ declare global {
   }
 }
 
-const version = '1.0.1';
+const version = '1.0.31';
 const components = [
   ActionSheet,
   AddressEdit,

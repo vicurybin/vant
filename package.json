@@ -1,6 +1,6 @@
 {
   "name": "plumui",
-  "version": "1.0.1",
+  "version": "1.0.31",
   "description": "Mobile UI Components built on Vue",
   "main": "lib/index.js",
   "module": "es/index.js",

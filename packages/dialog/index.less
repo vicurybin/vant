@@ -55,6 +55,7 @@
     text-align: center;
     font-weight: @dialog-header-font-weight;
     padding-top: @dialog-header-padding-top;
+    background:@white;
     &--left {
       text-align: left;
     }
@@ -65,7 +66,9 @@
       padding: @dialog-header-isolated-padding;
     }
   }
-
+  &__content {
+    background: @white;
+  }
   &__message {
     padding: @dialog-message-padding;
     font-size: @dialog-message-font-size;
@@ -74,7 +77,7 @@
     overflow-y: auto;
     text-align: center;
     -webkit-overflow-scrolling: touch;
-
+    background:@white;
     // allow newline charactor
     white-space: pre-wrap;
 
@@ -111,7 +114,7 @@
 
     &--buttons {
       display: flex;
-
+      background: @red;
       .van-button {
         // flex: 1;
       }
