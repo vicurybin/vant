@@ -1,8 +1,9 @@
-import { use, isDef } from '../utils';
-import { raf } from '../utils/dom/raf';
+import { use, isDef, suffixPx } from '../utils';
+import { scrollLeftTo } from './utils';
 import { on, off } from '../utils/dom/event';
 import { TouchMixin } from '../mixins/touch';
 import { ParentMixin } from '../mixins/relation';
+import { BindEventMixin } from '../mixins/bind-event';
 import {
   setScrollTop,
   getScrollTop,
@@ -14,7 +15,14 @@ const [sfc, bem] = use('tabs');
 const tabBem = use('tab')[1];
 
 export default sfc({
-  mixins: [TouchMixin, ParentMixin('vanTabs')],
+  mixins: [
+    TouchMixin,
+    ParentMixin('vanTabs'),
+    BindEventMixin(function (bind, isBind) {
+      this.bindScrollEvent(isBind);
+      bind(window, 'resize', this.setLine, true);
+    })
+  ],
 
   model: {
     prop: 'active'
@@ -27,6 +35,8 @@ export default sfc({
     offsetTop: Number,
     swipeable: Boolean,
     background: String,
+    lineWidth: [Number, String],
+    lineHeight: [Number, String],
     titleActiveColor: String,
     titleInactiveColor: String,
     border: {
@@ -40,14 +50,6 @@ export default sfc({
     lazyRender: {
       type: Boolean,
       default: true
-    },
-    lineWidth: {
-      type: Number,
-      default: null
-    },
-    lineHeight: {
-      type: Number,
-      default: null
     },
     active: {
       type: [Number, String],
@@ -68,16 +70,13 @@ export default sfc({
   },
 
   data() {
+    this.scrollEvent = false;
+
     return {
       position: '',
       curActive: null,
       lineStyle: {
         backgroundColor: this.color
-      },
-      events: {
-        resize: false,
-        sticky: false,
-        swipeable: false
       }
     };
   },
@@ -149,12 +148,8 @@ export default sfc({
       }
     },
 
-    sticky() {
-      this.handlers(true);
-    },
-
-    swipeable() {
-      this.handlers(true);
+    sticky(val) {
+      this.bindScrollEvent(val);
     }
   },
 
@@ -167,53 +162,22 @@ export default sfc({
     this.setLine();
   },
 
-  deactivated() {
-    this.handlers(false);
-  },
-
-  beforeDestroy() {
-    this.handlers(false);
-  },
-
   methods: {
     onShow() {
       this.$nextTick(() => {
         this.inited = true;
-        this.handlers(true);
         this.scrollIntoView(true);
       });
     },
 
-    // whether to bind sticky listener
-    handlers(bind) {
-      const { events } = this;
-      const sticky = this.sticky && bind;
-      const swipeable = this.swipeable && bind;
+    bindScrollEvent(isBind) {
+      const sticky = this.sticky && isBind;
 
-      // listen to window resize event
-      if (events.resize !== bind) {
-        events.resize = bind;
-        (bind ? on : off)(window, 'resize', this.setLine, true);
-      }
-
-      // listen to scroll event
-      if (events.sticky !== sticky) {
-        events.sticky = sticky;
+      if (this.scrollEvent !== sticky) {
+        this.scrollEvent = sticky;
         this.scrollEl = this.scrollEl || getScrollEventTarget(this.$el);
         (sticky ? on : off)(this.scrollEl, 'scroll', this.onScroll, true);
         this.onScroll();
-      }
-
-      // listen to touch event
-      if (events.swipeable !== swipeable) {
-        events.swipeable = swipeable;
-        const { content } = this.$refs;
-        const action = swipeable ? on : off;
-
-        action(content, 'touchstart', this.touchStart);
-        action(content, 'touchmove', this.touchMove);
-        action(content, 'touchend', this.onTouchEnd);
-        action(content, 'touchcancel', this.onTouchEnd);
       }
     },
 
@@ -270,12 +234,12 @@ export default sfc({
         const tab = tabs[this.curActive];
         const { lineWidth, lineHeight } = this;
         const width = isDef(lineWidth) ? lineWidth : tab.offsetWidth / 2;
-        const left = tab.offsetLeft + (tab.offsetWidth - width) / 2;
+        const left = tab.offsetLeft + tab.offsetWidth / 2;
 
         const lineStyle = {
-          width: `${width}px`,
+          width: suffixPx(width),
           backgroundColor: this.color,
-          transform: `translateX(${left}px)`
+          transform: `translateX(${left}px) translateX(-50%)`
         };
 
         if (shouldAnimate) {
@@ -283,7 +247,7 @@ export default sfc({
         }
 
         if (isDef(lineHeight)) {
-          const height = `${lineHeight}px`;
+          const height = suffixPx(lineHeight);
           lineStyle.height = height;
           lineStyle.borderRadius = height;
         }
@@ -344,29 +308,10 @@ export default sfc({
       }
 
       const { nav } = this.$refs;
-      const { scrollLeft, offsetWidth: navWidth } = nav;
-      const { offsetLeft, offsetWidth: tabWidth } = tabs[this.curActive];
+      const active = tabs[this.curActive];
+      const to = active.offsetLeft - (nav.offsetWidth - active.offsetWidth) / 2;
 
-      this.scrollTo(nav, scrollLeft, offsetLeft - (navWidth - tabWidth) / 2, immediate);
-    },
-
-    // animate the scrollLeft of nav
-    scrollTo(el, from, to, immediate) {
-      if (immediate) {
-        el.scrollLeft += to - from;
-        return;
-      }
-
-      let count = 0;
-      const frames = Math.round((this.duration * 1000) / 16);
-      const animate = () => {
-        el.scrollLeft += (to - from) / frames;
-        /* istanbul ignore next */
-        if (++count < frames) {
-          raf(animate);
-        }
-      };
-      animate();
+      scrollLeftTo(nav, to, immediate ? 0 : this.duration);
     },
 
     // render title slot of child tab
@@ -434,6 +379,16 @@ export default sfc({
       </div>
     ));
 
+    let contentListeners;
+    if (this.swipeable) {
+      contentListeners = {
+        touchstart: this.touchStart,
+        touchmove: this.touchMove,
+        touchend: this.onTouchEnd,
+        touchcancel: this.onTouchEnd
+      };
+    }
+
     return (
       <div class={bem([type])}>
         <div
@@ -451,7 +406,7 @@ export default sfc({
             {this.slots('nav-right')}
           </div>
         </div>
-        <div ref="content" class={bem('content', { animated })}>
+        <div class={bem('content', { animated })} {...{ on: contentListeners }}>
           {animated ? (
             <div class={bem('track')} style={this.trackStyle}>
               {this.slots()}
