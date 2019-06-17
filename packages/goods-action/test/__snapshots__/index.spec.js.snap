@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button render default slot 1`] = `<button class="van-button van-button--default van-button--large van-button--square van-goods-action-button"><span class="van-button__text">Default Content</span></button>`;
+
+exports[`Icon render default slot 1`] = `
+<div role="button" tabindex="0" class="van-goods-action-icon van-hairline">
+  <div class="van-icon van-icon-undefined van-goods-action-icon__icon">
+    <!---->
+  </div>Default Content
+</div>
+`;
