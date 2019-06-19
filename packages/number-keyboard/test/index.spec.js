@@ -126,3 +126,48 @@ test('focus on key', () => {
   trigger(key, 'touchend');
   expect(wrapper).toMatchSnapshot();
 });
+
+test('bind value', () => {
+  const wrapper = mount(NumberKeyboard, {
+    propsData: {
+      value: ''
+    },
+    listeners: {
+      'update:value': value => {
+        wrapper.setProps({ value });
+      }
+    }
+  });
+
+  const keys = wrapper.findAll('.van-key');
+  keys.at(0).trigger('click');
+  keys.at(1).trigger('click');
+
+  expect(wrapper.vm.value).toEqual('12');
+
+  keys.at(11).trigger('click');
+  expect(wrapper.vm.value).toEqual('1');
+});
+
+test('maxlength', () => {
+  const onInput = jest.fn();
+  const wrapper = mount(NumberKeyboard, {
+    propsData: {
+      value: '',
+      maxlength: 1
+    },
+    listeners: {
+      input: onInput,
+      'update:value': value => {
+        wrapper.setProps({ value });
+      }
+    }
+  });
+
+  const keys = wrapper.findAll('.van-key');
+  keys.at(0).trigger('click');
+  keys.at(1).trigger('click');
+
+  expect(wrapper.vm.value).toEqual('1');
+  expect(onInput).toHaveBeenCalledTimes(1);
+});
