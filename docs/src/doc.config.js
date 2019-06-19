@@ -9,7 +9,7 @@ export const searchConfig = {
 
 export const versions = [version, '1.x'];
 
-export const github = 'https://github.com/youzan/vant';
+export const github = 'https://github.com/vicurybin/vant';
 
 export default {
   'zh-CN': {
