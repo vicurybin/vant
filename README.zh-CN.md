@@ -16,9 +16,9 @@
 <p align="center">
   🔥 <a href="https://youzan.github.io/vant">文档网站</a>
   &nbsp;
-  🇬🇧 <a href="./README.md">访问英文版</a>
+  🇬🇧 <a href="./README.md">英文版介绍</a>
   &nbsp;
-  🚀 <a href="https://github.com/youzan/vant-weapp" target="_blank">Vant Weapp - 小程序版</a>
+  🚀 <a href="https://github.com/youzan/vant-weapp" target="_blank">小程序版</a>
 </p>
 
 ---
@@ -70,9 +70,8 @@ vant 也支持按需引入、CDN 引入等方式，详细说明见 [快速上手
 
 * [详细文档](https://youzan.github.io/vant)
 * [更新日志](https://youzan.github.io/vant#/zh-CN/changelog)
-* [Vant Demo: 示例工程](https://github.com/youzan/vant-demo)
-* [Vant Weapp: 小程序 UI](https://github.com/youzan/vant-weapp)
-* [Zent: PC 端 React UI](https://youzan.github.io/zent)
+* [Vant 示例仓库](https://github.com/youzan/vant-demo)
+* [VantWeapp 小程序组件](https://github.com/youzan/vant-weapp)
 
 ## 手机预览
 

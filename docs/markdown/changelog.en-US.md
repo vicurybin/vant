@@ -1,6 +1,85 @@
-# 更新日志
+# Changelog
 
-## [v2.0.1](https://github.com/youzan/vant/tree/v2.0.1)
+### [v2.0.5](https://github.com/youzan/vant/tree/v2.0.5)
+`2019-07-02`
+
+**Improvements**
+
+- Stepper: add button-size prop [\#3714](https://github.com/youzan/vant/pull/3714)
+- Stepper: support long press gesture [\#3711](https://github.com/youzan/vant/pull/3711)
+- Dialog: add close-on-popstate prop [\#3709](https://github.com/youzan/vant/pull/3709)
+
+**Bug Fixes**
+
+- fix postcss config overwritten issue
+
+
+### [v2.0.4](https://github.com/youzan/vant/tree/v2.0.4)
+`2019-07-01`
+
+**Improvements**
+
+- add Grid、GridItem component [\#3669](https://github.com/youzan/vant/pull/3669) [\#3682](https://github.com/youzan/vant/pull/3682) [\#3683](https://github.com/youzan/vant/pull/3683)
+- Field: add arrow-direction prop [\#3679](https://github.com/youzan/vant/pull/3679)
+- Sidebar: add to、replace prop [\#3696](https://github.com/youzan/vant/pull/3696)
+- Sidebar: support use v-model to bind active key [\#3698](https://github.com/youzan/vant/pull/3698)
+- IndexBar: add class for active index [\#3692](https://github.com/youzan/vant/pull/3692)
+- Uploader: support number type of name prop [\#3681](https://github.com/youzan/vant/pull/3681)
+- SwipeCell: add name prop [\#3680](https://github.com/youzan/vant/pull/3680)
+- AddressEdit: add detail-maxlength prop [\#3707](https://github.com/youzan/vant/pull/3707)
+- GoodsActionIcon: add icon slot [\#3705](https://github.com/youzan/vant/pull/3705)
+
+**Bug Fixes**
+
+- fix Collapse flick in safari [\#3686](https://github.com/youzan/vant/pull/3686)
+- fix Picker compatibility issues on lower versions of Android [\#3688](https://github.com/youzan/vant/pull/3688)
+
+
+### [v2.0.3](https://github.com/youzan/vant/tree/v2.0.3)
+`2019-06-27`
+
+**Improvements**
+
+- ActionSheet: add duration prop [\#3608](https://github.com/youzan/vant/pull/3608)
+- ActionSheet: add open、opened events [\#3639](https://github.com/youzan/vant/pull/3639)
+- ActionSheet: add close、closed events [\#3639](https://github.com/youzan/vant/pull/3639)
+- Icon: add fit mode for image content [\#3667](https://github.com/youzan/vant/pull/3667)
+- Icon: update checked、comment、comment-o icon [\#3615](https://github.com/youzan/vant/pull/3615)
+- ImagePreview: add onChange option [\#3630](https://github.com/youzan/vant/pull/3630)
+- Popup: optimize overlay animation duration [\#3610](https://github.com/youzan/vant/pull/3610)
+- Uploader: support preview non-image file [\#3604](https://github.com/youzan/vant/pull/3604)
+- Uploader: support click to preview image [\#3603](https://github.com/youzan/vant/pull/3603)
+- Stepper: add less vars [\#3599](https://github.com/youzan/vant/pull/3599)
+
+**Bug Fixes**
+
+- fix ImagePreview should lock scroll [\#3645](https://github.com/youzan/vant/pull/3645)
+- fix Tab may cause error when render title slot [\#3631](https://github.com/youzan/vant/pull/3631)
+- fix vetur auto-complete [\#3617](https://github.com/youzan/vant/pull/3617)
+
+
+### [v2.0.2](https://github.com/youzan/vant/tree/v2.0.2)
+`2019-06-21`
+
+**Improvements**
+
+- Card: add click-thumb event [\#3586](https://github.com/youzan/vant/pull/3586)
+- CouponList: add enabled-title、disabled-title props [\#3578](https://github.com/youzan/vant/pull/3578)
+- Slider: min/max can set any value [\#3566](https://github.com/youzan/vant/pull/3566)
+- Uploader: before-read prop support promise mode [\#3572](https://github.com/youzan/vant/pull/3572)
+- Picker: update acceleration rate [\#3556](https://github.com/youzan/vant/pull/3556)
+- NumberKeyboard: support v-model [\#3531](https://github.com/youzan/vant/pull/3531)
+- NumberKeyboard: add maxlength prop [\#3532](https://github.com/youzan/vant/pull/3532)
+- add sideEffects to enable tree shaking [\#3530](https://github.com/youzan/vant/pull/3530)
+
+**Bug Fixes**
+
+- fix Button default margin in safari [\#3577](https://github.com/youzan/vant/pull/3577)
+- fix Sku can not preview image when only have goods picture [\#3569](https://github.com/youzan/vant/pull/3569)
+- fix Toast missing type definition of clear method [\#3542](https://github.com/youzan/vant/pull/3542)
+
+
+### [v2.0.1](https://github.com/youzan/vant/tree/v2.0.1)
 `2019-06-15`
 
 **Improvements**
