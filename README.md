@@ -17,9 +17,9 @@
 <p align="center">
   🔥 <a href="https://youzan.github.io/vant">文档网站</a>
   &nbsp;
-  🇨🇳 <a href="./README.zh-CN.md">访问中文版</a>
+  🇨🇳 <a href="./README.zh-CN.md">中文版介绍</a>
   &nbsp;
-  🚀 <a href="https://github.com/youzan/vant-weapp" target="_blank">Vant Weapp - 小程序版</a>
+  🚀 <a href="https://github.com/youzan/vant-weapp" target="_blank">小程序版</a>
 </p>
 
 ---
@@ -70,8 +70,7 @@ Modern browsers and Android 4.0+, iOS 6+.
 * [Documentation](https://youzan.github.io/vant)
 * [Changelog](https://youzan.github.io/vant#/en-US/changelog)
 * [Vant Demo](https://github.com/youzan/vant-demo)
-* [Vant Weapp: Weapp UI](https://github.com/youzan/vant-weapp)
-* [Zent: PC UI base on React](https://youzan.github.io/zent)
+* [Vant Weapp](https://github.com/youzan/vant-weapp)
 
 ## Preview
 

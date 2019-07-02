@@ -1,5 +1,84 @@
 # 更新日志
 
+### [v2.0.5](https://github.com/youzan/vant/tree/v2.0.5)
+`2019-07-02`
+
+**Improvements**
+
+- Stepper: 支持长按手势 [\#3711](https://github.com/youzan/vant/pull/3711)
+- Stepper: 新增 button-size 属性 [\#3714](https://github.com/youzan/vant/pull/3714)
+- Dialog: 新增 close-on-popstate 属性 [\#3709](https://github.com/youzan/vant/pull/3709)
+
+**Bug Fixes**
+
+- 修复 postcss 配置对 vant 不生效的问题
+
+
+### [v2.0.4](https://github.com/youzan/vant/tree/v2.0.4) 🇨🇳
+`2019-07-01`
+
+**Improvements**
+
+- 新增 Grid、GridItem 组件 [\#3669](https://github.com/youzan/vant/pull/3669) [\#3682](https://github.com/youzan/vant/pull/3682) [\#3683](https://github.com/youzan/vant/pull/3683)
+- Field: 新增 arrow-direction 属性 [\#3679](https://github.com/youzan/vant/pull/3679)
+- Sidebar: 新增 to、replace 属性 [\#3696](https://github.com/youzan/vant/pull/3696)
+- Sidebar: 支持通过 v-model 绑定当前项索引 [\#3698](https://github.com/youzan/vant/pull/3698)
+- IndexBar: 新增选中状态的类名，用于定制样式 [\#3692](https://github.com/youzan/vant/pull/3692)
+- Uploader: 支持 Number 类型的 name 属性 [\#3681](https://github.com/youzan/vant/pull/3681)
+- SwipeCell: 新增 name 属性 [\#3680](https://github.com/youzan/vant/pull/3680)
+- AddressEdit: 新增 detail-maxlength 属性 [\#3707](https://github.com/youzan/vant/pull/3707)
+- GoodsActionIcon: 新增 icon 插槽 [\#3705](https://github.com/youzan/vant/pull/3705)
+
+**Bug Fixes**
+
+- 修复 Collapse 在 safari 浏览器上动画可能闪烁的问题 [\#3686](https://github.com/youzan/vant/pull/3686)
+- 修复 Picker 在低版本 Android 机器上的兼容性问题 [\#3688](https://github.com/youzan/vant/pull/3688)
+
+
+### [v2.0.3](https://github.com/youzan/vant/tree/v2.0.3)
+`2019-06-27`
+
+**Improvements**
+
+- ActionSheet: 新增 duration 属性 [\#3608](https://github.com/youzan/vant/pull/3608)
+- ActionSheet: 新增 open、opened 事件 [\#3639](https://github.com/youzan/vant/pull/3639)
+- ActionSheet: 新增 close、closed 事件 [\#3639](https://github.com/youzan/vant/pull/3639)
+- ImagePreview: 新增 onChange 选项 [\#3630](https://github.com/youzan/vant/pull/3630)
+- Popup: 优化蒙层动画时长 [\#3610](https://github.com/youzan/vant/pull/3610)
+- Uploader: 支持点击查看大图 [\#3603](https://github.com/youzan/vant/pull/3603)
+- Uploader: 支持预览非图片文件 [\#3604](https://github.com/youzan/vant/pull/3604)
+- Stepper: 新增多个 Less 变量 [\#3599](https://github.com/youzan/vant/pull/3599)
+- Icon: 更新 checked、comment、comment-o 图标 [\#3615](https://github.com/youzan/vant/pull/3615)
+
+**Bug Fixes**
+
+- 修复 Icon 传入图片时被拉伸的问题 [\#3667](https://github.com/youzan/vant/pull/3667)
+- 修复 ImagePreview 滚动穿透问题 [\#3645](https://github.com/youzan/vant/pull/3645)
+- 修复 Tab 使用 title slot 时可能报错的问题 [\#3631](https://github.com/youzan/vant/pull/3631)
+- 修复 vetur 插件自动补全组件属性不生效的问题 [\#3617](https://github.com/youzan/vant/pull/3617)
+
+
+### [v2.0.2](https://github.com/youzan/vant/tree/v2.0.2)
+`2019-06-21`
+
+**Improvements**
+
+- Picker: 优化滚动速率 [\#3556](https://github.com/youzan/vant/pull/3556)
+- Card: 新增 click-thumb 事件 [\#3586](https://github.com/youzan/vant/pull/3586)
+- CouponList: 新增 enabled-title、disabled-title 属性 [\#3578](https://github.com/youzan/vant/pull/3578)
+- Slider:  支持传入任意范围的 min、max 值 [\#3566](https://github.com/youzan/vant/pull/3566)
+- Uploader: 支持 before-read 属性返回 Promise [\#3572](https://github.com/youzan/vant/pull/3572)
+- NumberKeyboard: 支持 v-model 绑定输入值 [\#3531](https://github.com/youzan/vant/pull/3531)
+- NumberKeyboard: 新增 maxlength 属性 [\#3532](https://github.com/youzan/vant/pull/3532)
+- 新增 sideEffects 配置以支持 tree shaking [\#3530](https://github.com/youzan/vant/pull/3530)
+
+**Bug Fixes**
+
+- 修复 Sku 图片预览可能报错的问题 [\#3569](https://github.com/youzan/vant/pull/3569)
+- 修复 Button 在 safari 浏览器上存在外边距的问题 [\#3577](https://github.com/youzan/vant/pull/3577)
+- 修复 Toast clear 方法类型定义缺少参数的问题 [\#3542](https://github.com/youzan/vant/pull/3542)
+
+
 ### [v2.0.1](https://github.com/youzan/vant/tree/v2.0.1)
 `2019-06-15`
 
