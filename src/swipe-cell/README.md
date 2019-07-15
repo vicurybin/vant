@@ -14,23 +14,16 @@ Vue.use(SwipeCell);
 
 ```html
 <van-swipe-cell>
-  <van-button
-    square
-    slot="left"
-    type="danger"
-    text="Select"
-  />
-  <van-cell
-    :border="false"
-    title="Cell"
-    value="Cell Content"
-  />
-  <van-button
-    square
-    slot="right"
-    type="danger"
-    text="Delete"
-  />
+  <template slot="left">
+    <van-button square type="primary" text="Select" />
+  </template>
+
+  <van-cell :border="false" title="Cell" value="Cell Content" />
+
+  <template slot="right">
+    <van-button square type="danger" text="Delete" />
+    <van-button square type="primary" text="Collect"/>
+  </template>
 </van-swipe-cell>
 ```
 
@@ -38,23 +31,15 @@ Vue.use(SwipeCell);
 
 ```html
 <van-swipe-cell :on-close="onClose">
-  <van-button
-    square
-    slot="left"
-    type="danger"
-    text="Select"
-  />
-  <van-cell
-    :border="false"
-    title="Cell"
-    value="Cell Content"
-  />
-  <van-button
-    square
-    slot="right"
-    type="danger"
-    text="Delete"
-  />
+  <template slot="left">
+    <van-button square type="primary" text="Select" />
+  </template>
+
+  <van-cell :border="false" title="Cell" value="Cell Content" />
+
+  <template slot="right">
+    <van-button square type="danger" text="Delete" />
+  </template>
 </van-swipe-cell>
 ```
 
@@ -87,11 +72,11 @@ export default {
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|
-| name | Identifier of SwipeCell | `String | Number` | - |
+| name | Identifier of SwipeCell | `string | number` | - |
 | on-close | Callback function before close | `Function` | - |
-| disabled | Whether to disabled swipe | `Boolean` | `false` |
-| left-width | Width of the left swipe area | `Number` | `auto` |
-| right-width | Width of the right swipe area | `Number` | `auto` |
+| disabled | Whether to disabled swipe | `boolean` | `false` |
+| left-width | Width of the left swipe area | `number` | `auto` |
+| right-width | Width of the right swipe area | `number` | `auto` |
 
 ### Slots
 
@@ -111,9 +96,9 @@ export default {
 
 | Attribute | Description | Type |
 |------|------|------|
-| clickPosition | Click positon (`left` `right` `cell` `outside`) | `String` |
-| instance | SwipeCell instance | `Object` |
-| detail | Detail info | `Object` |
+| clickPosition | Click positon (`left` `right` `cell` `outside`) | `string` |
+| instance | SwipeCell instance | `object` |
+| detail | Detail info | `object` |
 
 ### Methods
 

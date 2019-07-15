@@ -102,21 +102,21 @@ export default {
 }
 ```
 
-### 常见问题
+## 常见问题
 
-#### List 的运行机制是什么？
+### List 的运行机制是什么？
 
 List 会监听浏览器的滚动事件并计算列表的位置，当列表底部与可视区域的距离小于`offset`时，List 会触发一次 load 事件。
 
-#### 为什么 List 初始化后会立即触发 load 事件？
+### 为什么 List 初始化后会立即触发 load 事件？
 
 List 初始化后会触发一次 load 事件，用于加载第一屏的数据，这个特性可以通过`immediate-check`属性关闭。
 
-#### 为什么会连续触发 load 事件？
+### 为什么会连续触发 load 事件？
 
 如果一次请求加载的数据条数较少，导致列表内容无法铺满当前屏幕，List 会继续触发 load 事件，直到内容铺满屏幕或数据全部加载完成。因此你需要调整每次获取的数据条数，理想情况下每次请求获取的数据条数应能够填满一屏高度。
 
-#### loading 和 finished 分别是什么含义？
+### loading 和 finished 分别是什么含义？
 
 `List`有以下三种状态，理解这些状态有助于你正确地使用`List`组件：
 
@@ -126,6 +126,10 @@ List 初始化后会触发一次 load 事件，用于加载第一屏的数据，
 
 在每次请求完毕后，需要手动将`loading`设置为`false`，表示加载结束
 
+### 使用 float 布局后一直触发加载？
+
+若 List 的内容使用了 float 布局，请使用`van-clearfix`清除浮动，使得 List 能正确判断元素位置
+
 
 ## API
 
@@ -133,15 +137,15 @@ List 初始化后会触发一次 load 事件，用于加载第一屏的数据，
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|------|------|
-| v-model | 是否处于加载状态，加载过程中不触发`load`事件 | `Boolean` | `false` | - |
-| finished | 是否已加载完成，加载完成后不再触发`load`事件 | `Boolean` | `false` | - |
-| error | 是否加载失败，加载失败后点击错误提示可以重新<br>触发`load`事件，必须使用`sync`修饰符 | `Boolean` | `false` | - |
-| offset | 滚动条与底部距离小于 offset 时触发`load`事件 | `Number` | `300` | - |
-| loading-text | 加载过程中的提示文案 | `String` | `加载中...` | - |
-| finished-text | 加载完成后的提示文案 | `String` | - | - |
-| error-text | 加载失败后的提示文案 | `String` | - | 1.5.3 |
-| immediate-check | 是否在初始化时立即执行滚动位置检查 | `Boolean` | `true` | - |
-| direction | 滚动触发加载的方向，可选值为`up` | `String` | `down` | 1.6.16 |
+| v-model | 是否处于加载状态，加载过程中不触发`load`事件 | `boolean` | `false` | - |
+| finished | 是否已加载完成，加载完成后不再触发`load`事件 | `boolean` | `false` | - |
+| error | 是否加载失败，加载失败后点击错误提示可以重新<br>触发`load`事件，必须使用`sync`修饰符 | `boolean` | `false` | - |
+| offset | 滚动条与底部距离小于 offset 时触发`load`事件 | `number` | `300` | - |
+| loading-text | 加载过程中的提示文案 | `string` | `加载中...` | - |
+| finished-text | 加载完成后的提示文案 | `string` | - | - |
+| error-text | 加载失败后的提示文案 | `string` | - | 1.5.3 |
+| immediate-check | 是否在初始化时立即执行滚动位置检查 | `boolean` | `true` | - |
+| direction | 滚动触发加载的方向，可选值为`up` | `string` | `down` | 1.6.16 |
 
 ### Events
 

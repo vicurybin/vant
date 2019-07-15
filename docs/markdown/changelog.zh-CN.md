@@ -1,5 +1,43 @@
 # 更新日志
 
+### [v2.0.7](https://github.com/youzan/vant/tree/v2.0.7)
+`2019-07-11`
+
+**Improvements**
+
+- 新增 CountDown 倒计时组件 [\#3805](https://github.com/youzan/vant/pull/3805)
+- Popup: 新增 round 属性 [\#3781](https://github.com/youzan/vant/pull/3781)
+- IndexBar: 新增 sticky-offset-top 属性 [\#3791](https://github.com/youzan/vant/pull/3791)
+- PullRefresh: 新增 distance 插槽参数 [\#3829](https://github.com/youzan/vant/pull/3829)
+- Swipe: swipeTo 方法新增 immediate 参数 [\#3821](https://github.com/youzan/vant/pull/3821)
+- Slider: bar-height 属性支持 number 类型 [\#3794](https://github.com/youzan/vant/pull/3794)
+- DropdownMenu: 新增 close-on-click-outside 属性 [\#3824](https://github.com/youzan/vant/pull/3824)
+
+**Bug Fixes**
+
+- 修复 Popup 蒙层在某些情况下遮挡元素的问题 [\#3831](https://github.com/youzan/vant/pull/3831)
+- 修复 Stepper 在 iOS 12 下滚动位置错误的问题 [\#3804](https://github.com/youzan/vant/pull/3804)
+- 修复 Dialog closeOnPopstate 方法缺少类型定义的问题 [\#3789](https://github.com/youzan/vant/pull/3789)
+- 修复 DatetimePicker 使用 filter 属性且为 time 类型时 confirm 事件参数错误的问题 [\#3816](https://github.com/youzan/vant/pull/3816)
+
+
+### [v2.0.6](https://github.com/youzan/vant/tree/v2.0.6)
+`2019-07-05`
+
+**Improvements**
+
+- 新增 Divider 分割线组件 [\#3755](https://github.com/youzan/vant/pull/3755)
+- Tab: 新增 name 属性 [\#3762](https://github.com/youzan/vant/pull/3762)
+- Sku: 新增 add-cart-text 属性 [\#3725](https://github.com/youzan/vant/pull/3725)
+
+**Bug Fixes**
+
+- 修复 Grid gutter 属性不能传入 String 类型的问题 [\#3741](https://github.com/youzan/vant/pull/3741)
+- 修复 Swipe 使用 width 属性后出现空白区域的问题 [\#3751](https://github.com/youzan/vant/pull/3751)
+- 修复 PullRefresh 同步修改 loading 时状态错误的问题 [\#3719](https://github.com/youzan/vant/pull/3719)
+- 修复 Collapse 在 safari 浏览器上渲染内容较多时高度错误的问题 [\#3723](https://github.com/youzan/vant/pull/3723)
+
+
 ### [v2.0.5](https://github.com/youzan/vant/tree/v2.0.5)
 `2019-07-02`
 

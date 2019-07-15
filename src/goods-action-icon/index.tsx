@@ -35,7 +35,7 @@ function GoodsActionIcon(
     <div
       role="button"
       tabindex="0"
-      class={[bem(), 'van-hairline']}
+      class={bem()}
       onClick={onClick}
       {...inherit(ctx)}
     >
@@ -58,7 +58,7 @@ GoodsActionIcon.props = {
   ...routeProps,
   text: String,
   icon: String,
-  info: [String, Number],
+  info: [Number, String],
   iconClass: null as any
 };
 
