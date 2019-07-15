@@ -61,15 +61,15 @@ import 'vant/lib/icon/local.css';
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|
-| name | Icon name or URL | `String` | `''` |
-| info | Info message | `String | Number` | `''` |
-| color | Icon color | `String` | `inherit` |
-| size | Icon size | `String | Number` | `inherit` |
-| class-prefix | ClassName prefix | `String` | `van-icon` |
-| tag | HTML Tag | `String` | `i` |
+| name | Icon name or URL | `string` | `''` |
+| info | Info message | `string | number` | `''` |
+| color | Icon color | `string` | `inherit` |
+| size | Icon size | `string | number` | `inherit` |
+| class-prefix | ClassName prefix | `string` | `van-icon` |
+| tag | HTML Tag | `string` | `i` |
 
 ### Events
 
 | Event | Description | Arguments |
 |------|------|------|
-| click | Triggered when click icon | - |
+| click | Triggered when click icon | event: Event |

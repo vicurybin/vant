@@ -16,53 +16,41 @@ Vue.use(SwipeCell);
 
 ```html
 <van-swipe-cell>
-  <van-button
-    square
-    slot="left"
-    type="danger"
-    text="选择"
-  />
-  <van-cell
-    :border="false"
-    title="单元格"
-    value="内容"
-  />
-  <van-button
-    square
-    slot="right"
-    type="danger"
-    text="删除"
-  />
+  <template slot="left">
+    <van-button square type="primary" text="选择" />
+  </template>
+
+  <van-cell :border="false" title="单元格" value="内容" />
+
+  <template slot="right">
+    <van-button square type="danger" text="删除" />
+    <van-button square type="primary" text="收藏"/>
+  </template>
 </van-swipe-cell>
 ```
 
 ### 异步关闭
 
+通过传入`on-close`回调函数，可以自定义两侧滑动内容关闭时的行为
+
 ```html
 <van-swipe-cell :on-close="onClose">
-  <van-button
-    square
-    slot="left"
-    type="danger"
-    text="选择"
-  />
-  <van-cell
-    :border="false"
-    title="单元格"
-    value="内容"
-  />
-  <van-button
-    square
-    slot="right"
-    type="danger"
-    text="删除"
-  />
+  <template slot="left">
+    <van-button square type="primary" text="选择" />
+  </template>
+
+  <van-cell :border="false" title="单元格" value="内容" />
+
+  <template slot="right">
+    <van-button square type="danger" text="删除" />
+  </template>
 </van-swipe-cell>
 ```
 
 ```js
 export default {
   methods: {
+    // clickPosition 表示关闭时点击的位置
     onClose(clickPosition, instance) {
       switch (clickPosition) {
         case 'left':
@@ -89,11 +77,11 @@ export default {
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|------|------|
-| name | 标识符，可以在 onClose 的参数中获取到 | `String | Number` | - | 2.0.4 |
+| name | 标识符，可以在 onClose 的参数中获取到 | `string | number` | - | 2.0.4 |
 | on-close | 关闭时的回调函数 | `Function` | - | - |
-| disabled | 是否禁用滑动 | `Boolean` | `false` | - |
-| left-width | 指定左侧滑动区域宽度 | `Number` | `auto` | - |
-| right-width | 指定右侧滑动区域宽度 | `Number` | `auto` | - |
+| disabled | 是否禁用滑动 | `boolean` | `false` | - |
+| left-width | 指定左侧滑动区域宽度 | `number` | `auto` | - |
+| right-width | 指定右侧滑动区域宽度 | `number` | `auto` | - |
 
 ### Slots
 
@@ -113,9 +101,9 @@ export default {
 
 | 参数名 | 说明 | 类型 |
 |------|------|------|
-| clickPosition | 关闭时的点击位置 (`left` `right` `cell` `outside`) | `String` |
-| instance | SwipeCell 实例 | `Object` |
-| detail | 额外信息，包含 name 字段 | `Object` |
+| clickPosition | 关闭时的点击位置 (`left` `right` `cell` `outside`) | `string` |
+| instance | SwipeCell 实例，用于调用实例方法 | `object` |
+| detail | 额外信息，包含 name 字段 | `object` |
 
 ### 方法
 

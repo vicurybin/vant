@@ -2,7 +2,7 @@ import Vue from 'vue';
 import docConfig from './doc.config';
 import DemoList from './components/DemoList';
 import DemoPages from './components/DemoPages';
-import { demoWrapper } from './demo-common';
+import { demoWrapper } from './mobile/demo-common';
 import { initIframeRouter } from './utils/iframe-router';
 
 initIframeRouter();
@@ -39,6 +39,7 @@ const registerRoute = ({ mobile, componentMap }) => {
           component = DemoPages;
         } else if (mobile) {
           const module = componentMap[`./${path}/demo/index.vue`];
+
           if (module) {
             component = demoWrapper(module, path);
           }

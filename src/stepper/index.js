@@ -1,4 +1,6 @@
-import { createNamespace, isDef, suffixPx } from '../utils';
+import { createNamespace, isDef, addUnit } from '../utils';
+import { getRootScrollTop } from '../utils/dom/scroll';
+import { isIOS } from '../utils/validate/system';
 
 const [createComponent, bem] = createNamespace('stepper');
 
@@ -10,24 +12,24 @@ export default createComponent({
     value: null,
     integer: Boolean,
     disabled: Boolean,
-    inputWidth: [String, Number],
-    buttonSize: [String, Number],
+    inputWidth: [Number, String],
+    buttonSize: [Number, String],
     asyncChange: Boolean,
     disableInput: Boolean,
     min: {
-      type: [String, Number],
+      type: [Number, String],
       default: 1
     },
     max: {
-      type: [String, Number],
+      type: [Number, String],
       default: Infinity
     },
     step: {
-      type: [String, Number],
+      type: [Number, String],
       default: 1
     },
     defaultValue: {
-      type: [String, Number],
+      type: [Number, String],
       default: 1
     }
   },
@@ -56,11 +58,11 @@ export default createComponent({
       const style = {};
 
       if (this.inputWidth) {
-        style.width = suffixPx(this.inputWidth);
+        style.width = addUnit(this.inputWidth);
       }
 
       if (this.buttonSize) {
-        style.height = suffixPx(this.buttonSize);
+        style.height = addUnit(this.buttonSize);
       }
 
       return style;
@@ -70,7 +72,7 @@ export default createComponent({
       const style = {};
 
       if (this.buttonSize) {
-        const size = suffixPx(this.buttonSize);
+        const size = addUnit(this.buttonSize);
         style.width = size;
         style.height = size;
       }
@@ -152,6 +154,13 @@ export default createComponent({
       // fix edge case when input is empty and min is 0
       if (this.currentValue === 0) {
         event.target.value = this.currentValue;
+      }
+
+      // Hack for iOS12 page scroll
+      // https://developers.weixin.qq.com/community/develop/doc/00044ae90742f8c82fb78fcae56800
+      /* istanbul ignore next */
+      if (isIOS()) {
+        window.scrollTo(0, getRootScrollTop());
       }
     },
 

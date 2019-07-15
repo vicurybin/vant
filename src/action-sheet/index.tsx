@@ -127,7 +127,7 @@ function ActionSheet(
       {...inherit(ctx, true)}
     >
       {Header()}
-      {props.actions.map(Option)}
+      {props.actions && props.actions.map(Option)}
       {Content()}
       {CancelText()}
     </Popup>
@@ -142,14 +142,11 @@ ActionSheet.props = {
     default: 'center',
   },
   actions: Array,
+  duration: Number,
   cancelText: String,
   getContainer: [String, Function],
   closeOnClickAction: Boolean,
   safeAreaInsetBottom: Boolean,
-  duration: {
-    type: Number,
-    default: null
-  },
   overlay: {
     type: Boolean,
     default: true
