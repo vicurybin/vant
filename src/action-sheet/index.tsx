@@ -139,14 +139,11 @@ function ActionSheet(
 ActionSheet.props = {
   ...PopupMixin.props,
   title: String,
-<<<<<<< HEAD
   titleAlign: {
     type: String,
     default: 'center',
   },
-=======
   round: Boolean,
->>>>>>> dev
   actions: Array,
   duration: Number,
   cancelText: String,
