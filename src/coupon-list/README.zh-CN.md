@@ -98,7 +98,8 @@ export default {
 | close-button-text | 列表底部按钮文字 | `string` | `不使用优惠` | - |
 | input-placeholder | 输入框文字提示 | `string` | `请输入优惠码` | - |
 | show-exchange-bar | 是否展示兑换栏 | `boolean` | `true` | - |
-| currency | 货币符号 |  `string` | `¥` | - | 1.5.0 |
+| currency | 货币符号 |  `string` | `¥` | 1.5.0 |
+| empty-image | 列表为空时的占位图 | `string` | `https://img.yzcdn.cn/vant/coupon-empty.png` | 2.1.0 |
 
 ### CouponList Events
 
@@ -109,7 +110,7 @@ export default {
 
 ### Coupon 数据结构
 
-| key | 说明 | 类型 |
+| 键名 | 说明 | 类型 |
 |------|------|------|
 | id | 优惠券 id | `string` |
 | name | 优惠券名称 | `string` |

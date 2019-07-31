@@ -73,21 +73,22 @@ export default createComponent({
     }
   },
 
-  render(h) {
+  render() {
     if (!this.shouldRender) {
       return;
     }
 
-    const { title, message, messageAlign } = this;
-    const children = this.slots();
+    const { message, messageAlign } = this;
+    const messageSlot = this.slots();
+    const title = this.slots('title') || this.title;
 
     const Title = title && (
-      <div class={bem('header', { isolated: !message && !children })}>{title}</div>
+      <div class={bem('header', { isolated: !message && !messageSlot })}>{title}</div>
     );
 
-    const Content = (children || message) && (
+    const Content = (messageSlot || message) && (
       <div class={bem('content')}>
-        {children || (
+        {messageSlot || (
           <div
             domPropsInnerHTML={message}
             class={bem('message', { 'has-title': title, [messageAlign]: messageAlign })}
@@ -131,7 +132,7 @@ export default createComponent({
         <div
           vShow={this.value}
           role="dialog"
-          aria-labelledby={title || message}
+          aria-labelledby={this.title || message}
           class={[bem(), this.className]}
         >
           {Title}

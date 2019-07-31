@@ -21,7 +21,10 @@ const PLACEHOLDER = {
 
 export default createComponent({
   props: {
-    messages: Array,
+    messages: {
+      type: Array,
+      default: () => []
+    },
     messageConfig: Object,
     goodsId: [Number, String]
   },
@@ -85,7 +88,7 @@ export default createComponent({
     getPlaceholder(message) {
       const type = +message.multiple === 1 ? 'textarea' : message.type;
       const map = this.messageConfig.placeholderMap || {};
-      return map[type] || PLACEHOLDER[type];
+      return message.placeholder || map[type] || PLACEHOLDER[type];
     },
 
     validateMessages() {
@@ -121,12 +124,13 @@ export default createComponent({
     }
   },
 
-  render(h) {
+  render() {
     return (
       <CellGroup class={bem()}>
         {this.messages.map((message, index) => (message.type === 'image' ? (
           <Cell
             class={bem('image-cell')}
+            value-class={bem('image-cell-value')}
             label="仅限一张"
             title={message.name}
             key={`${this.goodsId}-${index}`}

@@ -1,19 +1,19 @@
 import { mount, later } from '../../../test/utils';
+import Vue from 'vue';
 import DropdownMenu from '..';
 import DropdownItem from '../../dropdown-item';
+
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
 
 function renderWrapper(options = {}) {
   return mount({
     template: `
-      <dropdown-menu :direction="direction" :close-on-click-outside="closeOnClickOutside">
-        <dropdown-item v-model="value" :title="title" :options="options" />
-        <dropdown-item v-model="value" :title="title" :options="options" />
-      </dropdown-menu>
+      <van-dropdown-menu :direction="direction" :close-on-click-outside="closeOnClickOutside">
+        <van-dropdown-item v-model="value" :title="title" :options="options" />
+        <van-dropdown-item v-model="value" :title="title" :options="options" />
+      </van-dropdown-menu>
     `,
-    components: {
-      DropdownItem,
-      DropdownMenu
-    },
     data() {
       return {
         value: options.value || 0,
@@ -21,8 +21,8 @@ function renderWrapper(options = {}) {
         direction: options.direction || 'down',
         closeOnClickOutside: options.closeOnClickOutside,
         options: [
-          { text: 'A', value: 0 },
-          { text: 'B', value: 1 }
+          { text: 'A', value: 0, icon: options.icon },
+          { text: 'B', value: 1, icon: options.icon }
         ]
       };
     }
@@ -43,6 +43,19 @@ test('show dropdown item', async () => {
   expect(wrapper).toMatchSnapshot();
 
   titles.at(1).trigger('click');
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('render option icon', async () => {
+  const wrapper = renderWrapper({
+    icon: 'success'
+  });
+
+  await later();
+
+  const titles = wrapper.findAll('.van-dropdown-menu__title');
+
+  titles.at(0).trigger('click');
   expect(wrapper).toMatchSnapshot();
 });
 
@@ -80,10 +93,6 @@ test('direction up', async () => {
   });
 
   await later();
-
-  const titles = wrapper.findAll('.van-dropdown-menu__title');
-
-  titles.at(0).trigger('click');
   expect(wrapper).toMatchSnapshot();
 });
 
@@ -117,15 +126,11 @@ test('didn`t find matched option', async () => {
 test('destroy one item', async () => {
   const wrapper = mount({
     template: `
-      <dropdown-menu>
-        <dropdown-item v-if="render" v-model="value" :options="options" />
-        <dropdown-item v-model="value" :options="options" />
-      </dropdown-menu>
+      <van-dropdown-menu>
+        <van-dropdown-item v-if="render" v-model="value" :options="options" />
+        <van-dropdown-item v-model="value" :options="options" />
+      </van-dropdown-menu>
     `,
-    components: {
-      DropdownItem,
-      DropdownMenu
-    },
     data() {
       return {
         value: 0,
@@ -146,14 +151,10 @@ test('destroy one item', async () => {
 test('disable dropdown item', async () => {
   const wrapper = mount({
     template: `
-      <dropdown-menu>
-        <dropdown-item disabled v-model="value" :options="options" />
-      </dropdown-menu>
+      <van-dropdown-menu>
+        <van-dropdown-item disabled v-model="value" :options="options" />
+      </van-dropdown-menu>
     `,
-    components: {
-      DropdownItem,
-      DropdownMenu
-    },
     data() {
       return {
         value: 0,
@@ -175,15 +176,11 @@ test('change event', async () => {
 
   const wrapper = mount({
     template: `
-      <dropdown-menu>
-        <dropdown-item v-model="value" :options="options" @change="onChange" />
-        <dropdown-item v-model="value" :options="options" />
-      </dropdown-menu>
+      <van-dropdown-menu>
+        <van-dropdown-item v-model="value" :options="options" @change="onChange" />
+        <van-dropdown-item v-model="value" :options="options" />
+      </van-dropdown-menu>
     `,
-    components: {
-      DropdownItem,
-      DropdownMenu
-    },
     data() {
       return {
         value: 0,
@@ -211,4 +208,27 @@ test('change event', async () => {
   options.at(1).trigger('click');
   expect(onChange).toHaveBeenCalledWith(1);
   expect(onChange).toHaveBeenCalledTimes(1);
+});
+
+test('toggle method', async done => {
+  const wrapper = mount({
+    template: `
+      <van-dropdown-menu>
+        <van-dropdown-item ref="item" />
+      </van-dropdown-menu>
+    `,
+    async mounted() {
+      // show
+      this.$refs.item.toggle(true, { immediate: true });
+      await later();
+      expect(wrapper).toMatchSnapshot();
+
+      // hide
+      this.$refs.item.toggle(false, { immediate: true });
+      await later();
+      expect(wrapper).toMatchSnapshot();
+
+      done();
+    }
+  });
 });

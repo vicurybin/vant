@@ -40,19 +40,17 @@ export default createComponent({
   },
 
   methods: {
-    toggle(show) {
-      this.showPopup = !this.showPopup;
-
-      if (this.showPopup) {
-        this.showWrapper = true;
+    toggle(show = !this.showPopup, options = {}) {
+      if (show === this.showPopup) {
+        return;
       }
-    },
 
-    hide(skipTransition) {
-      this.showPopup = false;
+      this.transition = !options.immediate;
+      this.showPopup = show;
 
-      if (skipTransition) {
-        this.transition = false;
+      if (show) {
+        this.parent.updateOffset();
+        this.showWrapper = true;
       }
     }
   },
@@ -65,7 +63,7 @@ export default createComponent({
     this.onOpened = createEmitter('opened');
   },
 
-  render(h) {
+  render() {
     const {
       zIndex,
       offset,
@@ -82,8 +80,9 @@ export default createComponent({
         <Cell
           clickable
           key={option.value}
+          icon={option.icon}
           title={option.text}
-          titleStyle={{ color: active ? activeColor : '' }}
+          style={{ color: active ? activeColor : '' }}
           onClick={() => {
             this.showPopup = false;
 
@@ -119,7 +118,6 @@ export default createComponent({
           onClose={this.onClose}
           onOpened={this.onOpened}
           onClosed={() => {
-            this.transition = true;
             this.showWrapper = false;
             this.$emit('closed');
           }}

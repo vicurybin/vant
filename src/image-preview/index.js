@@ -7,10 +7,13 @@ let instance;
 const defaultConfig = {
   images: [],
   loop: true,
+  swipeDuration: 500,
   value: true,
   minZoom: 1 / 3,
   maxZoom: 3,
   className: '',
+  onClose: null,
+  onChange: null,
   lazyLoad: false,
   showIndex: true,
   asyncClose: false,

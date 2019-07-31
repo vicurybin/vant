@@ -97,6 +97,7 @@ export default {
 | close-button-text | Close button text | `string` | `Close` |
 | input-placeholder | Input placeholder | `string` | `Coupon code` |
 | currency | Currency symbol |  `string` | `¥` |
+| empty-image | Placeholder image when list is empty | `string` | `https://img.yzcdn.cn/vant/coupon-empty.png` |
 
 ### CouponList Events
 
@@ -105,9 +106,9 @@ export default {
 | change | Triggered when change chosen coupon | index: index of chosen coupon |
 | exchange | Triggered when exchange coupon | code: exchange code |
 
-### Coupon Data Structure
+### Data Structure of Coupon
 
-| key | Description | Type |
+| Key | Description | Type |
 |------|------|------|
 | id | Id | `string` |
 | name | Name | `string` |
