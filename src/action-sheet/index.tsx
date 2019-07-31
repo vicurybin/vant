@@ -23,6 +23,7 @@ export type ActionSheetProps = PopupMixinProps & {
   title?: string;
   titleAlign: string;
   actions: ActionSheetItem[];
+  round?: boolean;
   duration: number;
   cancelText?: string;
   closeOnClickAction?: boolean;
@@ -117,6 +118,7 @@ function ActionSheet(
     <Popup
       class={bem({ 'safe-area-inset-bottom': props.safeAreaInsetBottom })}
       position="bottom"
+      round={props.round}
       value={props.value}
       overlay={props.overlay}
       duration={props.duration}
@@ -137,10 +139,14 @@ function ActionSheet(
 ActionSheet.props = {
   ...PopupMixin.props,
   title: String,
+<<<<<<< HEAD
   titleAlign: {
     type: String,
     default: 'center',
   },
+=======
+  round: Boolean,
+>>>>>>> dev
   actions: Array,
   duration: Number,
   cancelText: String,

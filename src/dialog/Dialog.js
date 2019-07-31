@@ -75,20 +75,22 @@ export default createComponent({
     }
   },
 
-  render(h) {
+  render() {
     if (!this.shouldRender) {
       return;
     }
 
-    const { title, message, messageAlign, titleAlign } = this;
-    const children = this.slots();
+    const { message, messageAlign, titleAlign } = this;
+    const messageSlot = this.slots();
+    const title = this.slots('title') || this.title;
 
     const Title = title && (
-      <div class={bem('header', { isolated: !message && !children, [titleAlign]: titleAlign })}>{title}</div>
+      <div class={bem('header', { isolated: !message && !messageSlot, [titleAlign]: titleAlign })}>{title}</div>
     );
-    const Content = (children || message) && (
+
+    const Content = (messageSlot || message) && (
       <div class={bem('content')}>
-        {children || (
+        {messageSlot || (
           <div
             domPropsInnerHTML={message}
             class={bem('message', { 'has-title': title, [messageAlign]: messageAlign })}
@@ -129,7 +131,12 @@ export default createComponent({
 
     return (
       <transition name="van-dialog-bounce">
-        <div vShow={this.value} class={[bem({ description: this.isDescriptionType }), this.className]}>
+        <div
+          vShow={this.value}
+          role="dialog"
+          aria-labelledby={this.title || message}
+          class={[bem({ description: this.isDescriptionType }), this.className]}
+        >
           {Title}
           {Content}
           {ButtonGroup}

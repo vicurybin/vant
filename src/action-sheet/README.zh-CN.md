@@ -105,6 +105,7 @@ export default {
 | 私titleAlign | 标题位置,可选left | `String` | center | - |
 | cancel-text | 取消按钮文字 | `string` | - | - |
 | overlay | 是否显示遮罩层 | `boolean` | `true` | - |
+| round | 是否显示圆角 | `boolean` | `false` | 2.0.9 |
 | close-on-click-action | 是否在点击选项后关闭 | `boolean` | `false` | 2.0.0 |
 | close-on-click-overlay | 是否在点击遮罩层后关闭 | `boolean` | `true` | - |
 | lazy-render | 是否在显示弹层时才渲染节点 | `boolean` | `true` | - |
@@ -129,10 +130,10 @@ export default {
 
 `Props`中的`actions`为一个对象数组，数组中的每一个对象配置每一列，每一列有以下`key`：
 
-| key | 说明 |
-|------|------|
-| name | 标题 |
-| subname | 二级标题 |
-| className | 为对应列添加额外的 class |
-| loading | 是否为加载状态 |
-| disabled | 是否为禁用状态 |
+| 键名 | 说明 | 类型 |
+|------|------|------|
+| name | 标题 | `string` |
+| subname | 二级标题 | `string` |
+| className | 为对应列添加额外的 class | `any` |
+| loading | 是否为加载状态 | `boolean` |
+| disabled | 是否为禁用状态 | `boolean` |

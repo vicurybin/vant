@@ -120,9 +120,11 @@ export default {
 | v-model | Whether to show sku | `boolean` | `false` |
 | sku | Sku data | `object` | - |
 | goods | Goods info | `object` | - |
-| goods-id | Goods id | `string | number` | - |
+| goods-id | Goods id | `string | `number` | - |
+| price-tag | Tag behind the price | `string` | - |
 | hide-stock | Whether to hide stock | `boolean` | `false` |
 | hide-quota-text | Whether to hide quota text | `boolean` | `false` |
+| hide-selected-text | Whether to hide selected text | `boolean` | `false` |
 | show-add-cart-btn | Whether to show cart button | `boolean` | `true` |
 | buy-text | Buy button text | `string` | - | - |
 | add-cart-text | Add cart button text | `string` | - | - |
@@ -162,6 +164,8 @@ Use ref to get sku instance and call instance methods
 |------|------|
 | sku-header | Custom header |
 | sku-header-price | Custom header price area |
+| sku-header-origin-price | Custom header origin price area |
+| sku-header-extra | Extra header area |
 | sku-body-top | Custom content before sku-group |
 | sku-group | Custom sku |
 | extra-sku-group | Extra custom content |
@@ -211,7 +215,8 @@ sku: {
       multiple: '0',
       name: 'Message',
       type: 'text',
-      required: '1'
+      required: '1'，
+      placeholder: ''
     }
   ],
   hide_stock: false
@@ -262,7 +267,13 @@ customStepperConfig: {
         Toast('not enough stock');
       }
     }
-  }
+  },
+  // custom callback when stepper value change
+  handleStepperChange: currentValue => {},
+  // stock
+  stockNum: 1999,
+  // stock fomatter
+  stockFormatter: stockNum => {},
 }
 ```
 
@@ -278,7 +289,7 @@ messageConfig: {
   },
   // max file size (MB)
   uploadMaxSize: 3,
-  // placehold config
+  // placeholder config
   placeholderMap: {
     text: 'xxx',
     tel: 'xxx',

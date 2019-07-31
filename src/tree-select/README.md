@@ -17,8 +17,8 @@ Vue.use(TreeSelect);
   :items="items"
   :main-active-index="mainActiveIndex"
   :active-id="activeId"
-  @navclick="onNavClick"
-  @itemclick="onItemClick"
+  @click-nav="onClickNav"
+  @click-item="onClickItem"
 />
 ```
 
@@ -34,10 +34,10 @@ export default {
     };
   },
   methods: {
-    onNavClick(index) {
+    onClickNav(index) {
       this.mainActiveIndex = index;
     },
-    onItemClick(data) {
+    onClickItem(data) {
       this.activeId = data.id;
     }
   }
@@ -59,10 +59,10 @@ export default {
 
 | Event | Description | Arguments |
 |------|------|------|
-| navclick | triggered when parent node is selected |  index: index of selected parent |
-| itemclick | triggered when item is selected | data: selected item |
+| click-nav | triggered when parent node is selected |  index: index of selected parent |
+| click-item | triggered when item is selected | data: selected item |
 
-### Item Data Structure
+### Data Structure of Item
 
 `items` should be an array contains specified tree objects.
 

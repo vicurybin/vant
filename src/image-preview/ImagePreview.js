@@ -38,6 +38,10 @@ export default createComponent({
       type: Boolean,
       default: true
     },
+    swipeDuration: {
+      type: Number,
+      default: 500
+    },
     overlay: {
       type: Boolean,
       default: true
@@ -250,7 +254,7 @@ export default createComponent({
     }
   },
 
-  render(h) {
+  render() {
     if (!this.value) {
       return;
     }
@@ -267,6 +271,7 @@ export default createComponent({
       <Swipe
         ref="swipe"
         loop={this.loop}
+        duration={this.swipeDuration}
         indicatorColor="white"
         initialSwipe={this.startPosition}
         showIndicators={this.showIndicators}
@@ -305,8 +310,8 @@ export default createComponent({
           onTouchend={this.onWrapperTouchEnd}
           onTouchcancel={this.onWrapperTouchEnd}
         >
-          {Index}
           {Images}
+          {Index}
         </div>
       </transition>
     );

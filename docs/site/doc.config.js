@@ -268,6 +268,10 @@ export default {
                 title: 'Steps 步骤条'
               },
               {
+                path: '/sticky',
+                title: 'Sticky 粘性布局'
+              },
+              {
                 path: '/swipe',
                 title: 'Swipe 轮播'
               },
@@ -537,7 +541,7 @@ export default {
               },
               {
                 path: '/overlay',
-                title: 'Overlay 遮罩层'
+                title: 'Overlay'
               },
               {
                 path: '/pull-refresh',
@@ -604,6 +608,10 @@ export default {
               {
                 path: '/steps',
                 title: 'Steps'
+              },
+              {
+                path: '/sticky',
+                title: 'Sticky'
               },
               {
                 path: '/swipe',

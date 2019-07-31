@@ -123,8 +123,10 @@ export default {
 | sku | 商品sku数据 | `object` | - | - |
 | goods | 商品信息 | `object` | - | - |
 | goods-id | 商品 id | `string | number` | - | - |
+| price-tag | 显示在价格后面的标签 | `string` | - | - |
 | hide-stock | 是否显示商品剩余库存 | `boolean` | `false` | - |
 | hide-quota-text | 是否显示限购提示 | `boolean` | `false` | 1.4.8 |
+| hide-selected-text | 是否隐藏已选提示 | `boolean` | `false` | - |
 | show-add-cart-btn | 是否显示加入购物车按钮 | `boolean` | `true` | - |
 | buy-text | 购买按钮文字 | `string` | `立即购买` | - |
 | add-cart-text | 加入购物车按钮文字 | `string` | `加入购物车` | - |
@@ -168,6 +170,8 @@ Sku 组件默认划分好了若干区块，这些区块都定义成了插槽，�
 |------|------|
 | sku-header | 商品信息展示区，包含商品图片、名称、价格等信息 |
 | sku-header-price | 自定义 sku 头部价格展示 |
+| sku-header-origin-price | 自定义 sku 头部原价展示 |
+| sku-header-extra | 额外 sku 头部区域 |
 | sku-body-top |  sku 展示区上方的内容，无默认展示内容，按需使用 |
 | sku-group | 商品 sku 展示区 |
 | extra-sku-group | 额外商品 sku 展示区，一般用不到 |
@@ -221,7 +225,8 @@ sku: {
       multiple: '0', // 留言类型为 text 时，是否多行文本。'1' 表示多行
       name: '留言', // 留言名称
       type: 'text', // 留言类型，可选: id_no（身份证）, text, tel, date, time, email
-      required: '1' // 是否必填 '1' 表示必填
+      required: '1', // 是否必填 '1' 表示必填
+      placeholder: '' // 可选值，占位文本
     }
   ],
   hide_stock: false // 是否隐藏剩余库存
@@ -274,7 +279,13 @@ customStepperConfig: {
         Toast('库存不够了');
       }
     }
-  }
+  },
+  // 步进器变化的回调
+  handleStepperChange: currentValue => {},
+  // 库存
+  stockNum: 1999,
+  // 格式化库存
+  stockFormatter: stockNum => {},
 }
 ```
 
@@ -290,7 +301,7 @@ messageConfig: {
   },
   // 最大上传体积 (MB)
   uploadMaxSize: 3,
-  // placehold配置
+  // placeholder 配置
   placeholderMap: {
     text: 'xxx',
     tel: 'xxx',

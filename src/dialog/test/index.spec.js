@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import Dialog from '..';
 import DialogVue from '../Dialog';
-import { mount, later, trigger, transitionStub } from '../../../test/utils';
-
-transitionStub();
+import { mount, later, trigger } from '../../../test/utils';
 
 test('Dialog function call', async () => {
   Dialog.close();
@@ -103,4 +101,28 @@ test('button text', () => {
 
 test('dialog component', () => {
   expect(Dialog.Component).toEqual(DialogVue);
+});
+
+test('default slot', () => {
+  const wrapper = mount(DialogVue, {
+    propsData: {
+      value: true
+    },
+    scopedSlots: {
+      default: () => 'Custom Message'
+    }
+  });
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('title slot', () => {
+  const wrapper = mount(DialogVue, {
+    propsData: {
+      value: true
+    },
+    scopedSlots: {
+      title: () => 'Custom Title'
+    }
+  });
+  expect(wrapper).toMatchSnapshot();
 });

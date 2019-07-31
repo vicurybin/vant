@@ -85,10 +85,11 @@ export default {
 | select | Triggered when select address | item: address object，index |
 | edit-disabled | Triggered when edit disabled address | item: address object，index |
 | select-disabled | Triggered when select disabled address | item: address object，index |
+| click-item | Triggered when click address item | item: address object，index |
 
-### Address Data Structure
+### Data Structure of Address
 
-| key | Description | Type |
+| Key | Description | Type |
 |------|------|------|
 | id | Id | `string | number` |
 | name | Name | `string` |

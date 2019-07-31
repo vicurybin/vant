@@ -7,6 +7,7 @@ import {
   getScrollTop,
   getElementTop,
   getRootScrollTop,
+  setRootScrollTop,
   getScrollEventTarget
 } from '../utils/dom/scroll';
 
@@ -75,11 +76,21 @@ export default createComponent({
     }
   },
 
+  watch: {
+    indexList() {
+      this.$nextTick(this.onScroll);
+    }
+  },
+
   methods: {
     onScroll() {
-      const scrollTop = this.scroller === window
-        ? getScrollTop(this.scroller)
-        : 0;
+      let scrollTop;
+      if (this.scroller === window || this.scroller === document.body) {
+        scrollTop = getScrollTop(this.scroller);
+      } else {
+        // see: https://github.com/youzan/vant/issues/3774
+        scrollTop = 0;
+      }
       const rects = this.children.map(item => ({
         height: item.height,
         top: getElementTop(item.$el)
@@ -143,7 +154,7 @@ export default createComponent({
       }
     },
 
-    scrollToElement(element, setActive) {
+    scrollToElement(element) {
       const { index } = element.dataset;
       if (!index) {
         return;
@@ -154,7 +165,7 @@ export default createComponent({
         match[0].scrollIntoView();
 
         if (this.stickyOffsetTop) {
-          window.scrollTo(0, getRootScrollTop() - this.stickyOffsetTop);
+          setRootScrollTop(getRootScrollTop() - this.stickyOffsetTop);
         }
 
         this.$emit('select', match[0].index);
@@ -166,7 +177,7 @@ export default createComponent({
     }
   },
 
-  render(h) {
+  render() {
     const Indexes = this.indexList.map(index => {
       const active = index === this.activeAnchorIndex;
 

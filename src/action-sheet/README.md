@@ -97,6 +97,7 @@ export default {
 | title | Title | `string` | - |
 | cancel-text | Text of cancel button | `string` | - |
 | overlay | Whether to show overlay | `boolean` | `true` |
+| round | Whether to show round corner | `boolean` | `false` | 
 | close-on-click-action | Whether to close when click action | `boolean` | `false` |
 | close-on-click-overlay | Whether to close when click overlay | `boolean` | `true` |
 | lazy-render | Whether to lazy render util appeared | `boolean` | `true` |
@@ -117,12 +118,12 @@ export default {
 | close | Triggered when close ActionSheet | - |
 | closed | Triggered when closed ActionSheet | - |
 
-### Data struct of Action
+### Data Structure of Action
 
-| key | Description |
-|------|------|
-| name | Title |
-| subname | Subtitle |
-| className | className for the option |
-| loading | Whether to be loading status |
-| disabled | Whether to be disabled |
+| Key | Description | Type |
+|------|------|------|
+| name | Title | `string` |
+| subname | Subtitle | `string` |
+| className | className for the option | `any` |
+| loading | Whether to be loading status | `boolean` |
+| disabled | Whether to be disabled | `boolean` |

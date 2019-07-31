@@ -86,10 +86,11 @@ export default {
 | select | 切换选中的地址时触发 | item: 地址对象，index: 索引 |
 | edit-disabled | 编辑不可配送的地址时触发 | item: 地址对象，index: 索引 |
 | select-disabled | 选中不可配送的地址时触发 | item: 地址对象，index: 索引 |
+| click-item | 点击任意地址时触发 | item: 地址对象，index: 索引 |
 
 ### Address 数据结构
 
-| key | 说明 | 类型 |
+| 键名 | 说明 | 类型 |
 |------|------|------|
 | id | 每条地址的唯一标识 | `string | number` |
 | name | 收货人姓名 | `string` |

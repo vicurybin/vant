@@ -1,5 +1,95 @@
 # Changelog
 
+### [v2.1.0-beta.2](https://github.com/youzan/vant/tree/v2.1.0-beta.2)
+`2019-07-26`
+
+**Improvements**
+
+- GoodsAction: update style [\#3967](https://github.com/youzan/vant/pull/3967)
+- ImagePreview: add swipe-duration prop [\#3963](https://github.com/youzan/vant/pull/3963)
+
+**Bug Fixes**
+
+- fix Sku incorrect button border radius [\#3966](https://github.com/youzan/vant/pull/3966)
+- fix Tabs incorrect line position in some cases [\#3961](https://github.com/youzan/vant/pull/3961)
+- fix ImagePreview should reset onClose & onChange option [\#3960](https://github.com/youzan/vant/pull/3960)
+- fix DatetimePicker incorrect confirm param when use formatter [\#3969](https://github.com/youzan/vant/pull/3969)
+
+
+### [v2.1.0-beta.1](https://github.com/youzan/vant/tree/v2.1.0-beta.1)
+`2019-07-25`
+
+**Improvements**
+
+- SwipeCell: add stop-propagation prop [\#3952](https://github.com/youzan/vant/pull/3952)
+- Sku: update button style [\#3922](https://github.com/youzan/vant/pull/3922)
+- Sku: add sku-header-origin-price slot [\#3958](https://github.com/youzan/vant/pull/3958)
+- CouponList: add empty-image prop [\#3941](https://github.com/youzan/vant/pull/3941)
+- AddressList: add click-item event [\#3942](https://github.com/youzan/vant/pull/3942)
+
+**Bug Fixes**
+
+- fix Tabs fix scroll position deviation when sticky [\#3949](https://github.com/youzan/vant/pull/3949)
+- fix IndexBar should update when index-list updated [\#3943](https://github.com/youzan/vant/pull/3943)
+
+
+### [v2.1.0-beta.0](https://github.com/youzan/vant/tree/v2.1.0-beta.0)
+`2019-07-22`
+
+**Improvements**
+
+- Sku: update style [\#3875](https://github.com/youzan/vant/pull/3875)
+- Sku: add price-tag prop [\#3875](https://github.com/youzan/vant/pull/3875)
+- Sku: add hide-selected-text prop [\#3875](https://github.com/youzan/vant/pull/3875)
+- Dialog: centered in screen [\#3905](https://github.com/youzan/vant/pull/3905)
+- Uploader: add less vars [\#3907](https://github.com/youzan/vant/pull/3907)
+- ActionSheet: add less vars [\#3908](https://github.com/youzan/vant/pull/3908)
+
+**Bug Fixes**
+
+- fix AddressList can't select item when click empty area [\#3909](https://github.com/youzan/vant/pull/3909)
+
+
+### [v2.0.9](https://github.com/youzan/vant/tree/v2.0.9)
+`2019-07-19`
+
+**Improvements**
+
+- add Sticky component [\#3888](https://github.com/youzan/vant/pull/3888)
+- Grid: optimize word break [\#3897](https://github.com/youzan/vant/pull/3897)
+- Image: add round prop [\#3838](https://github.com/youzan/vant/pull/3838)
+- Image: add show-error prop [\#3896](https://github.com/youzan/vant/pull/3896)
+- Image: add show-loading prop [\#3893](https://github.com/youzan/vant/pull/3893)
+- Toast: add iconPrefix option [\#3872](https://github.com/youzan/vant/pull/3872)
+- Toast: optimize image icon display [\#3895](https://github.com/youzan/vant/pull/3895)
+- TreeSelect: add click-nav、click-item event [\#3892](https://github.com/youzan/vant/pull/3892)
+- ActionSheet: add round prop [\#3874](https://github.com/youzan/vant/pull/3874)
+- Uploader: support preview network image [\#3899](https://github.com/youzan/vant/pull/3899)
+
+**Bug Fixes**
+
+- fix Dialog closeOnPopstate can't be disabled [\#3868](https://github.com/youzan/vant/pull/3868)
+- fix DropdownMenu cann't use toggle to open item [\#3876](https://github.com/youzan/vant/pull/3876)
+- fix SwipeCell should stop event propagation [\#3898](https://github.com/youzan/vant/pull/3898)
+
+
+### [v2.0.8](https://github.com/youzan/vant/tree/v2.0.8)
+`2019-07-16`
+
+**Improvements**
+
+- Sku: support custom placeholder [\#3864](https://github.com/youzan/vant/pull/3864)
+- DropdownMenu: add icon option [\#3855](https://github.com/youzan/vant/pull/3855)
+- DropdownMenu: optimize title ellipsis [\#3847](https://github.com/youzan/vant/pull/3847)
+- ImagePreview: support double click zoom [\#3839](https://github.com/youzan/vant/pull/3839)
+
+**Bug Fixes**
+
+- fix Tab: click event param missing [\#3866](https://github.com/youzan/vant/pull/3866)
+- fix List not work when body is the scrolling container [\#3844](https://github.com/youzan/vant/pull/3844)
+- fix IndexBar incorrect active anchor in some cases [\#3832](https://github.com/youzan/vant/pull/3832)
+
+
 ### [v2.0.7](https://github.com/youzan/vant/tree/v2.0.7)
 `2019-07-11`
 

@@ -1,12 +1,7 @@
 import Vue from 'vue';
-import { mount, TransitionStub, Wrapper } from '@vue/test-utils';
+import { Wrapper } from '@vue/test-utils';
 
-// prevent vue warning log
-Vue.config.silent = true;
-
-export { mount };
-
-function getTouch(el: HTMLElement, x: number, y: number) {
+function getTouch(el: HTMLElement | Window, x: number, y: number) {
   return {
     identifier: Date.now(),
     target: el,
@@ -23,7 +18,7 @@ function getTouch(el: HTMLElement, x: number, y: number) {
 
 // Trigger pointer/touch event
 export function trigger(
-  wrapper: Wrapper<Vue> | HTMLElement,
+  wrapper: Wrapper<Vue> | HTMLElement | Window,
   eventName: string,
   x: number = 0,
   y: number = 0,
@@ -58,25 +53,4 @@ export function triggerDrag(el: Wrapper<Vue> | HTMLElement, x = 0, y = 0): void 
   trigger(el, 'touchmove', x / 2, y / 2);
   trigger(el, 'touchmove', x, y);
   trigger(el, 'touchend', x, y);
-}
-
-// promisify setTimeout
-export function later(delay: number = 0): Promise<void> {
-  return new Promise(resolve => {
-    setTimeout(resolve, delay);
-  });
-}
-
-export function transitionStub(): void {
-  Vue.component('transition', TransitionStub as any);
-}
-
-export function mockGetBoundingClientRect(rect: ClientRect | DOMRect): Function {
-  const originMethod = Element.prototype.getBoundingClientRect;
-
-  Element.prototype.getBoundingClientRect = <any> jest.fn(() => rect);
-
-  return function () {
-    Element.prototype.getBoundingClientRect = originMethod;
-  };
 }
