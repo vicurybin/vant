@@ -3,6 +3,7 @@
 ### Install
 
 ``` javascript
+import Vue from 'vue';
 import { TreeSelect } from 'vant';
 
 Vue.use(TreeSelect);
@@ -10,15 +11,13 @@ Vue.use(TreeSelect);
 
 ## Usage
 
-### Basic Usage
+### Radio Mode
 
 ```html
 <van-tree-select
   :items="items"
-  :main-active-index="mainActiveIndex"
-  :active-id="activeId"
-  @click-nav="onClickNav"
-  @click-item="onClickItem"
+  :active-id.sync="activeId"
+  :main-active-index.sync="activeIndex"
 />
 ```
 
@@ -27,18 +26,62 @@ export default {
   data() {
     return {
       items,
-      // the index of parent item
-      mainActiveIndex: 0,
-      // the id of selected item
-      activeId: 1001
+      activeId: 1,
+      activeIndex: 0
     };
-  },
-  methods: {
-    onClickNav(index) {
-      this.mainActiveIndex = index;
-    },
-    onClickItem(data) {
-      this.activeId = data.id;
+  }
+}
+```
+
+### Multiple Mode
+
+```html
+<van-tree-select
+  :items="items"
+  :active-id.sync="activeIds"
+  :main-active-index.sync="activeIndex"
+/>
+```
+
+```javascript
+export default {
+  data() {
+    return {
+      items,
+      activeIds: [1, 2],
+      activeIndex: 0
+    };
+  }
+}
+```
+
+### Custom Content
+
+```html
+<van-tree-select
+  height="55vw"
+  :items="items"
+  :main-active-index.sync="activeIndex"
+>
+  <template slot="content">
+    <van-image
+      v-if="activeIndex === 0"
+      src="https://img.yzcdn.cn/vant/apple-1.jpg"
+    />
+    <van-image
+      v-if="activeIndex === 1"
+      src="https://img.yzcdn.cn/vant/apple-2.jpg"
+    />
+  </template>
+</van-tree-select>
+```
+
+```js
+export default {
+  data() {
+    return {
+      activeIndex: 0,
+      items: [{ text: 'Group 1' }, { text: 'Group 2' }]
     }
   }
 }
@@ -48,19 +91,26 @@ export default {
 
 ### Props
 
-| Attribute | Description | Type | Default |
-|------|------|------|------|
-| items | Required datasets for the component | `Item[]` | `[]` |
-| height | Height (px) | `number` | `300` |
-| main-Active-index | The index of selected parent node | `number` | `0` |
-| active-id | Id of selected item | `string | number` | `0` |
+| Attribute | Description | Type | Default | Version |
+|------|------|------|------|------|
+| items | Required datasets for the component | *Item[]* | `[]` | - |
+| height | Height | *string \| number* | `300` | - |
+| main-Active-index | The index of selected parent node | *number* | `0` | - |
+| active-id | Id of selected item | *string \| number \| (string \| number)[]* | `0` | - |
+| max | Maximum number of selected items | *number* | `Infinity` | 2.2.0 |
 
 ### Events
 
 | Event | Description | Arguments |
 |------|------|------|
-| click-nav | triggered when parent node is selected |  index: index of selected parent |
+| click-nav | triggered when parent node is selected | index: index of selected parent |
 | click-item | triggered when item is selected | data: selected item |
+
+### Slots
+
+| Name | Description |
+|------|------|
+| content | Custom right content |
 
 ### Data Structure of Item
 
@@ -72,7 +122,9 @@ In every tree object, `text` property defines `id` stands for the unique key whi
 [
   {
     // name of the parent node
-    text: 'All Cities',
+    text: 'Group 1',
+    // info
+    info: 3,
     // leaves of this parent node
     children: [
       {

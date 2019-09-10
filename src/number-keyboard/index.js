@@ -1,5 +1,6 @@
 import { createNamespace } from '../utils';
 import { stopPropagation } from '../utils/dom/event';
+import { BORDER_TOP } from '../utils/constant';
 import { BindEventMixin } from '../mixins/bind-event';
 import Key from './Key';
 
@@ -9,7 +10,7 @@ const DELETE_KEY_THEME = ['delete', 'big', 'gray'];
 
 export default createComponent({
   mixins: [
-    BindEventMixin(function (bind) {
+    BindEventMixin(function(bind) {
       if (this.hideOnClickOutside) {
         bind(document.body, 'touchstart', this.onBlur);
       }
@@ -137,7 +138,7 @@ export default createComponent({
     const showTitle = title || showTitleClose || titleLeftSlot;
 
     const Title = showTitle && (
-      <div class={[bem('title'), 'van-hairline--top']}>
+      <div class={[bem('title'), BORDER_TOP]}>
         {titleLeftSlot && <span class={bem('title-left')}>{titleLeftSlot}</span>}
         {title && <span>{title}</span>}
         {showTitleClose && (
@@ -190,8 +191,10 @@ export default createComponent({
           onWebkitAnimationEnd={this.onAnimationEnd}
         >
           {Title}
-          <div class={bem('body')}>{Keys}</div>
-          {Sidebar}
+          <div class={bem('body')}>
+            {Keys}
+            {Sidebar}
+          </div>
         </div>
       </transition>
     );

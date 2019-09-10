@@ -7,6 +7,7 @@ Quickly and easily create layouts with `van-row` and `van-col`
 ### Install
 
 ``` javascript
+import Vue from 'vue';
 import { Row, Col } from 'vant';
 
 Vue.use(Row).use(Col);
@@ -90,18 +91,30 @@ Setting `type` to `flex` to enable flex layout
 
 ### Row Props
 
-| Attribute | Description | Type | Default |
-|------|------|------|------|
-| type | Layout type, can be set to `flex` | `string` | - |
-| gutter | Grid spacing（px） | `string | number` | - |
-| tag | Custom element tag | `string` | `div` |
-| justify | Flex main axis，can be set to  end/center/space-around/space-between | `string` | `start` |
-| align | Flex cross axis, be set to  center/bottom | `string` | `top` |
+| Attribute | Description | Type | Default | Version |
+|------|------|------|------|------|
+| type | Layout type, can be set to `flex` | *string* | - | - |
+| gutter | Grid spacing（px） | *string \| number* | - | - |
+| tag | Custom element tag | *string* | `div` | - |
+| justify | Flex main axis，can be set to  end/center/space-around/space-between | *string* | `start` | - |
+| align | Flex cross axis, be set to  center/bottom | *string* | `top` | - |
 
 ### Col Props
 
-| Attribute | Description | Type | Default |
-|------|------|------|------|
-| span | number of column the grid spans | `string | number` | - |
-| offset | number of spacing on the left side of the grid | `string | number` | - |
-| tag | Custom element tag | `string` | `div` |
+| Attribute | Description | Type | Default | Version |
+|------|------|------|------|------|
+| span | number of column the grid spans | *string \| number* | - | - |
+| offset | number of spacing on the left side of the grid | *string \| number* | - | - |
+| tag | Custom element tag | *string* | `div` | - |
+
+### Row Events
+
+| Event | Description | Arguments |
+|------|------|------|
+| click | Triggered when click row | event: Event |
+
+### Col Events
+
+| Event | Description | Arguments |
+|------|------|------|
+| click | Triggered when click col | event: Event |

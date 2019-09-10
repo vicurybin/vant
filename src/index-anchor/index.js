@@ -1,5 +1,6 @@
 import { createNamespace } from '../utils';
 import { ChildrenMixin } from '../mixins/relation';
+import { BORDER_BOTTOM } from '../utils/constant';
 
 const [createComponent, bem] = createNamespace('index-anchor');
 
@@ -13,7 +14,8 @@ export default createComponent({
   data() {
     return {
       top: 0,
-      active: false
+      active: false,
+      position: 'static'
     };
   },
 
@@ -25,9 +27,10 @@ export default createComponent({
     anchorStyle() {
       if (this.sticky) {
         return {
+          position: this.position,
+          zIndex: `${this.parent.zIndex}`,
           transform: `translate3d(0, ${this.top}px, 0)`,
           color: this.parent.highlightColor,
-          zIndex: `${this.parent.zIndex}`
         };
       }
     }
@@ -50,7 +53,7 @@ export default createComponent({
       <div style={{ height: sticky ? `${this.height}px` : null }}>
         <div
           style={this.anchorStyle}
-          class={[bem({ sticky }), { 'van-hairline--bottom': sticky }]}
+          class={[bem({ sticky }), { [BORDER_BOTTOM]: sticky }]}
         >
           {this.slots('default') || this.index}
         </div>

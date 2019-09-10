@@ -3,6 +3,7 @@
 ### Install
 
 ``` javascript
+import Vue from 'vue';
 import { Popup } from 'vant';
 
 Vue.use(Popup);
@@ -44,6 +45,26 @@ Use `position` prop to set popup display position
 <van-popup
   v-model="show"
   position="top"
+  :style="{ height: '20%' }"
+/>
+```
+
+### Close Icon
+
+```html
+<van-popup
+  v-model="show"
+  closeable
+  position="bottom"
+  :style="{ height: '20%' }"
+/>
+
+<!-- Custom Icon -->
+<van-popup
+  v-model="show"
+  closeable
+  close-icon="close"
+  position="bottom"
   :style="{ height: '20%' }"
 />
 ```
@@ -97,20 +118,23 @@ export default {
 
 ### Props
 
-| Attribute | Description | Type | Default |
-|------|------|------|------|
-| v-model | Whether to show popup | `boolean` | `false` |
-| overlay | Whether to show overlay | `boolean` | `true` |
-| position | Can be set to `top` `bottom` `right` `left` | `string` | `center` |
-| overlay-class | Custom overlay class | `string` | - |
-| overlay-style | Custom overlay style | `object` | - |
-| duration | Transition duration, unit second | `number` | `0.3` |
-| round | Whether to show round corner | `boolean` | `false` | 
-| lock-scroll | Whether to lock background scroll | `boolean` | `true` |
-| lazy-render | Whether to lazy render util appeared | `boolean` | `true` |
-| close-on-click-overlay | Whether to close when click overlay | `boolean` | `true` |
-| transition | Transition | `string` | `popup-slide` |
-| get-container | Return the mount node for Popup | `string | () => HTMLElement` | - |
+| Attribute | Description | Type | Default | Version |
+|------|------|------|------|------|
+| v-model | Whether to show popup | *boolean* | `false` | - |
+| overlay | Whether to show overlay | *boolean* | `true` | - |
+| position | Can be set to `top` `bottom` `right` `left` | *string* | `center` | - |
+| overlay-class | Custom overlay class | *string* | - | - |
+| overlay-style | Custom overlay style | *object* | - | - |
+| duration | Transition duration, unit second | *number* | `0.3` | - |
+| round | Whether to show round corner | *boolean* | `false` | 2.0.7 |
+| lock-scroll | Whether to lock background scroll | *boolean* | `true` | - |
+| lazy-render | Whether to lazy render util appeared | *boolean* | `true` | - |
+| close-on-click-overlay | Whether to close when click overlay | *boolean* | `true` | - |
+| closeable | Whether to show close icon | *boolean* | `false` | 2.2.0 |
+| close-icon | Close icon name | *string* | `cross` | 2.2.0 |
+| transition | Transition | *string* | `popup-slide` | - |
+| get-container | Return the mount node for Popup | *string \| () => HTMLElement* | - | - |
+
 
 ### Events
 

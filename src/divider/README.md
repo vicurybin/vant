@@ -3,6 +3,7 @@
 ### Install
 
 ``` javascript
+import Vue from 'vue';
 import { Divider } from 'vant';
 
 Vue.use(Divider);
@@ -47,13 +48,13 @@ Vue.use(Divider);
 
 ### Props
 
-| Attribute | Description | Type | Default |
-|------|------|------|------|
-| dashed | Whether to use dashed border | `boolean` | `false` |
-| hairline | Whether to use hairline | `boolean` | `true` |
-| content-position | Content position，can be set to `left` `right` | `string` | `center` |
+| Attribute | Description | Type | Default | Version |
+|------|------|------|------|------|
+| dashed | Whether to use dashed border | *boolean* | `false` | - |
+| hairline | Whether to use hairline | *boolean* | `true` | - |
+| content-position | Content position，can be set to `left` `right` | *string* | `center` | - |
 
-### Cell Slots
+### Slots
 
 | Name | Description |
 |------|------|

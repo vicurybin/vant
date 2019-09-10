@@ -3,6 +3,7 @@
 ### Install
 
 ``` javascript
+import Vue from 'vue';
 import { Icon } from 'vant';
 
 Vue.use(Icon);
@@ -59,14 +60,14 @@ import 'vant/lib/icon/local.css';
 
 ### Props
 
-| Attribute | Description | Type | Default |
-|------|------|------|------|
-| name | Icon name or URL | `string` | `''` |
-| info | Info message | `string | number` | `''` |
-| color | Icon color | `string` | `inherit` |
-| size | Icon size | `string | number` | `inherit` |
-| class-prefix | ClassName prefix | `string` | `van-icon` |
-| tag | HTML Tag | `string` | `i` |
+| Attribute | Description | Type | Default | Version |
+|------|------|------|------|------|
+| name | Icon name or URL | *string* | `''` | - |
+| info | Info message | *string \| number* | `''` | - |
+| color | Icon color | *string* | `inherit` | - |
+| size | Icon size | *string \| number* | `inherit` | - |
+| class-prefix | ClassName prefix | *string* | `van-icon` | - |
+| tag | HTML Tag | *string* | `i` | - |
 
 ### Events
 

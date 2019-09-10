@@ -32,6 +32,7 @@ export default createComponent({
 
   props: {
     valueKey: String,
+    allowHtml: Boolean,
     className: String,
     itemHeight: Number,
     defaultIndex: Number,
@@ -76,6 +77,10 @@ export default createComponent({
   computed: {
     count() {
       return this.options.length;
+    },
+
+    baseOffset() {
+      return (this.itemHeight * (this.visibleItemCount - 1)) / 2;
     }
   },
 
@@ -85,22 +90,26 @@ export default createComponent({
 
       if (this.moving) {
         const translateY = getElementTranslateY(this.$refs.wrapper);
-        this.startOffset = Math.min(0, translateY);
+        this.offset = Math.min(0, translateY - this.baseOffset);
+        this.startOffset = this.offset;
       } else {
         this.startOffset = this.offset;
       }
 
       this.duration = 0;
-      this.moving = false;
       this.transitionEndTrigger = null;
       this.touchStartTime = Date.now();
       this.momentumOffset = this.startOffset;
     },
 
     onTouchMove(event) {
-      preventDefault(event);
       this.moving = true;
       this.touchMove(event);
+
+      if (this.direction === 'vertical') {
+        preventDefault(event, true);
+      }
+
       this.offset = range(
         this.startOffset + this.deltaY,
         -(this.count * this.itemHeight),
@@ -125,11 +134,10 @@ export default createComponent({
         return;
       }
 
-      if (this.offset !== this.startOffset) {
-        this.duration = DEFAULT_DURATION;
-        const index = this.getIndexByOffset(this.offset);
-        this.setIndex(index, true);
-      }
+      const index = this.getIndexByOffset(this.offset);
+      this.moving = false;
+      this.duration = DEFAULT_DURATION;
+      this.setIndex(index, true);
     },
 
     onTransitionEnd() {
@@ -137,6 +145,10 @@ export default createComponent({
     },
 
     onClickItem(index) {
+      if (this.moving) {
+        return;
+      }
+
       this.duration = DEFAULT_DURATION;
       this.setIndex(index, true);
     },
@@ -216,23 +228,48 @@ export default createComponent({
         this.transitionEndTrigger();
         this.transitionEndTrigger = null;
       }
+    },
+
+    genOptions() {
+      const optionStyle = {
+        height: `${this.itemHeight}px`
+      };
+
+      return this.options.map((option, index) => {
+        const text = this.getOptionText(option);
+        const data = {
+          style: optionStyle,
+          class: [
+            'van-ellipsis',
+            bem('item', {
+              disabled: isOptionDisabled(option),
+              selected: index === this.currentIndex
+            })
+          ],
+          on: {
+            click: () => {
+              this.onClickItem(index);
+            }
+          }
+        };
+
+        if (this.allowHtml) {
+          data.domProps = {
+            innerHTML: text
+          };
+        }
+
+        return <li {...data}>{this.allowHtml ? '' : text}</li>;
+      });
     }
   },
 
   render() {
-    const { itemHeight, visibleItemCount } = this;
-
-    const baseOffset = (itemHeight * (visibleItemCount - 1)) / 2;
-
     const wrapperStyle = {
-      transform: `translate3d(0, ${this.offset + baseOffset}px, 0)`,
+      transform: `translate3d(0, ${this.offset + this.baseOffset}px, 0)`,
       transitionDuration: `${this.duration}ms`,
       transitionProperty: this.duration ? 'all' : 'none',
-      lineHeight: `${itemHeight}px`
-    };
-
-    const optionStyle = {
-      height: `${itemHeight}px`
+      lineHeight: `${this.itemHeight}px`
     };
 
     return (
@@ -249,22 +286,7 @@ export default createComponent({
           class={bem('wrapper')}
           onTransitionend={this.onTransitionEnd}
         >
-          {this.options.map((option, index) => (
-            <li
-              style={optionStyle}
-              class={[
-                'van-ellipsis',
-                bem('item', {
-                  disabled: isOptionDisabled(option),
-                  selected: index === this.currentIndex
-                })
-              ]}
-              domPropsInnerHTML={this.getOptionText(option)}
-              onClick={() => {
-                this.onClickItem(index);
-              }}
-            />
-          ))}
+          {this.genOptions()}
         </ul>
       </div>
     );

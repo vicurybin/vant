@@ -6,7 +6,7 @@ The default language of Vant is Chinese. If you want to use other languages, you
 
 ### Switch languages
 
-Vant supports multiple languages with the Locale component, and the `Locale.use` method allows you to switch to diffrent languages.
+Vant supports multiple languages with the Locale component, and the `Locale.use` method allows you to switch to different languages.
 
 ```js
 import { Locale } from 'vant';
@@ -44,5 +44,6 @@ Current supported languages:
 | Traditional Chinese (TW) | zh-TW |
 | English | en-US |
 | Turkish | tr-TR |
+| Spanish (Spain) | es-ES |
 
-View all language configs [Here](https://github.com/youzan/vant/tree/dev/src/locale/lang).
+> View all language configs [Here](https://github.com/youzan/vant/tree/dev/src/locale/lang).

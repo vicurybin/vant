@@ -1,7 +1,9 @@
 # Cell 单元格
 
 ### 引入
+
 ``` javascript
+import Vue from 'vue';
 import { Cell, CellGroup } from 'vant';
 
 Vue.use(Cell).use(CellGroup);
@@ -11,7 +13,7 @@ Vue.use(Cell).use(CellGroup);
 
 ### 基础用法
 
-`Cell`可以单独使用，也可以与`CellGroup`搭配使用。`CellGroup`可以为`Cell`提供上下外边框。
+`Cell`可以单独使用，也可以与`CellGroup`搭配使用。`CellGroup`可以为`Cell`提供上下外边框
 
 ```html
 <van-cell-group>
@@ -39,7 +41,7 @@ Vue.use(Cell).use(CellGroup);
 
 ### 只设置 value
 
-只设置`value`时会向左对齐
+只设置`value`时，内容会靠左对齐
 
 ```html
 <van-cell value="内容" />
@@ -47,7 +49,7 @@ Vue.use(Cell).use(CellGroup);
 
 ### 展示箭头
 
-传入`is-link`属性则会在右侧显示箭头，并且可以通过传入`arrow-direction`属性控制箭头方向
+设置`is-link`属性后会在单元格右侧显示箭头，并且可以通过`arrow-direction`属性控制箭头方向
 
 ```html
 <van-cell title="单元格" is-link />
@@ -55,13 +57,13 @@ Vue.use(Cell).use(CellGroup);
 <van-cell title="单元格" is-link arrow-direction="down" value="内容" />
 ```
 
-### 页面跳转
+### 页面导航
 
-可以通过`url`属性进行页面跳转，或通过`to`属性进行 vue-router 跳转
+可以通过`url`属性进行 URL 跳转，或通过`to`属性进行路由跳转
 
 ```html
-<van-cell title="单元格" is-link url="//youzan.github.io/vant/mobile.html" />
-<van-cell title="单元格" is-link to="index" />
+<van-cell title="URL 跳转" is-link url="/vant/mobile.html" />
+<van-cell title="路由跳转" is-link to="index" />
 ```
 
 ### 分组标题
@@ -77,12 +79,13 @@ Vue.use(Cell).use(CellGroup);
 </van-cell-group>
 ```
 
-### 高级用法
+### 使用插槽
 
-如以上用法不能满足你的需求，可以使用对应的`slot`来自定义显示的内容
+如以上用法不能满足你的需求，可以使用插槽来自定义内容
 
 ```html
 <van-cell value="内容" is-link>
+  <!-- 使用 title 插槽来自定义标题 -->
   <template slot="title">
     <span class="custom-title">单元格</span>
     <van-tag type="danger">标签</van-tag>
@@ -90,6 +93,7 @@ Vue.use(Cell).use(CellGroup);
 </van-cell>
 
 <van-cell title="单元格" icon="shop-o">
+  <!-- 使用 right-icon 插槽来自定义右侧图标 -->
   <van-icon
     slot="right-icon"
     name="search"
@@ -104,31 +108,31 @@ Vue.use(Cell).use(CellGroup);
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|------|------|
-| title | 分组标题 | `string` | `-` | 1.6.9 |
-| border | 是否显示外边框 | `boolean` | `true` | - |
+| title | 分组标题 | *string* | `-` | - |
+| border | 是否显示外边框 | *boolean* | `true` | - |
 
 ### Cell Props
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|------|------|
-| icon | 左侧图标名称或图片链接，可选值见 Icon 组件 | `string` | - | - |
-| title | 左侧标题 | `string | number` | - | - |
-| value | 右侧内容 | `string | number` | - | - |
-| label | 标题下方的描述信息 | `string` | - | - |
-| size | 单元格大小，可选值为 `large` | `string` | - | - |
-| url | 跳转链接 | `string` | - | - |
-| to | 路由跳转对象，同 vue-router 的 to 属性 | `string | object` | - | - |
-| border | 是否显示内边框 | `boolean` | `true` | - |
-| replace | 跳转时是否替换当前页面历史 | `boolean` | `false` | - |
-| clickable | 是否开启点击反馈 | `boolean` | `false` | - |
-| is-link | 是否展示右侧箭头并开启点击反馈 | `boolean` | `false` | - |
-| required | 是否显示表单必填星号 | `boolean` | `false` | - |
-| center | 是否使内容垂直居中 | `boolean` | `false` | - |
-| arrow-direction | 箭头方向，可选值为 `left` `up` `down` | `string` | - | -|
-| title-style | 左侧标题额外样式 | `any` | - | 1.6.17 |
-| title-class | 左侧标题额外类名 | `any` | - | - |
-| value-class | 右侧内容额外类名 | `any` | - | - |
-| label-class | 描述信息额外类名 | `any` | - | - |
+| icon | 左侧图标名称或图片链接，可选值见 Icon 组件 | *string* | - | - |
+| title | 左侧标题 | *string \| number* | - | - |
+| value | 右侧内容 | *string \| number* | - | - |
+| label | 标题下方的描述信息 | *string* | - | - |
+| size | 单元格大小，可选值为 `large` | *string* | - | - |
+| url | 跳转链接 | *string* | - | - |
+| to | 路由跳转对象，同 vue-router 的 to 属性 | *string \| object* | - | - |
+| border | 是否显示内边框 | *boolean* | `true` | - |
+| replace | 跳转时是否替换当前页面历史 | *boolean* | `false` | - |
+| clickable | 是否开启点击反馈 | *boolean* | `false` | - |
+| is-link | 是否展示右侧箭头并开启点击反馈 | *boolean* | `false` | - |
+| required | 是否显示表单必填星号 | *boolean* | `false` | - |
+| center | 是否使内容垂直居中 | *boolean* | `false` | - |
+| arrow-direction | 箭头方向，可选值为 `left` `up` `down` | *string* | - | -|
+| title-style | 左侧标题额外样式 | *any* | - | - |
+| title-class | 左侧标题额外类名 | *any* | - | - |
+| value-class | 右侧内容额外类名 | *any* | - | - |
+| label-class | 描述信息额外类名 | *any* | - | - |
 
 ### Cell Events
 
@@ -136,12 +140,19 @@ Vue.use(Cell).use(CellGroup);
 |------|------|------|
 | click | 点击单元格时触发 | event: Event |
 
+### CellGroup Slots
+
+| 名称 | 说明 |
+|------|------|
+| default | 默认插槽 |
+| title | 自定义分组标题 |
+
 ### Cell Slots
 
 | 名称 | 说明 |
 |------|------|
-| default | 自定义`value`显示内容 |
-| title | 自定义标题显示内容 |
-| label | 自定义标题下方描述显示内容 |
+| default | 自定义右侧内容 |
+| title | 自定义左侧标题 |
+| label | 自定义标题下方描述 |
 | icon | 自定义左侧图标 |
 | right-icon | 自定义右侧按钮，默认为`arrow` |

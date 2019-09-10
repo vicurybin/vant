@@ -3,6 +3,7 @@
 ### 引入
 
 ``` javascript
+import Vue from 'vue';
 import { CountDown } from 'vant';
 
 Vue.use(CountDown);
@@ -122,10 +123,10 @@ export default {
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|------|------|
-| time | 倒计时时长，单位毫秒 | `number` | - | - |
-| format | 时间格式，DD-日，HH-时，mm-分，ss-秒，SSS-毫秒 | `string` | `HH:mm:ss` | - |
-| auto-start | 是否自动开始倒计时 | `boolean` | `true` | - |
-| millisecond | 是否开启毫秒级渲染 | `boolean` | `false` | - |
+| time | 倒计时时长，单位毫秒 | *number* | - | - |
+| format | 时间格式，DD-日，HH-时，mm-分，ss-秒，SSS-毫秒 | *string* | `HH:mm:ss` | - |
+| auto-start | 是否自动开始倒计时 | *boolean* | `true` | - |
+| millisecond | 是否开启毫秒级渲染 | *boolean* | `false` | - |
 
 ### Events
 
@@ -143,11 +144,11 @@ export default {
 
 | 名称 | 说明 | 类型 |
 |------|------|------|
-| days | 剩余天数 | `number` |
-| hours | 剩余小时 | `number` |
-| minutes | 剩余分钟 | `number` |
-| seconds | 剩余秒数 | `number` |
-| milliseconds | 剩余毫秒 | `number` |
+| days | 剩余天数 | *number* |
+| hours | 剩余小时 | *number* |
+| minutes | 剩余分钟 | *number* |
+| seconds | 剩余秒数 | *number* |
+| milliseconds | 剩余毫秒 | *number* |
 
 ### 方法
 

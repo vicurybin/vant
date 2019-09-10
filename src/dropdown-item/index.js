@@ -82,6 +82,7 @@ export default createComponent({
           key={option.value}
           icon={option.icon}
           title={option.text}
+          class={bem('option', { active })}
           style={{ color: active ? activeColor : '' }}
           onClick={() => {
             this.showPopup = false;

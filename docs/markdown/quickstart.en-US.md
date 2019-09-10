@@ -95,18 +95,18 @@ Vue.use(Vant);
 
 ```html
 <!-- import style -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.0/lib/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.1/lib/index.css" />
 
 <!-- import script -->
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vant@2.0/lib/vant.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@2.1/lib/vant.min.js"></script>
 
 <script>
 var Vue = window.Vue;
 var vant = window.vant;
 
-// Register components
-Vue.use(vant);
+// Register Lazyload component
+Vue.use(vant.Lazyload);
 
 // Call function components
 vant.Toast('message');

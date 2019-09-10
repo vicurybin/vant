@@ -3,6 +3,7 @@
 ### Install
 
 ``` javascript
+import Vue from 'vue';
 import { Step, Steps } from 'vant';
 
 Vue.use(Step).use(Steps);
@@ -69,14 +70,14 @@ export default {
 
 ### Steps Props
 
-| Attribute | Description | Type | Default |
-|------|------|------|------|
-| active | Active step | `number` | 0 |
-| description | Description | `string` | - |
-| direction | Can be set to `vertical` | `string` | `horizontal` |
-| active-color | Active step color | `string` | `#07c160` |
-| active-icon | Active icon name | `string` | `checked` |
-| inactive-icon | Active icon name | `string` | - |
+| Attribute | Description | Type | Default | Version |
+|------|------|------|------|------|
+| active | Active step | *number* | 0 | - |
+| description | Description | *string* | - | - |
+| direction | Can be set to `vertical` | *string* | `horizontal` | - |
+| active-color | Active step color | *string* | `#07c160` | - |
+| active-icon | Active icon name | *string* | `checked` | - |
+| inactive-icon | Active icon name | *string* | - | - |
 
 ### Step Slots
 

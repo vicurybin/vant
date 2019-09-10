@@ -3,6 +3,7 @@
 ### Install
 
 ``` javascript
+import Vue from 'vue';
 import { Button } from 'vant';
 
 Vue.use(Button);
@@ -73,30 +74,45 @@ Vue.use(Button);
 <van-button type="primary" size="mini">Mini</van-button>
 ```
 
+### Route
+
+```html
+<van-button type="primary" url="/vant/mobile.html">URL</van-button>
+<van-button type="primary" to="index">Vue Router</van-button>
+```
+
+### Custom Color
+
+```html
+<van-button color="#7232dd">Custom Color</van-button>
+<van-button color="#7232dd" plain>Custom Color</van-button>
+```
+
 ## API
 
 ### Props
 
-| Attribute | Description | Type | Default |
-|------|------|------|------|
-| type | Can be set to `primary` `info` `warning` `danger` | `string` | `default` |
-| size | Can be set to `large` `small` `mini` | `string` | `normal` |
-| text | Text | `string` | - |
-| icon | Left Icon | `string` | - |
-| tag | HTML Tag | `string` | `button` |
-| native-type | Native Type Attribute | `string` | `''` |
-| plain | Whether to be plain button | `boolean` | `false` |
-| block | Whether to set display block | `boolean` | `false` |
-| round | Whether to be round button | `boolean` | `false` |
-| square | Whether to be square button | `boolean` | `false` |
-| disabled | Whether to disable button | `boolean` | `false` |
-| loading | Whether show loading status | `boolean` | `false` |
-| loading-text | Loading text | `string` | - |
-| loading-type | Loading type, can be set to `spinner` | `string` | `circular` |
-| loading-size | Loading icon size | `string` | `20px` |
-| url | Link URL | `string` | - |
-| to | Target route of the link, same as to of vue-router | `string | object` | - |
-| replace | If true, the navigation will not leave a history record | `boolean` | `false` |
+| Attribute | Description | Type | Default | Version |
+|------|------|------|------|------|
+| type | Can be set to `primary` `info` `warning` `danger` | *string* | `default` | - |
+| size | Can be set to `large` `small` `mini` | *string* | `normal` | - |
+| text | Text | *string* | - | - |
+| color | Color, support linear-gradient | *string* | - | 2.1.3 |
+| icon | Left Icon | *string* | - | - |
+| tag | HTML Tag | *string* | `button` | - |
+| native-type | Native Type Attribute | *string* | `''` | - |
+| plain | Whether to be plain button | *boolean* | `false` | - |
+| block | Whether to set display block | *boolean* | `false` | - |
+| round | Whether to be round button | *boolean* | `false` | - |
+| square | Whether to be square button | *boolean* | `false` | - |
+| disabled | Whether to disable button | *boolean* | `false` | - |
+| loading | Whether show loading status | *boolean* | `false` | - |
+| loading-text | Loading text | *string* | - | - |
+| loading-type | Loading type, can be set to `spinner` | *string* | `circular` | - |
+| loading-size | Loading icon size | *string* | `20px` | - |
+| url | Link URL | *string* | - | - |
+| to | Target route of the link, same as to of vue-router | *string \| object* | - | - |
+| replace | If true, the navigation will not leave a history record | *boolean* | `false` | - |
 
 ### Events
 

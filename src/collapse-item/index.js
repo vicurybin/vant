@@ -1,4 +1,5 @@
 import { createNamespace, isDef } from '../utils';
+import { BORDER_TOP } from '../utils/constant';
 import { raf, doubleRaf } from '../utils/dom/raf';
 import Cell from '../cell';
 import { cellProps } from '../cell/shared';
@@ -37,8 +38,14 @@ export default createComponent({
         return null;
       }
 
-      const { value } = this.parent;
-      return this.parent.accordion
+      const { value, accordion } = this.parent;
+
+      if (process.env.NODE_ENV !== 'production' && !accordion && !Array.isArray(value)) {
+        console.error('[Vant] Collapse: type of prop "value" should be Array');
+        return;
+      }
+
+      return accordion
         ? value === this.currentName
         : value.some(name => name === this.currentName);
     }
@@ -147,7 +154,7 @@ export default createComponent({
     );
 
     return (
-      <div class={[bem(), { 'van-hairline--top': this.index }]}>
+      <div class={[bem(), { [BORDER_TOP]: this.index }]}>
         {Title}
         {Content}
       </div>

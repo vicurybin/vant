@@ -2,109 +2,55 @@
   <demo-section>
     <demo-block :title="$t('basicUsage')">
       <van-cell-group>
-        <van-cell
-          :title="$t('cell')"
-          :value="$t('content')"
-        />
-        <van-cell
-          :title="$t('cell')"
-          :value="$t('content')"
-          :label="$t('desc')"
-        />
+        <van-cell :title="$t('cell')" :value="$t('content')" />
+        <van-cell :title="$t('cell')" :value="$t('content')" :label="$t('desc')" />
       </van-cell-group>
     </demo-block>
 
     <demo-block :title="$t('largeSize')">
-      <van-cell
-        :title="$t('cell')"
-        :value="$t('content')"
-        size="large"
-      />
-      <van-cell
-        :title="$t('cell')"
-        :value="$t('content')"
-        size="large"
-        :label="$t('desc')"
-      />
+      <van-cell :title="$t('cell')" :value="$t('content')" size="large" />
+      <van-cell :title="$t('cell')" :value="$t('content')" size="large" :label="$t('desc')" />
     </demo-block>
 
     <demo-block :title="$t('showIcon')">
-      <van-cell
-        :title="$t('cell')"
-        :value="$t('content')"
-        icon="location-o"
-      />
+      <van-cell :title="$t('cell')" :value="$t('content')" icon="location-o" />
     </demo-block>
 
-    <demo-block :title="$t('valueOnly')">
+    <demo-block v-if="!$attrs.weapp" :title="$t('valueOnly')">
       <van-cell :value="$t('content')" />
     </demo-block>
 
     <demo-block :title="$t('showArrow')">
-      <van-cell
-        :title="$t('cell')"
-        is-link
-      />
-      <van-cell
-        :title="$t('cell')"
-        is-link
-        :value="$t('content')"
-      />
-      <van-cell
-        :title="$t('cell')"
-        is-link
-        arrow-direction="down"
-        :value="$t('content')"
-      />
+      <van-cell :title="$t('cell')" is-link />
+      <van-cell :title="$t('cell')" is-link :value="$t('content')" />
+      <van-cell :title="$t('cell')" is-link arrow-direction="down" :value="$t('content')" />
     </demo-block>
 
     <demo-block :title="$t('router')">
-      <van-cell
-        :title="$t('cell')"
-        is-link
-        url="//youzan.github.io/vant/mobile.html"
-      />
-      <van-cell
-        :title="$t('cell')"
-        is-link
-        to="index"
-      />
+      <van-cell :title="$t('urlRoute')" is-link url="/vant/mobile.html" />
+      <van-cell :title="$t('vueRoute')" is-link to="index" />
     </demo-block>
 
     <demo-block :title="$t('groupTitle')">
       <van-cell-group :title="`${$t('group')} 1`">
-        <van-cell
-          :title="$t('cell')"
-          :value="$t('content')"
-        />
+        <van-cell :title="$t('cell')" :value="$t('content')" />
       </van-cell-group>
       <van-cell-group :title="`${$t('group')} 2`">
-        <van-cell
-          :title="$t('cell')"
-          :value="$t('content')"
-        />
+        <van-cell :title="$t('cell')" :value="$t('content')" />
       </van-cell-group>
     </demo-block>
 
-    <demo-block :title="$t('advancedUsage')">
-      <van-cell
-        :value="$t('content')"
-        is-link
-      >
+    <demo-block :title="$t('useSlots')">
+      <van-cell :value="$t('content')" is-link>
         <template #title>
           <span class="custom-title">{{ $t('cell') }}</span>
           <van-tag type="danger">{{ $t('tag') }}</van-tag>
         </template>
       </van-cell>
-      <van-cell
-        icon="shop-o"
-        :title="$t('cell')"
-      >
+
+      <van-cell icon="shop-o" :title="$t('cell')">
         <template #right-icon>
-          <van-icon
-            name="search"
-            style="line-height: inherit;"
-          />
+          <van-icon name="search" style="line-height: inherit;" />
         </template>
       </van-cell>
     </demo-block>
@@ -122,7 +68,10 @@ export default {
       largeSize: '单元格大小',
       group: '分组',
       groupTitle: '分组标题',
-      router: '页面跳转'
+      router: '页面导航',
+      urlRoute: 'URL 跳转',
+      vueRoute: '路由跳转',
+      useSlots: '使用插槽'
     },
     'en-US': {
       cell: 'Cell title',
@@ -132,7 +81,10 @@ export default {
       largeSize: 'Size',
       group: 'Group',
       groupTitle: 'Group Title',
-      router: 'Router'
+      router: 'Router',
+      urlRoute: 'URL',
+      vueRoute: 'Vue Router',
+      useSlots: 'Use Slots'
     }
   }
 };

@@ -19,16 +19,6 @@ vue ui
 
 在图形化界面中，点击`依赖` -> `安装依赖`，然后将 `vant` 添加到依赖中即可。
 
-### 示例工程
-
-我们提供了一个基于 Vue Cli 3 的示例工程，仓库地址为 [Vant Demo](https://github.com/youzan/vant-demo)，示例工程会帮助你了解如下内容：
-
-- 基于 vant 搭建单页面应用，配置按需引入
-- 配置 rem 适配方案
-- 配置 viewport 适配方案
-- 配置 TypeScript 工程
-- 配置自定义主题色方案
-
 ### 安装
 
 ```bash
@@ -104,24 +94,24 @@ import 'vant/lib/index.css';
 Vue.use(Vant);
 ```
 
-> 注意：配置 babel-plugin-import 插件后将不允许导入所有组件
+> 注意：配置 babel-plugin-import 插件后，将不允许以这种方式导入组件
 
 ### 方式四. 通过 CDN 引入
 
 ```html
 <!-- 引入样式 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.0/lib/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.1/lib/index.css">
 
 <!-- 引入组件 -->
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vant@2.0/lib/vant.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@2.1/lib/vant.min.js"></script>
 
 <script>
 var Vue = window.Vue;
 var vant = window.vant;
 
-// 注册组件
-Vue.use(vant);
+// 注册 Lazyload 组件
+Vue.use(vant.Lazyload);
 
 // 调用函数式组件
 vant.Toast('提示');
@@ -153,11 +143,11 @@ module.exports = {
 }
 ```
 
-> 注意：在配置 postcss-loader 时，应避免 ignore node_modules 目录，这会导致 Vant 的样式无法被编译
+> 注意：在配置 postcss-loader 时，应避免 ignore node_modules 目录，这会导致 Vant 的样式无法被编译
 
 ### 在桌面端使用
 
-Vant 组件默认只适配了移动端设备，如果你需要在桌面端使用 vant，可以引入我们提供的 [@vant/touch-emulator](https://github.com/chenjiahan/vant-touch-emulator).
+Vant 组件默认只适配了移动端设备，如果你需要在桌面端使用 vant，可以引入我们提供的 [@vant/touch-emulator](https://github.com/youzan/vant/tree/dev/packages/vant-touch-emulator).
 
 ```bash
 # 安装模块

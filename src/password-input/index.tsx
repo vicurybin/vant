@@ -1,5 +1,6 @@
 import { createNamespace, addUnit } from '../utils';
 import { emit, inherit } from '../utils/functional';
+import { BORDER_LEFT, BORDER_SURROUND } from '../utils/constant';
 
 // Types
 import { CreateElement, RenderContext } from 'vue/types';
@@ -11,6 +12,7 @@ export type PasswordInputProps = {
   value: string;
   length: number;
   gutter: number;
+  focused?: boolean;
   errorInfo?: string;
 };
 
@@ -28,6 +30,7 @@ function PasswordInput(
   for (let i = 0; i < props.length; i++) {
     const char = props.value[i];
     const showBorder = i !== 0 && !props.gutter;
+    const showCursor = props.focused && i === props.value.length;
 
     let style;
     if (i !== 0 && props.gutter) {
@@ -35,8 +38,9 @@ function PasswordInput(
     }
 
     Points.push(
-      <li class={{ 'van-hairline--left': showBorder }} style={style}>
+      <li class={{ [BORDER_LEFT]: showBorder }} style={style}>
         {props.mask ? <i style={{ visibility: char ? 'visible' : 'hidden' }} /> : char}
+        {showCursor && <div class={bem('cursor')} />}
       </li>
     );
   }
@@ -44,7 +48,7 @@ function PasswordInput(
   return (
     <div class={bem()}>
       <ul
-        class={[bem('security'), { 'van-hairline--surround': !props.gutter }]}
+        class={[bem('security'), { [BORDER_SURROUND]: !props.gutter }]}
         onTouchstart={(event: TouchEvent) => {
           event.stopPropagation();
           emit(ctx, 'focus', event);
@@ -61,6 +65,7 @@ function PasswordInput(
 PasswordInput.props = {
   info: String,
   gutter: [Number, String],
+  focused: Boolean,
   errorInfo: String,
   mask: {
     type: Boolean,

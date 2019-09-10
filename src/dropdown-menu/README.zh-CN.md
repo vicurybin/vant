@@ -3,6 +3,7 @@
 ### 引入
 
 ``` javascript
+import Vue from 'vue';
 import { DropdownMenu, DropdownItem } from 'vant';
 
 Vue.use(DropdownMenu).use(DropdownItem);
@@ -78,6 +79,17 @@ export default {
 };
 ```
 
+### 自定义选中态颜色
+
+通过`active-color`属性可以自定义菜单标题和选项的选中态颜色
+
+```html
+<van-dropdown-menu active-color="#ee0a24">
+  <van-dropdown-item v-model="value1" :options="option1" />
+  <van-dropdown-item v-model="value2" :options="option2" />
+</van-dropdown-menu>
+```
+
 ### 向上展开
 
 将`direction`属性值设置为`up`，菜单即可向上展开
@@ -104,23 +116,23 @@ export default {
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|------|------|
-| active-color | 菜单标题和选项的选中态颜色 | `string` | `#1989fa` | - |
-| z-index | 菜单栏 z-index 层级 | `number` | `10` | - |
-| duration | 动画时长，单位秒 | `number` | `0.2` | 2.0.0 |
-| direction | 菜单展开方向，可选值为`up` | `string` | `down` | 2.0.1 |
-| overlay | 是否显示遮罩层 | `boolean` | `true` | - |
-| close-on-click-overlay | 是否在点击遮罩层后关闭菜单 | `boolean` | `true` | - |
-| close-on-click-outside | 是否在点击外部元素后关闭菜单 | `boolean` | `true` | 2.0.7 |
+| active-color | 菜单标题和选项的选中态颜色 | *string* | `#1989fa` | - |
+| z-index | 菜单栏 z-index 层级 | *number* | `10` | - |
+| duration | 动画时长，单位秒 | *number* | `0.2` | - |
+| direction | 菜单展开方向，可选值为`up` | *string* | `down` | 2.0.1 |
+| overlay | 是否显示遮罩层 | *boolean* | `true` | - |
+| close-on-click-overlay | 是否在点击遮罩层后关闭菜单 | *boolean* | `true` | - |
+| close-on-click-outside | 是否在点击外部元素后关闭菜单 | *boolean* | `true` | 2.0.7 |
 
 ### DropdownItem Props
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|------|------|
-| value | 当前选中项对应的 value，可以通过`v-model`双向绑定 | `string | number` | - | - |
-| title | 菜单项标题 | `string` | 当前选中项文字 | - |
-| options | 选项数组 | `Option[]` | `[]` | - |
-| disabled | 是否禁用菜单 | `boolean` | `false` | - |
-| title-class | 标题额外类名 | `string` | - | - |
+| value | 当前选中项对应的 value，可以通过`v-model`双向绑定 | *string \| number* | - | - |
+| title | 菜单项标题 | *string* | 当前选中项文字 | - |
+| options | 选项数组 | *Option[]* | `[]` | - |
+| disabled | 是否禁用菜单 | *boolean* | `false` | - |
+| title-class | 标题额外类名 | *string* | - | - |
 
 ### DropdownItem Events
 
@@ -143,6 +155,6 @@ export default {
 
 | 键名 | 说明 | 类型 |
 |------|------|------|
-| text | 文字 | `string` |
-| value | 标识符 | `string | number` |
-| icon | 左侧图标名称或图片链接，可选值见 Icon 组件 | `string` |
+| text | 文字 | *string* |
+| value | 标识符 | *string \| number* |
+| icon | 左侧图标名称或图片链接，可选值见 Icon 组件 | *string* |

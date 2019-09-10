@@ -3,6 +3,7 @@
 ### Install
 
 ``` javascript
+import Vue from 'vue';
 import { Progress } from 'vant';
 
 Vue.use(Progress);
@@ -18,6 +19,11 @@ Use 'percentage' prop to set current progress
 <van-progress :percentage="50" />
 ```
 
+### Stroke Width
+
+```html
+<van-progress :percentage="50" stroke-width="8" />
+```
 
 ### Inactive
 
@@ -39,7 +45,7 @@ Use `pivot-text` to custom text，use `color` to custom bar color
 
 <van-progress
   pivot-text="Red"
-  color="#f44"
+  color="#ee0a24"
   :percentage="50"
 />
 
@@ -55,12 +61,13 @@ Use `pivot-text` to custom text，use `color` to custom bar color
 
 ### Props
 
-| Attribute | Description | Type | Default |
-|------|------|------|------|
-| inactive | Whether to be gray | `boolean` | `false` |
-| percentage | Percentage | `number` | `0` |
-| show-pivot | Whether to show text | `boolean` | `true` |
-| color | Color | `string` | `#1989fa` |
-| pivot-text | Text | `string` | percentage |
-| pivot-color | Text background color | `string` | inherit progress color |
-| text-color | Text color | `string` | `#fff` |
+| Attribute | Description | Type | Default | Version |
+|------|------|------|------|------|
+| inactive | Whether to be gray | *boolean* | `false` | - |
+| percentage | Percentage | *number* | `0` | - |
+| stroke-width | Stroke width | *string \| number* | `4px` | 2.2.1 |
+| show-pivot | Whether to show text | *boolean* | `true` | - |
+| color | Color | *string* | `#1989fa` | - |
+| pivot-text | Text | *string* | percentage | - |
+| pivot-color | Text background color | *string* | inherit progress color | - |
+| text-color | Text color | *string* | `#fff` | - |

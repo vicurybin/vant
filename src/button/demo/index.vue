@@ -125,6 +125,31 @@
         {{ $t('mini') }}
       </van-button>
     </demo-block>
+
+    <demo-block :title="$t('router')">
+      <van-button
+        :text="$t('urlRoute')"
+        type="primary"
+        url="/vant/mobile.html"
+      />
+      <van-button
+        :text="$t('vueRoute')"
+        type="primary"
+        to="index"
+      />
+    </demo-block>
+
+    <demo-block :title="$t('customColor')">
+      <van-button
+        color="#7232dd"
+        :text="$t('customColor')"
+      />
+      <van-button
+        plain
+        color="#7232dd"
+        :text="$t('customColor')"
+      />
+    </demo-block>
   </demo-section>
 </template>
 
@@ -151,7 +176,11 @@ export default {
       round: '圆形按钮',
       hairline: '细边框',
       hairlineButton: '细边框按钮',
-      loadingText: '加载中...'
+      loadingText: '加载中...',
+      router: '页面导航',
+      urlRoute: 'URL 跳转',
+      vueRoute: '路由跳转',
+      customColor: '自定义颜色'
     },
     'en-US': {
       type: 'Type',
@@ -173,7 +202,11 @@ export default {
       round: 'Round',
       hairline: 'Hairline',
       hairlineButton: 'Hairline',
-      loadingText: 'Loading...'
+      loadingText: 'Loading...',
+      router: 'Router',
+      urlRoute: 'URL',
+      vueRoute: 'Vue Router',
+      customColor: 'Custom Color'
     }
   }
 };

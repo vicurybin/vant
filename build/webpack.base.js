@@ -1,29 +1,8 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = {
   mode: 'development',
-  entry: {
-    'vant-docs': './docs/site/desktop/main.js',
-    'vant-mobile': './docs/site/mobile/main.js'
-  },
-  output: {
-    path: path.join(__dirname, '../docs/dist'),
-    publicPath: '/',
-    chunkFilename: 'async_[name].js'
-  },
-  stats: {
-    modules: false,
-    children: false
-  },
-  devServer: {
-    open: true,
-    host: '0.0.0.0',
-    stats: 'errors-only',
-    clientLogLevel: 'warning'
-  },
   resolve: {
     extensions: ['.js', '.ts', '.tsx', '.vue', '.less']
   },
@@ -45,7 +24,13 @@ module.exports = {
       {
         test: /\.(js|ts|tsx)$/,
         exclude: /node_modules/,
-        use: 'babel-loader'
+        use: {
+          loader: 'babel-loader',
+          // enable sub-packages to find babel config
+          options: {
+            rootMode: 'upward'
+          }
+        }
       },
       {
         test: /\.less$/,
@@ -68,20 +53,5 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new VueLoaderPlugin(),
-    new ProgressBarPlugin(),
-    new HtmlWebpackPlugin({
-      chunks: ['vant-docs'],
-      template: 'docs/site/desktop/index.html',
-      filename: 'index.html',
-      inject: true
-    }),
-    new HtmlWebpackPlugin({
-      chunks: ['vant-mobile'],
-      template: 'docs/site/mobile/index.html',
-      filename: 'mobile.html',
-      inject: true
-    })
-  ]
+  plugins: [new VueLoaderPlugin()]
 };

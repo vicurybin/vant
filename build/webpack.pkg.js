@@ -1,11 +1,10 @@
 const path = require('path');
-const config = require('./webpack.dev.js');
+const merge = require('webpack-merge');
+const config = require('./webpack.base');
 
 const isMinify = process.argv.indexOf('-p') !== -1;
 
-delete config.serve;
-
-module.exports = Object.assign(config, {
+module.exports = merge(config, {
   mode: 'production',
   entry: {
     vant: './es/index.js'
@@ -16,7 +15,8 @@ module.exports = Object.assign(config, {
     libraryTarget: 'umd',
     filename: isMinify ? '[name].min.js' : '[name].js',
     umdNamedDefine: true,
-    globalObject: 'this'
+    // https://github.com/webpack/webpack/issues/6522
+    globalObject: 'typeof self !== \'undefined\' ? self : this'
   },
   externals: {
     vue: {

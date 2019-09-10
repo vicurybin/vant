@@ -18,6 +18,6 @@ export default createComponent({
   },
 
   render() {
-    return <div class={[bem(), 'van-hairline--top-bottom']}>{this.slots()}</div>;
+    return <div class={bem()}>{this.slots()}</div>;
   }
 });

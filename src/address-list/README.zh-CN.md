@@ -1,7 +1,9 @@
 # AddressList 地址列表
 
 ### 引入
+
 ``` javascript
+import Vue from 'vue';
 import { AddressList } from 'vant';
 
 Vue.use(AddressList);
@@ -70,12 +72,12 @@ export default {
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|------|------|
-| v-model | 当前选中地址的 id | `string` | - | - |
-| list | 地址列表 | `Address[]` | `[]` | - |
-| disabled-list | 不可配送地址列表 | `Address[]` | `[]` | - |
-| disabled-text | 不可配送提示文案 | `string` | - | - |
-| switchable | 是否允许切换地址 | `boolean` | `true` | - |
-| add-button-text | 底部按钮文字 | `string` | `新增地址` | - |
+| v-model | 当前选中地址的 id | *string* | - | - |
+| list | 地址列表 | *Address[]* | `[]` | - |
+| disabled-list | 不可配送地址列表 | *Address[]* | `[]` | - |
+| disabled-text | 不可配送提示文案 | *string* | - | - |
+| switchable | 是否允许切换地址 | *boolean* | `true` | - |
+| add-button-text | 底部按钮文字 | *string* | `新增地址` | - |
 
 ### Events
 
@@ -92,10 +94,10 @@ export default {
 
 | 键名 | 说明 | 类型 |
 |------|------|------|
-| id | 每条地址的唯一标识 | `string | number` |
-| name | 收货人姓名 | `string` |
-| tel | 收货人手机号 | `string | number` |
-| address | 收货地址 | `string` |
+| id | 每条地址的唯一标识 | *string \| number* |
+| name | 收货人姓名 | *string* |
+| tel | 收货人手机号 | *string \| number* |
+| address | 收货地址 | *string* |
 
 ### Slots
 

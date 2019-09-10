@@ -3,6 +3,7 @@
 ### 引入
 
 ``` javascript
+import Vue from 'vue';
 import { Button } from 'vant';
 
 Vue.use(Button);
@@ -89,31 +90,50 @@ Vue.use(Button);
 <van-button type="primary" size="mini">迷你按钮</van-button>
 ```
 
+### 页面导航
+
+可以通过`url`属性进行 URL 跳转，或通过`to`属性进行路由跳转
+
+```html
+<van-button type="primary" url="/vant/mobile.html">URL 跳转</van-button>
+<van-button type="primary" to="index">路由跳转</van-button>
+```
+
+### 自定义颜色
+
+通过`color`属性可以自定义按钮的颜色
+
+```html
+<van-button color="#7232dd">自定义颜色</van-button>
+<van-button color="#7232dd" plain>自定义颜色</van-button>
+```
+
 ## API
 
 ### Props
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|------|------|
-| type | 类型，可选值为 `primary` `info` `warning` `danger` | `string` | `default` | 1.6.6 |
-| size | 尺寸，可选值为 `large` `small` `mini` | `string` | `normal` | - |
-| text | 按钮文字 | `string` | - | - |
-| icon | 左侧图标名称或图片链接，可选值见 Icon 组件 | `string` | - | 2.0.0 |
-| tag | HTML 标签 | `string` | `button` | - |
-| native-type | 原生 button 标签 type 属性 | `string` | - | - |
-| block | 是否为块级元素 | `boolean` | `false` | - |
-| plain | 是否为朴素按钮 | `boolean` | `false` | - |
-| square | 是否为方形按钮 | `boolean` | `false` | - |
-| round | 是否为圆形按钮 | `boolean` | `false` | - |
-| disabled | 是否禁用按钮 | `boolean` | `false` | - |
-| hairline | 是否使用 0.5px 边框 | `boolean` | `false` | 1.6.11 |
-| loading | 是否显示为加载状态 | `boolean` | `false` | - |
-| loading-text | 加载状态提示文字 | `string` | - | 1.6.3 |
-| loading-type | 加载图标类型，可选值为`spinner` | `string` | `circular` | 2.0.0 |
-| loading-size | 加载图标大小 | `string` | `20px` | 1.6.7 |
-| url | 跳转链接 | `string` | - | 1.6.5 |
-| to | 路由跳转对象，同 vue-router 的 to 属性 | `string | object` | - | 1.6.5 |
-| replace | 跳转时是否替换当前页面历史 | `boolean` | `false` | 1.6.5 |
+| type | 类型，可选值为 `primary` `info` `warning` `danger` | *string* | `default` | - |
+| size | 尺寸，可选值为 `large` `small` `mini` | *string* | `normal` | - |
+| text | 按钮文字 | *string* | - | - |
+| color | 按钮颜色，支持传入`linear-gradient`渐变色 | *string* | - | 2.1.3 |
+| icon | 左侧图标名称或图片链接，可选值见 Icon 组件 | *string* | - | - |
+| tag | HTML 标签 | *string* | `button` | - |
+| native-type | 原生 button 标签 type 属性 | *string* | - | - |
+| block | 是否为块级元素 | *boolean* | `false` | - |
+| plain | 是否为朴素按钮 | *boolean* | `false` | - |
+| square | 是否为方形按钮 | *boolean* | `false` | - |
+| round | 是否为圆形按钮 | *boolean* | `false` | - |
+| disabled | 是否禁用按钮 | *boolean* | `false` | - |
+| hairline | 是否使用 0.5px 边框 | *boolean* | `false` | - |
+| loading | 是否显示为加载状态 | *boolean* | `false` | - |
+| loading-text | 加载状态提示文字 | *string* | - | - |
+| loading-type | 加载图标类型，可选值为`spinner` | *string* | `circular` | - |
+| loading-size | 加载图标大小 | *string* | `20px` | - |
+| url | 跳转链接 | *string* | - | - |
+| to | 路由跳转对象，同 vue-router 的 to 属性 | *string \| object* | - | - |
+| replace | 跳转时是否替换当前页面历史 | *boolean* | `false` | - |
 
 ### Events
 

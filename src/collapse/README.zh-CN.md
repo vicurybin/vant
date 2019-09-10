@@ -1,7 +1,9 @@
 # Collapse 折叠面板
 
 ### 引入
+
 ``` javascript
+import Vue from 'vue';
 import { Collapse, CollapseItem } from 'vant';
 
 Vue.use(Collapse).use(CollapseItem);
@@ -88,32 +90,32 @@ export default {
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|------|------|
-| v-model | 当前展开面板的 name | `string[] | number[] | string | number` | - | - |
-| accordion | 是否开启手风琴模式 | `boolean` | `false` | - |
-| border | 是否显示外边框 | `boolean` | `true` | 1.6.9 |
+| v-model | 当前展开面板的 name | 手风琴模式：*string \| number*<br>非手风琴模式：*(string \| number)[]* | - | - |
+| accordion | 是否开启手风琴模式 | *boolean* | `false` | - |
+| border | 是否显示外边框 | *boolean* | `true` | - |
 
 ### Collapse Events
 
 | 事件名 | 说明 | 回调参数 |
 |------|------|------|
-| change | 切换面板时触发 | activeNames: `string | array` |
+| change | 切换面板时触发 | activeNames: 类型与 v-model 绑定的值一致 |
 
 ### CollapseItem Props
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
-|------|------|------|------|------|------|
-| name | 唯一标识符，默认为索引值 | `string | number` | `index` | - |
-| icon | 标题栏左侧图标名称或图片链接，可选值见 Icon 组件 | `string` | - | - |
-| size | 标题栏大小，可选值为 `large` | `string` | - | 1.6.9 |
-| title | 标题栏左侧内容 | `string | number` | - | - |
-| value | 标题栏右侧内容 | `string | number` | - | - |
-| label | 标题栏描述信息 | `string | number`  | - | - |
-| border | 是否显示内边框 | `boolean` | `true` | - |
-| is-link | 是否展示标题栏右侧箭头并开启点击反馈 | `boolean` | `true` | - |
-| disabled | 是否禁用面板 | `boolean` | `false` | - |
-| title-class | 左侧标题额外类名 | `string` | - | - |
-| value-class | 右侧内容额外类名 | `string` | - | - |
-| label-class | 描述信息额外类名 | `string` | - | - |
+|------|------|------|------|------|
+| name | 唯一标识符，默认为索引值 | *string \| number* | `index` | - |
+| icon | 标题栏左侧图标名称或图片链接，可选值见 Icon 组件 | *string* | - | - |
+| size | 标题栏大小，可选值为 `large` | *string* | - | - |
+| title | 标题栏左侧内容 | *string \| number* | - | - |
+| value | 标题栏右侧内容 | *string \| number* | - | - |
+| label | 标题栏描述信息 | *string \| number*  | - | - |
+| border | 是否显示内边框 | *boolean* | `true` | - |
+| is-link | 是否展示标题栏右侧箭头并开启点击反馈 | *boolean* | `true` | - |
+| disabled | 是否禁用面板 | *boolean* | `false` | - |
+| title-class | 左侧标题额外类名 | *string* | - | - |
+| value-class | 右侧内容额外类名 | *string* | - | - |
+| label-class | 描述信息额外类名 | *string* | - | - |
 
 ### CollapseItem Slots
 

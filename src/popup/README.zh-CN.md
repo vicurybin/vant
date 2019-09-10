@@ -7,6 +7,7 @@
 ### 引入
 
 ``` javascript
+import Vue from 'vue';
 import { Popup } from 'vant';
 
 Vue.use(Popup);
@@ -50,6 +51,28 @@ export default {
 <van-popup
   v-model="show"
   position="top"
+  :style="{ height: '20%' }"
+/>
+```
+
+### 关闭图标
+
+设置`closeable`属性后，会在弹出层的右上角显示关闭图标，并且可以通过`close-icon`属性自定义图标
+
+```html
+<van-popup
+  v-model="show"
+  closeable
+  position="bottom"
+  :style="{ height: '20%' }"
+/>
+
+<!-- 自定义图标 -->
+<van-popup
+  v-model="show"
+  closeable
+  close-icon="close"
+  position="bottom"
   :style="{ height: '20%' }"
 />
 ```
@@ -108,18 +131,20 @@ export default {
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|------|------|
-| v-model | 当前组件是否显示 | `boolean` | `false` | - |
-| overlay | 是否显示遮罩层 | `boolean` | `true` | - |
-| position | 弹出位置，可选值为 `top` `bottom` `right` `left` | `string` | `center` | - |
-| overlay-class | 自定义遮罩层类名 | `string` | - | - |
-| overlay-style | 自定义遮罩层样式 | `object` | - | - |
-| duration | 动画时长，单位秒 | `number` | `0.3` | 2.0.0 |
-| round | 是否显示圆角 | `boolean` | `false` | 2.0.7 |
-| lock-scroll | 是否锁定背景滚动 | `boolean` | `true` | - |
-| lazy-render | 是否在显示弹层时才渲染节点 | `boolean` | `true` | - |
-| close-on-click-overlay | 是否在点击遮罩层后关闭 | `boolean` | `true` | - |
-| transition | 动画类名，用法与 Vue 内置的`transtion`组件的`name`属性一致 | `string` | - | - |
-| get-container | 指定挂载的节点，可以传入选择器，<br>或一个返回节点的函数 | `string | () => HTMLElement` | - | - |
+| v-model | 当前组件是否显示 | *boolean* | `false` | - |
+| overlay | 是否显示遮罩层 | *boolean* | `true` | - |
+| position | 弹出位置，可选值为 `top` `bottom` `right` `left` | *string* | `center` | - |
+| overlay-class | 自定义遮罩层类名 | *string* | - | - |
+| overlay-style | 自定义遮罩层样式 | *object* | - | - |
+| duration | 动画时长，单位秒 | *number* | `0.3` | - |
+| round | 是否显示圆角 | *boolean* | `false` | 2.0.7 |
+| lock-scroll | 是否锁定背景滚动 | *boolean* | `true` | - |
+| lazy-render | 是否在显示弹层时才渲染节点 | *boolean* | `true` | - |
+| close-on-click-overlay | 是否在点击遮罩层后关闭 | *boolean* | `true` | - |
+| closeable | 是否显示关闭图标 | *boolean* | `false` | 2.2.0 |
+| close-icon | 关闭图标名称或图片链接 | *string* | `cross` | 2.2.0 |
+| transition | 动画类名，用法与 Vue 原生`transtion`组件的`name`属性一致 | *string* | - | - |
+| get-container | 指定挂载的节点，可以传入选择器，<br>或一个返回节点的函数 | *string \| () => HTMLElement* | - | - |
 
 ### Events
 
