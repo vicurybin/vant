@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       fileList: [
-        { url: 'https://img.yzcdn.cn/vant/cat.jpeg' }
+        { url: 'https://img.yzcdn.cn/vant/leaf.jpg' }
       ]
     }
   }
@@ -118,13 +118,14 @@ export default {
 | preview-full-image | Whethe to show full screen image preview when click image | *boolean* | `true` | - |
 | multiple | Whether to enable multiple selection pictures | *boolean* | `false` | - |
 | disabled | Whether to disabled the upload | *boolean* | `false` | - |
+| deletable | Whether to show delete icon | *boolean* | `true` | 2.2.12 |
 | capture | Capture，can be set to `camera` | *string* | - | - |
 | after-read | Hook after reading the file | *Function* | - | - |
 | before-read | Hook before reading the file, return false to stop reading the file, can return Promise | *Function* | - | - |
 | before-delete | Hook before delete the file, return false to stop reading the file, can return Promise | *Function* | - | - |
 | max-size | Max size of file | *number* | - | - |
 | max-count | Max count of image | *number* | - | - |
-| result-type | Type of file read result, can be set to `dataUrl` `text` | *string* | `dataUrl` | - |
+| result-type | Type of file read result, can be set to `file` `text` | *string* | `dataUrl` | 2.2.7 |
 | upload-text | Upload text | *string* | - | - |
 | image-fit | Preview image fit mode | *string* | `cover` | 2.1.5 |
 
@@ -135,7 +136,7 @@ export default {
 | oversize | Triggered when file size over limit | Same as after-read |
 | click-preview | Triggered when click preview image | Same as after-read |
 | close-preview | Triggered when close full screen image preview | - |
-| delete | Triggered when delete preview file | file |
+| delete | Triggered when delete preview file | Same as after-read |
 
 ### Slots
 
@@ -148,4 +149,20 @@ export default {
 | Attribute | Description | Type |
 |------|------|------|
 | file | File object | *object* |
-| detail | Detail info | *object* |
+| detail | Detail info, contains name and index | *object* |
+
+### ResultType
+
+| Value | Description |
+|------|------|
+| file | Result contains File object |
+| text | Result contains File object and text content |
+| dataUrl | Result contains File object and base64 content |
+
+### Methods
+
+Use ref to get Uploader instance and call instance methods
+
+| Name | Description | Attribute | Return value |
+|------|------|------|------|
+| closeImagePreview | Close full screen image preview | - | - |

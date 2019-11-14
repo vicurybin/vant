@@ -108,7 +108,7 @@ export default {
 | delete-button-text | Delete button text | *string* | `delete` | - |
 | show-delete-key | Whether to show delete button | *boolean* | `true` | - |
 | hide-on-click-outside | Whether to hide keyboard when click outside | *boolean* | `true` | - |
-| safe-area-inset-bottom | Whether to enable bottom safe area adaptation, to enable those features use `viewport-fit=cover` in the `viewport` meta tag | *boolean* | `false` | - |
+| safe-area-inset-bottom | Whether to enable bottom safe area adaptation | *boolean* | `true` | - |
 
 ### Events
 
@@ -116,7 +116,7 @@ export default {
 |------|------|------|
 | input | Triggered when keydown | key: Content of the key |
 | delete | Triggered when press delete key | - |
-| blur | Triggered when click close button | - |
+| close | Triggered when click close button | - |
 | blur | Triggered when click close button or blur keyboard | - |
 | show | Triggered when keyboard is fully displayed. | - |
 | hide | Triggered when keyboard is fully hidden. | - |
@@ -125,5 +125,6 @@ export default {
 
 | Name | Description |
 |------|------|
-| delete | Custom delete button content |
+| delete | Custom delete key content |
+| extra-key | Custom extra key content |
 | title-left | Custom title left content |

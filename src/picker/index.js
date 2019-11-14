@@ -2,7 +2,7 @@ import { createNamespace } from '../utils';
 import { preventDefault } from '../utils/dom/event';
 import { deepClone } from '../utils/deep-clone';
 import { pickerProps } from './shared';
-import { BLUE, BORDER_TOP_BOTTOM, BORDER_UNSET_TOP_BOTTOM } from '../utils/constant';
+import { BORDER_TOP_BOTTOM, BORDER_UNSET_TOP_BOTTOM } from '../utils/constant';
 import Loading from '../loading';
 import PickerColumn from './PickerColumn';
 
@@ -165,16 +165,16 @@ export default createComponent({
     const Toolbar = this.showToolbar && (
       <div class={[BORDER_TOP_BOTTOM, bem('toolbar')]}>
         {this.slots() || [
-          <div role="button" tabindex="0" class={bem('cancel')} onClick={this.onCancel}>
+          <button class={bem('cancel')} onClick={this.onCancel}>
             {this.cancelButtonText || t('cancel')}
-          </div>,
+          </button>,
           this.slots('title') ||
             (this.title && (
               <div class={['van-ellipsis', bem('title')]}>{this.title}</div>
             )),
-          <div role="button" tabindex="0" class={bem('confirm')} onClick={this.onConfirm}>
+          <button class={bem('confirm')} onClick={this.onConfirm}>
             {this.confirmButtonText || t('confirm')}
-          </div>
+          </button>
         ]}
       </div>
     );
@@ -182,7 +182,8 @@ export default createComponent({
     return (
       <div class={bem()}>
         {this.toolbarPosition === 'top' ? Toolbar : h()}
-        {this.loading ? <Loading class={bem('loading')} color={BLUE} /> : h()}
+        {this.loading ? <Loading class={bem('loading')} /> : h()}
+        {this.slots('columns-top')}
         <div class={bem('columns')} style={columnsStyle} onTouchmove={preventDefault}>
           {columns.map((item, index) => (
             <PickerColumn
@@ -191,6 +192,7 @@ export default createComponent({
               className={item.className}
               itemHeight={this.itemHeight}
               defaultIndex={item.defaultIndex || this.defaultIndex}
+              swipeDuration={this.swipeDuration}
               visibleItemCount={this.visibleItemCount}
               initialOptions={this.simple ? item : item.values}
               onChange={() => {
@@ -201,6 +203,7 @@ export default createComponent({
           <div class={bem('mask')} style={maskStyle} />
           <div class={[BORDER_UNSET_TOP_BOTTOM, bem('frame')]} style={frameStyle} />
         </div>
+        {this.slots('columns-bottom')}
         {this.toolbarPosition === 'bottom' ? Toolbar : h()}
       </div>
     );

@@ -62,7 +62,7 @@ Use icon slot to custom icon
     <img
       slot="icon"
       slot-scope="props"
-      :src="props.checked ? icon.active : icon.inactive"
+      :src="props.checked ? activeIcon : inactiveIcon"
     >
   </van-radio>
   <van-radio name="2">
@@ -70,7 +70,7 @@ Use icon slot to custom icon
     <img
       slot="icon"
       slot-scope="props"
-      :src="props.checked ? icon.active : icon.inactive"
+      :src="props.checked ? activeIcon : inactiveIcon"
     >
   </van-radio>
 </van-radio-group>
@@ -79,13 +79,13 @@ Use icon slot to custom icon
 ```js
 export default {
   data() {
-    radio: '1',
-    icon: {
-      active: 'https://img.yzcdn.cn/vant/user-active.png',
-      inactive: 'https://img.yzcdn.cn/vant/user-inactive.png'
-    }
+    return {
+      radio: '1',
+      activeIcon: 'https://img.yzcdn.cn/vant/user-active.png',
+      inactiveIcon: 'https://img.yzcdn.cn/vant/user-inactive.png'
+    };
   }
-}
+};
 ```
 
 ### Inside a Cell
@@ -112,9 +112,9 @@ export default {
 | name | Radio name | *any* | - | - |
 | shape | Can be set to `square` | *string* | `round` | - |
 | disabled | Whether to disable radio | *boolean* | `false` | - |
-| icon-size | Icon size | *string \| number* | `20px` | - |
 | label-disabled | Whether to disable label click | *boolean* | `false` | - |
 | label-position | Can be set to `left` | *string* | `right` | - |
+| icon-size | Icon size | *string \| number* | `20px` | - |
 | checked-color | Checked color | *string* | `#1989fa` | - | - |
 
 ### RadioGroup Props
@@ -122,7 +122,9 @@ export default {
 | Attribute | Description | Type | Default | Version |
 |------|------|------|------|------|
 | v-model | Name of checked radio | *any* | - | - |
-| disabled | Diable all radios | *boolean* | `false` | - |
+| disabled | Disable all radios | *boolean* | `false` | - |
+| icon-size | Icon size of all radios | *string \| number* | `20px` | 2.2.3 |
+| checked-color | Checked color of all radios | *string* | `#1989fa` | - | 2.2.3 |
 
 ### Radio Events
 

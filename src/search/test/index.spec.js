@@ -1,7 +1,7 @@
 import Search from '..';
-import { mount } from '../../../test/utils';
+import { mount } from '../../../test';
 
-test('listen input event', () => {
+test('input event', () => {
   const onInput = jest.fn();
   const wrapper = mount(Search, {
     context: {
@@ -18,7 +18,7 @@ test('listen input event', () => {
   expect(onInput).toHaveBeenCalledWith('1');
 });
 
-test('cancel search', () => {
+test('cancel event', () => {
   const onInput = jest.fn();
   const onCancel = jest.fn();
 
@@ -35,14 +35,14 @@ test('cancel search', () => {
     }
   });
 
-  const cancel = wrapper.find('.van-search__action div');
+  const cancel = wrapper.find('.van-search__action');
   cancel.trigger('click');
 
   expect(onInput).toHaveBeenCalledWith('');
   expect(onCancel).toHaveBeenCalled();
 });
 
-test('emit a search event', () => {
+test('search event', () => {
   const onSearch = jest.fn();
   const onKeypress = jest.fn();
 
@@ -63,7 +63,7 @@ test('emit a search event', () => {
   expect(onKeypress).toHaveBeenCalled();
 });
 
-test('render label slot', () => {
+test('label slot', () => {
   const wrapper = mount(Search, {
     scopedSlots: {
       label() {
@@ -99,6 +99,17 @@ test('right-icon slot', () => {
   const wrapper = mount(Search, {
     scopedSlots: {
       'right-icon': () => 'Custom Right Icon'
+    }
+  });
+
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('action-text prop', () => {
+  const wrapper = mount(Search, {
+    propsData: {
+      actionText: 'Custom Text',
+      showAction: true
     }
   });
 

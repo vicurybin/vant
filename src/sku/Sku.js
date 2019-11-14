@@ -14,8 +14,7 @@ import { isAllSelected, isSkuChoosable, getSkuComb, getSelectedSkuValues } from 
 import { LIMIT_TYPE, UNSELECTED_SKU_VALUE_ID } from './constants';
 
 const namespace = createNamespace('sku');
-const createComponent = namespace[0];
-const t = namespace[2];
+const [createComponent, bem, t] = namespace;
 const { QUOTA_LIMIT } = LIMIT_TYPE;
 
 export default createComponent({
@@ -36,6 +35,7 @@ export default createComponent({
     customSkuValidator: Function,
     closeOnClickOverlay: Boolean,
     disableStepperInput: Boolean,
+    safeAreaInsetBottom: Boolean,
     resetSelectedSkuOnHide: Boolean,
     quota: {
       type: Number,
@@ -48,6 +48,10 @@ export default createComponent({
     initialSku: {
       type: Object,
       default: () => ({})
+    },
+    stockThreshold: {
+      type: Number,
+      default: 50,
     },
     showSoldoutSku: {
       type: Boolean,
@@ -197,7 +201,7 @@ export default createComponent({
           }
 
           treeItem.v.forEach(vItem => {
-            const img = vItem.imgUrl || vItem.img_url;
+            const img = vItem.previewImgUrl || vItem.imgUrl || vItem.img_url;
             if (img) {
               imageList.push(img);
             }
@@ -223,7 +227,13 @@ export default createComponent({
       const { stockFormatter } = this.customStepperConfig;
       if (stockFormatter) return stockFormatter(this.stock);
 
-      return t('stock', this.stock);
+      return [
+        `${t('stock')} `,
+        <span class={bem('stock-num', { highlight: this.stock < this.stockThreshold })}>
+          {this.stock}
+        </span>,
+        ` ${t('stockUnit')}`
+      ];
     },
 
     quotaText() {
@@ -306,6 +316,18 @@ export default createComponent({
           this.selectedSku[key] = valueId;
         }
       });
+
+      const skuValues = this.selectedSkuValues;
+
+      if (skuValues.length > 0) {
+        this.$nextTick(() => {
+          this.$emit('sku-selected', {
+            skuValue: skuValues[skuValues.length - 1],
+            selectedSku: this.selectedSku,
+            selectedSkuComb: this.selectedSkuComb,
+          });
+        });
+      }
     },
 
     getSkuMessages() {
@@ -545,10 +567,10 @@ export default createComponent({
         round
         closeable
         position="bottom"
-        closeIcon="clear"
         class="van-sku-container"
         getContainer={this.getContainer}
         closeOnClickOverlay={this.closeOnClickOverlay}
+        safeAreaInsetBottom={this.safeAreaInsetBottom}
       >
         {Header}
         <div class="van-sku-body" style={this.bodyStyle}>

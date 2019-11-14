@@ -17,7 +17,7 @@ Vue.use(Field);
 
 ### 基础用法
 
-通过 v-model 绑定输入框的值
+通过`v-model`绑定输入框的值
 
 ```html
 <van-cell-group>
@@ -85,23 +85,6 @@ Vue.use(Field);
 </van-cell-group>
 ```
 
-### 高度自适应
-
-对于 textarea，可以通过`autosize`属性设置高度自适应
-
-```html
-<van-cell-group>
-  <van-field
-    v-model="message"
-    label="留言"
-    type="textarea"
-    placeholder="请输入留言"
-    rows="1"
-    autosize
-  />
-</van-cell-group>
-```
-
 ### 插入按钮
 
 通过 button 插槽可以在输入框尾部插入按钮
@@ -117,6 +100,42 @@ Vue.use(Field);
   >
     <van-button slot="button" size="small" type="primary">发送验证码</van-button>
   </van-field>
+</van-cell-group>
+```
+
+### 高度自适应
+
+对于 textarea，可以通过`autosize`属性设置高度自适应
+
+```html
+<van-cell-group>
+  <van-field
+    v-model="message"
+    rows="1"
+    autosize
+    label="留言"
+    type="textarea"
+    placeholder="请输入留言"
+  />
+</van-cell-group>
+```
+
+### 显示字数统计
+
+设置`maxlength`和`show-word-limit`属性后会在底部显示字数统计
+
+```html
+<van-cell-group>
+  <van-field
+    v-model="message"
+    rows="2"
+    autosize
+    label="留言"
+    type="textarea"
+    maxlength="50"
+    placeholder="请输入留言"
+    show-word-limit
+  />
 </van-cell-group>
 ```
 
@@ -139,6 +158,7 @@ Vue.use(Field);
 | clearable | 是否启用清除控件 | *boolean* | `false` | - |
 | clickable | 是否开启点击反馈 | *boolean* | `false` | - |
 | is-link | 是否展示右侧箭头并开启点击反馈 | *boolean* | `false` | - |
+| show-word-limit | 是否显示字数统计，需要设置`maxlength`属性 | *boolean* | `false` | 2.2.8 |
 | error | 是否将输入内容标红 | *boolean* | `false` | - |
 | arrow-direction | 箭头方向，可选值为 `left` `up` `down` | *string* | - | 2.0.4 |
 | error-message | 底部错误提示文案，为空时不展示 | *string* | `''` | - 
@@ -148,8 +168,8 @@ Vue.use(Field);
 | input-align | 输入框内容对齐方式，可选值为 `center` `right` | *string* | `left` | - |
 | error-message-align | 错误提示文案对齐方式，可选值为 `center` `right` | *string* | `left` | - |
 | autosize | 自适应内容高度，只对 textarea 有效，可传入对象,<br>如 { maxHeight: 100, minHeight: 50 }，单位为`px` | *boolean \| object* | `false` | - |
-| left-icon | 左侧图标名称或图片链接，可选值见 Icon 组件 | *string* | - | - |
-| right-icon | 右侧图标名称或图片链接，可选值见 Icon 组件 | *string* | - | - |
+| left-icon | 左侧图标名称或图片链接，可选值见 [Icon 组件](#/zh-CN/icon) | *string* | - | - |
+| right-icon | 右侧图标名称或图片链接，可选值见 [Icon 组件](#/zh-CN/icon) | *string* | - | - |
 
 ### Events
 
@@ -167,12 +187,12 @@ Vue.use(Field);
 
 ### 方法
 
-通过 ref 可以获取到 field 实例并调用实例方法
+通过 ref 可以获取到 Field 实例并调用实例方法
 
-| 方法名 | 参数 | 返回值 | 介绍 |
+| 方法名 | 说明 | 参数 | 返回值 |
 |------|------|------|------|
-| focus | - | - | 获取输入框焦点 |
-| blur | - | - | 取消输入框焦点 |
+| focus | 获取输入框焦点 | - | - |
+| blur | 取消输入框焦点 | - | - |
 
 ### Slots
 

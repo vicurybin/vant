@@ -126,6 +126,7 @@ export default {
 | hide-stock | Whether to hide stock | *boolean* | `false` | - |
 | hide-quota-text | Whether to hide quota text | *boolean* | `false` | - |
 | hide-selected-text | Whether to hide selected text | *boolean* | `false` | - |
+| stock-threshold | stock threshold | *boolean* | `50` | - |
 | show-add-cart-btn | Whether to show cart button | *boolean* | `true` | - |
 | buy-text | Buy button text | *string* | - | - | - |
 | add-cart-text | Add cart button text | *string* | - | - | - |
@@ -138,7 +139,8 @@ export default {
 | stepper-title | Quantity title | *string* | `Quantity` | - |
 | custom-stepper-config | Custom stepper related config | *object* | `{}` | - |
 | message-config | Message related config | *object* | `{}` | - |
-| get-container | Return the mount node for sku | *string \| () => HTMLElement* | - | - |
+| get-container | Return the mount node for sku | *string \| () => Element* | - | - |
+| safe-area-inset-bottom | Whether to enable bottom safe area adaptation | *boolean* | `false` | 2.2.1 |
 
 ### Events
 
@@ -155,9 +157,9 @@ export default {
 
 Use ref to get sku instance and call instance methods
 
-| Name | Attribute | Return value | Description |
+| Name | Description | Attribute | Return value |
 |------|------|------|------|
-| getSkuData | - | skuData | Get current skuData |
+| getSkuData | Get current skuData | - | skuData |
 
 ### Slots
 
@@ -185,12 +187,14 @@ sku: {
         {
           id: '30349',
           name: 'Red',
-          imgUrl: 'https://img.yzcdn.cn/1.jpg'
+          imgUrl: 'https://img.yzcdn.cn/1.jpg',
+          previewImgUrl: 'https://img.yzcdn.cn/1p.jpg',
         },
         {
           id: '1215',
           name: 'Blue',
-          imgUrl: 'https://img.yzcdn.cn/2.jpg'
+          imgUrl: 'https://img.yzcdn.cn/2.jpg',
+          previewImgUrl: 'https://img.yzcdn.cn/2p.jpg',
         }
       ],
       k_s: 's1'

@@ -14,16 +14,9 @@ Vue.use(Overlay);
 ### Basic Usage
 
 ```html
-<van-button
-  type="primary"
-  text="Show Overlay"
-  @click="show = true"
-/>
+<van-button type="primary" text="Show Overlay" @click="show = true" />
 
-<van-overlay
-  :show="show"
-  @click="show = false"
-/>
+<van-overlay :show="show" @click="show = false" />
 ```
 
 ```js
@@ -36,6 +29,31 @@ export default {
 },
 ```
 
+### Embedded Content
+
+```html
+<van-overlay :show="show" @click="show = false">
+  <div class="wrapper" @click.stop>
+    <div class="block" />
+  </div>
+</van-overlay>
+
+<style>
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.block {
+  width: 120px;
+  height: 120px;
+  background-color: #fff;
+}
+</style>
+```
+
 ## API
 
 ### Props
@@ -46,9 +64,16 @@ export default {
 | z-index | z-index | *string \| number* | `1` | - |
 | duration | Animation duration | *string \| number* | `0.3` | - |
 | class-name | ClassName | *string* | - | - |
+| custom-class | Custom style | *object* | - | - |
 
 ### Events
 
 | Event | Description | Arguments |
 |------|------|------|
 | click | Triggered when clicked | event: Event |
+
+### Slots
+
+| Name | Description |
+|------|------|
+| default | Default slot |

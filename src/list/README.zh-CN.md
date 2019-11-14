@@ -103,6 +103,43 @@ export default {
 }
 ```
 
+## API
+
+### Props
+
+| 参数 | 说明 | 类型 | 默认值 | 版本 |
+|------|------|------|------|------|
+| v-model | 是否处于加载状态，加载过程中不触发`load`事件 | *boolean* | `false` | - |
+| finished | 是否已加载完成，加载完成后不再触发`load`事件 | *boolean* | `false` | - |
+| error | 是否加载失败，加载失败后点击错误提示可以重新<br>触发`load`事件，必须使用`sync`修饰符 | *boolean* | `false` | - |
+| offset | 滚动条与底部距离小于 offset 时触发`load`事件 | *number* | `300` | - |
+| loading-text | 加载过程中的提示文案 | *string* | `加载中...` | - |
+| finished-text | 加载完成后的提示文案 | *string* | - | - |
+| error-text | 加载失败后的提示文案 | *string* | - | - |
+| immediate-check | 是否在初始化时立即执行滚动位置检查 | *boolean* | `true` | - |
+| direction | 滚动触发加载的方向，可选值为`up` | *string* | `down` | - |
+
+### Events
+
+| 事件名 | 说明 | 回调参数 |
+|------|------|------|
+| load | 滚动条与底部距离小于 offset 时触发 | - |
+
+### 方法
+
+通过 ref 可以获取到 list 实例并调用实例方法
+
+| 方法名 | 说明 | 参数 | 返回值 |
+|------|------|------|------|
+| check | 检查当前的滚动位置，若已滚动至底部，则会触发 load 事件 | - | - |
+
+### Slots
+
+| 名称 | 说明 |
+|------|------|
+| default | 列表内容 |
+| loading | 自定义底部加载中提示 |
+
 ## 常见问题
 
 ### List 的运行机制是什么？
@@ -130,41 +167,3 @@ List 初始化后会触发一次 load 事件，用于加载第一屏的数据，
 ### 使用 float 布局后一直触发加载？
 
 若 List 的内容使用了 float 布局，可以在容器上添加`van-clearfix`类名来清除浮动，使得 List 能正确判断元素位置
-
-
-## API
-
-### Props
-
-| 参数 | 说明 | 类型 | 默认值 | 版本 |
-|------|------|------|------|------|
-| v-model | 是否处于加载状态，加载过程中不触发`load`事件 | *boolean* | `false` | - |
-| finished | 是否已加载完成，加载完成后不再触发`load`事件 | *boolean* | `false` | - |
-| error | 是否加载失败，加载失败后点击错误提示可以重新<br>触发`load`事件，必须使用`sync`修饰符 | *boolean* | `false` | - |
-| offset | 滚动条与底部距离小于 offset 时触发`load`事件 | *number* | `300` | - |
-| loading-text | 加载过程中的提示文案 | *string* | `加载中...` | - |
-| finished-text | 加载完成后的提示文案 | *string* | - | - |
-| error-text | 加载失败后的提示文案 | *string* | - | - |
-| immediate-check | 是否在初始化时立即执行滚动位置检查 | *boolean* | `true` | - |
-| direction | 滚动触发加载的方向，可选值为`up` | *string* | `down` | - |
-
-### Events
-
-| 事件名 | 说明 | 回调参数 |
-|------|------|------|
-| load | 滚动条与底部距离小于 offset 时触发 | - |
-
-### 方法
-
-通过 ref 可以获取到 list 实例并调用实例方法
-
-| 方法名 | 参数 | 返回值 | 介绍 |
-|------|------|------|------|
-| check | - | - | 检查当前的滚动位置，若已滚动至底部，则会触发 load 事件 |
-
-### Slots
-
-| 名称 | 说明 |
-|------|------|
-| default | 列表内容 |
-| loading | 自定义底部加载中提示 |

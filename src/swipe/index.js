@@ -46,6 +46,10 @@ export default createComponent({
     showIndicators: {
       type: Boolean,
       default: true
+    },
+    stopPropagation: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -169,7 +173,7 @@ export default createComponent({
       this.touchMove(event);
 
       if (this.isCorrectDirection) {
-        preventDefault(event, true);
+        preventDefault(event, this.stopPropagation);
         this.move({ offset: this.delta });
       }
     },
@@ -254,8 +258,15 @@ export default createComponent({
       this.correctPosition();
 
       doubleRaf(() => {
+        let targetIndex;
+        if (this.loop && index === this.count) {
+          targetIndex = this.active === 0 ? 0 : index;
+        } else {
+          targetIndex = index % this.count;
+        }
+
         this.move({
-          pace: (index % this.count) - this.active,
+          pace: targetIndex - this.active,
           emitChange: true
         });
 
@@ -305,7 +316,7 @@ export default createComponent({
       }
     },
 
-    renderIndicator() {
+    genIndicator() {
       const { count, activeIndicator } = this;
       const slot = this.slots('indicator');
 
@@ -342,7 +353,7 @@ export default createComponent({
         >
           {this.slots()}
         </div>
-        {this.renderIndicator()}
+        {this.genIndicator()}
       </div>
     );
   }

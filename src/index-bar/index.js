@@ -3,6 +3,8 @@ import { TouchMixin } from '../mixins/touch';
 import { ParentMixin } from '../mixins/relation';
 import { BindEventMixin } from '../mixins/bind-event';
 import { GREEN } from '../utils/constant';
+import { preventDefault } from '../utils/dom/event';
+import { isHidden } from '../utils/dom/style';
 import {
   getScrollTop,
   getElementTop,
@@ -84,6 +86,10 @@ export default createComponent({
 
   methods: {
     onScroll() {
+      if (isHidden(this.$el)) {
+        return;
+      }
+
       const scrollTop = getScrollTop(this.scroller);
       const scrollerRect = this.getScrollerRect();
       const rects = this.children.map(item => ({
@@ -100,7 +106,7 @@ export default createComponent({
         let isReachEdge = false;
 
         if (active !== -1) {
-          activeItemTop = rects[active].top - scrollTop;
+          activeItemTop = rects[active].top - scrollTop - this.stickyOffsetTop;
           isReachEdge = activeItemTop <= 0;
         }
 
@@ -152,8 +158,9 @@ export default createComponent({
     getActiveAnchorIndex(scrollTop, rects) {
       for (let i = this.children.length - 1; i >= 0; i--) {
         const prevHeight = i > 0 ? rects[i - 1].height : 0;
+        const reachTop = this.sticky ? prevHeight + this.stickyOffsetTop : 0;
 
-        if (scrollTop + prevHeight + this.stickyOffsetTop >= rects[i].top) {
+        if (scrollTop + reachTop >= rects[i].top) {
           return i;
         }
       }
@@ -168,10 +175,7 @@ export default createComponent({
       this.touchMove(event);
 
       if (this.direction === 'vertical') {
-        /* istanbul ignore else */
-        if (event.cancelable) {
-          event.preventDefault();
-        }
+        preventDefault(event);
 
         const { clientX, clientY } = event.touches[0];
         const target = document.elementFromPoint(clientX, clientY);
@@ -197,7 +201,7 @@ export default createComponent({
       if (match[0]) {
         match[0].scrollIntoView();
 
-        if (this.stickyOffsetTop) {
+        if (this.sticky && this.stickyOffsetTop) {
           setRootScrollTop(getRootScrollTop() - this.stickyOffsetTop);
         }
 

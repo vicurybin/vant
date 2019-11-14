@@ -4,6 +4,8 @@ import { pickerProps } from '../picker/shared';
 
 const [createComponent, bem] = createNamespace('area');
 
+const COLUMNSPLACEHOLDERCODE = '000000';
+
 function isOverseaCode(code) {
   return code[0] === '9';
 }
@@ -23,6 +25,10 @@ export default createComponent({
     isOverseaCode: {
       type: Function,
       default: isOverseaCode
+    },
+    columnsPlaceholder: {
+      type: Array,
+      default: () => []
     }
   },
 
@@ -48,6 +54,14 @@ export default createComponent({
 
     displayColumns() {
       return this.columns.slice(0, +this.columnsNum);
+    },
+
+    typeToColumnsPlaceholder() {
+      return {
+        province: this.columnsPlaceholder[0] || '',
+        city: this.columnsPlaceholder[1] || '',
+        county: this.columnsPlaceholder[2] || '',
+      };
     }
   },
 
@@ -96,6 +110,15 @@ export default createComponent({
         result = result.filter(item => item.code.indexOf(code) === 0);
       }
 
+      if (this.typeToColumnsPlaceholder[type] && result.length) {
+        // set columns placeholder
+        const codeFill = type === 'province' ? '' : type === 'city' ? COLUMNSPLACEHOLDERCODE.slice(2, 4) : COLUMNSPLACEHOLDERCODE.slice(4, 6);
+        result.unshift({
+          code: `${code}${codeFill}`,
+          name: this.typeToColumnsPlaceholder[type]
+        });
+      }
+
       return result;
     },
 
@@ -120,14 +143,48 @@ export default createComponent({
       return 0;
     },
 
+    // parse output columns data
+    parseOutputValues(values) {
+      return values.map((value, index) => {
+        // save undefined value
+        if (!value) return value;
+
+        value = JSON.parse(JSON.stringify(value));
+        if (!value.code || value.name === this.columnsPlaceholder[index]) {
+          value.code = '';
+          value.name = '';
+        }
+        return value;
+      });
+    },
+
     onChange(picker, values, index) {
       this.code = values[index].code;
       this.setValues();
-      this.$emit('change', picker, picker.getValues(), index);
+      let getValues = picker.getValues();
+      getValues = this.parseOutputValues(getValues);
+      this.$emit('change', picker, getValues, index);
+    },
+
+    onConfirm(values, index) {
+      values = this.parseOutputValues(values);
+      this.setValues();
+      this.$emit('confirm', values, index);
     },
 
     setValues() {
-      let code = this.code || Object.keys(this.county)[0] || '';
+      let { code } = this;
+
+      if (!code) {
+        if (this.columnsPlaceholder.length) {
+          code = COLUMNSPLACEHOLDERCODE;
+        } else if (Object.keys(this.county)[0]) {
+          code = Object.keys(this.county)[0];
+        } else {
+          code = '';
+        }
+      }
+
       const { picker } = this.$refs;
       const province = this.getList('province');
       const city = this.getList('city', code.slice(0, 2));
@@ -152,7 +209,10 @@ export default createComponent({
     },
 
     getValues() {
-      return this.$refs.picker ? this.$refs.picker.getValues().filter(value => !!value) : [];
+      const { picker } = this.$refs;
+      let getValues = picker ? picker.getValues().filter(value => !!value) : [];
+      getValues = this.parseOutputValues(getValues);
+      return getValues;
     },
 
     getArea() {
@@ -170,8 +230,9 @@ export default createComponent({
       }
 
       const names = values.map(item => item.name);
+      const filterCodeValues = values.filter(value => !!value.code);
+      area.code = filterCodeValues.length ? filterCodeValues[filterCodeValues.length - 1].code : '';
 
-      area.code = values[values.length - 1].code;
       if (this.isOverseaCode(area.code)) {
         area.country = names[1] || '';
         area.province = names[2] || '';
@@ -193,7 +254,8 @@ export default createComponent({
   render() {
     const on = {
       ...this.$listeners,
-      change: this.onChange
+      change: this.onChange,
+      confirm: this.onConfirm
     };
 
     return (

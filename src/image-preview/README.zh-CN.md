@@ -107,7 +107,7 @@ export default {
 | showIndex | 是否显示页码 | *boolean* | `true` | - |
 | showIndicators | 是否显示轮播指示器 | *boolean* | `false` | - |
 | loop | 是否开启循环播放 | *boolean* | `true` | - |
-| swipeDuration | 动画时长，单位为 ms | *number* | `500` | - |
+| swipeDuration | 动画时长，单位为`ms` | *number* | `500` | - |
 | onClose | 关闭时的回调函数 | *Function* | - | - |
 | onChange | 切换图片时的回调函数，回调参数为当前索引 | *Function* | - | 2.0.3 |
 | asyncClose | 是否开启异步关闭 | *boolean* | `false` | - |
@@ -152,6 +152,7 @@ export default {
 | 名称 | 说明 |
 |------|------|
 | index | 自定义页码内容 |
+| cover | 自定义覆盖在图片预览上方的内容 |
 
 ### onClose 回调参数
 
@@ -159,3 +160,9 @@ export default {
 |------|------|------|
 | url | 当前图片 URL | *string* |
 | index | 当前图片的索引值 | *number* |
+
+## 常见问题
+
+### 在桌面端无法操作组件？
+
+参见[在桌面端使用](#/zh-CN/quickstart#zai-zhuo-mian-duan-shi-yong)。

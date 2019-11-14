@@ -206,6 +206,7 @@ export default {
 | visible-item-count | 可见的选项个数 | *number* | `5` | - |
 | allow-html | 是否允许选项内容中渲染 HTML | *boolean* | `true` | 2.1.8 |
 | default-index | 单列选择器的默认选中项索引，<br>多列选择器请参考下方的 Columns 配置 | *number* | `0` | - |
+| swipe-duration | 快速滑动时惯性滚动的时长，单位`ms` | *number*  | `1000` | `2.2.10` |
 
 ### Events
 
@@ -221,7 +222,10 @@ Picker 组件的事件会根据 columns 是单列或多列返回不同的参数
 
 | 名称 | 说明 |
 |------|------|
+| default | 自定义顶部栏内容 |
 | title | 自定义标题内容 |
+| columns-top | 自定义选项上方内容 |
+| columns-bottom | 自定义选项下方内容 |
 
 ### Column 数据结构
 
@@ -237,15 +241,21 @@ Picker 组件的事件会根据 columns 是单列或多列返回不同的参数
 
 通过 ref 可以获取到 picker 实例并调用实例方法
 
-| 方法名 | 参数 | 返回值 | 介绍 |
+| 方法名 | 说明 | 参数 | 返回值 |
 |------|------|------|------|
-| getValues | - | values | 获取所有列选中的值 |
-| setValues | values | - | 设置所有列选中的值 |
-| getIndexes | - | indexes | 获取所有列选中值对应的索引 |
-| setIndexes | indexes | - | 设置所有列选中值对应的索引 |
-| getColumnValue | columnIndex | value | 获取对应列选中的值 |
-| setColumnValue | columnIndex, value | - | 设置对应列选中的值 |
-| getColumnIndex | columnIndex | optionIndex | 获取对应列选中项的索引 |
-| setColumnIndex | columnIndex, optionIndex | - | 设置对应列选中项的索引 |
-| getColumnValues | columnIndex | values | 获取对应列中所有选项 |
-| setColumnValues | columnIndex, values | - | 设置对应列中所有选项 |
+| getValues | 获取所有列选中的值 | - | values |
+| setValues | 设置所有列选中的值 | values | - |
+| getIndexes | 获取所有列选中值对应的索引 | - | indexes |
+| setIndexes | 设置所有列选中值对应的索引 | indexes | - |
+| getColumnValue | 获取对应列选中的值 | columnIndex | value |
+| setColumnValue | 设置对应列选中的值 | columnIndex, value | - |
+| getColumnIndex | 获取对应列选中项的索引 | columnIndex | optionIndex |
+| setColumnIndex | 设置对应列选中项的索引 | columnIndex, optionIndex | - |
+| getColumnValues | 获取对应列中所有选项 | columnIndex | values |
+| setColumnValues | 设置对应列中所有选项 | columnIndex, values | - |
+
+## 常见问题
+
+### 在桌面端无法操作组件？
+
+参见[在桌面端使用](#/zh-CN/quickstart#zai-zhuo-mian-duan-shi-yong)。

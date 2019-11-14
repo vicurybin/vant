@@ -39,6 +39,18 @@ Vue.use(Area);
 <van-area :area-list="areaList" :columns-num="2" title="标题" />
 ```
 
+### 配置列占位提示文字
+
+可以通过`columns-placeholder`属性配置每一列的占位提示文字
+
+```html
+<van-area
+  :area-list="areaList"
+  :columns-placeholder="['请选择', '请选择', '请选择']"
+  title="标题"
+/>
+```
+
 ## API
 
 ### Props
@@ -49,6 +61,7 @@ Vue.use(Area);
 | title | 顶部栏标题 | *string* | - | - |
 | area-list | 省市区数据，格式见下方 | *object* | - | - |
 | columns-num | 显示列数，3-省市区，2-省市，1-省 | *string \| number* | `3` | - |
+| columns-placeholder | 列占位提示文字 | *string[]* | `[]` | 2.2.5 |
 | loading | 是否显示加载状态 | *boolean* | `false` | - |
 | item-height | 选项高度 | *number* | `44` | - |
 | visible-item-count | 可见的选项个数 | *number* | `5` | - |
@@ -68,9 +81,9 @@ Vue.use(Area);
 
 通过 ref 可以获取到 area 实例并调用实例方法
 
-| 方法名 | 参数 | 返回值 | 介绍 |
+| 方法名 | 说明 | 参数 | 返回值 |
 |------|------|------|------|
-| reset | code: string | - | 根据 code 重置所有选项，若不传 code，则重置到第一项 |
+| reset | 根据 code 重置所有选项，若不传 code，则重置到第一项 | code: string | - |
 
 ### 省市区列表数据格式
 
@@ -131,3 +144,9 @@ Vue.use(Area);
   }
 ];
 ```
+
+## 常见问题
+
+### 在桌面端无法操作组件？
+
+参见[在桌面端使用](#/zh-CN/quickstart#zai-zhuo-mian-duan-shi-yong)。

@@ -26,7 +26,6 @@ export default createComponent({
     title: String,
     closeButtonText: String,
     deleteButtonText: String,
-    safeAreaInsetBottom: Boolean,
     theme: {
       type: String,
       default: 'default'
@@ -58,6 +57,10 @@ export default createComponent({
     hideOnClickOutside: {
       type: Boolean,
       default: true
+    },
+    safeAreaInsetBottom: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -79,13 +82,16 @@ export default createComponent({
       switch (this.theme) {
         case 'default':
           keys.push(
-            { text: this.extraKey, theme: ['gray'] },
+            { text: this.extraKey, theme: ['gray'], type: 'extra' },
             { text: 0 },
             { text: this.deleteText, theme: ['gray'], type: 'delete' }
           );
           break;
         case 'custom':
-          keys.push({ text: 0, theme: ['middle'] }, { text: this.extraKey });
+          keys.push(
+            { text: 0, theme: ['middle'] },
+            { text: this.extraKey, type: 'extra' }
+          );
           break;
       }
 
@@ -158,6 +164,7 @@ export default createComponent({
         onPress={onPress}
       >
         {key.type === 'delete' && this.slots('delete')}
+        {key.type === 'extra' && this.slots('extra-key')}
       </Key>
     ));
 

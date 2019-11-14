@@ -128,6 +128,7 @@ export default {
 | hide-stock | 是否显示商品剩余库存 | *boolean* | `false` | - |
 | hide-quota-text | 是否显示限购提示 | *boolean* | `false` | - |
 | hide-selected-text | 是否隐藏已选提示 | *boolean* | `false` | - |
+| stock-threshold | 库存阈值。低于这个值会把库存数高亮显示 | *boolean* | `50` | - |
 | show-add-cart-btn | 是否显示加入购物车按钮 | *boolean* | `true` | - |
 | buy-text | 购买按钮文字 | *string* | `立即购买` | - |
 | add-cart-text | 加入购物车按钮文字 | *string* | `加入购物车` | - |
@@ -140,9 +141,10 @@ export default {
 | stepper-title | 数量选择组件左侧文案 | *string* | `购买数量` | - |
 | custom-stepper-config | 步进器相关自定义配置 | *object* | `{}` | - |
 | message-config | 留言相关配置 | *object* | `{}` | - |
-| get-container | 指定挂载的节点，可以传入选择器，<br>或一个返回节点的函数 | *string \| () => HTMLElement* | - | - |
+| get-container | 指定挂载的节点，可以传入选择器，<br>或一个返回节点的函数 | *string \| () => Element* | - | - |
 | initial-sku | 默认选中的 sku，具体参考高级用法 | *object* | `{}` | - |
 | show-soldout-sku | 是否展示售罄的 sku，默认展示并置灰 | *boolean* | `true` | - |
+| safe-area-inset-bottom | 是否开启底部安全区适配，[详细说明](#/zh-CN/quickstart#di-bu-an-quan-qu-gua-pei) | *boolean* | `false` | 2.2.1 |
 
 ### Events
 
@@ -159,9 +161,9 @@ export default {
 
 通过 ref 可以获取到 sku 实例并调用实例方法
 
-| 方法名 | 参数 | 返回值 | 介绍 |
+| 方法名 | 说明 | 参数 | 返回值 |
 |------|------|------|------|
-| getSkuData | - | skuData | 获取当前 skuData |
+| getSkuData | 获取当前 skuData | - | skuData |
 
 ### Slots
 
@@ -193,12 +195,14 @@ sku: {
         {
           id: '30349', // skuValueId：规格值 id
           name: '红色', // skuValueName：规格值名称
-          imgUrl: 'https://img.yzcdn.cn/1.jpg' // 规格类目图片，只有第一个规格类目可以定义图片
+          imgUrl: 'https://img.yzcdn.cn/1.jpg', // 规格类目图片，只有第一个规格类目可以定义图片
+          previewImgUrl: 'https://img.yzcdn.cn/1p.jpg', // 用于预览显示的规格类目图片
         },
         {
           id: '1215',
           name: '蓝色',
-          imgUrl: 'https://img.yzcdn.cn/2.jpg'
+          imgUrl: 'https://img.yzcdn.cn/2.jpg',
+          previewImgUrl: 'https://img.yzcdn.cn/2p.jpg',
         }
       ],
       k_s: 's1' // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id

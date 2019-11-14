@@ -2,6 +2,7 @@ import { createNamespace, addUnit } from '../utils';
 import { BORDER } from '../utils/constant';
 import { ChildrenMixin } from '../mixins/relation';
 import { route, routeProps } from '../utils/router';
+import Info from '../info';
 import Icon from '../icon';
 
 const [createComponent, bem] = createNamespace('grid-item');
@@ -11,8 +12,10 @@ export default createComponent({
 
   props: {
     ...routeProps,
+    dot: Boolean,
+    text: String,
     icon: String,
-    text: String
+    info: [Number, String]
   },
 
   computed: {
@@ -59,7 +62,32 @@ export default createComponent({
       route(this.$router, this);
     },
 
-    renderContent() {
+    genIcon() {
+      const iconSlot = this.slots('icon');
+
+      if (iconSlot) {
+        return (
+          <div class={bem('icon-wrapper')}>
+            {iconSlot}
+            <Info dot={this.dot} info={this.info} />
+          </div>
+        );
+      }
+
+      if (this.icon) {
+        return (
+          <Icon
+            name={this.icon}
+            dot={this.dot}
+            info={this.info}
+            size={this.parent.iconSize}
+            class={bem('icon')}
+          />
+        );
+      }
+    },
+
+    genContent() {
       const slot = this.slots();
 
       if (slot) {
@@ -67,7 +95,7 @@ export default createComponent({
       }
 
       return [
-        this.slots('icon') || (this.icon && <Icon name={this.icon} class={bem('icon')} />),
+        this.genIcon(),
         this.slots('text') || (this.text && <span class={bem('text')}>{this.text}</span>)
       ];
     }
@@ -77,9 +105,11 @@ export default createComponent({
     const { center, border, square, gutter, clickable } = this.parent;
 
     return (
-      <div class={[bem({ square })]} style={this.style} onClick={this.onClick}>
+      <div class={[bem({ square })]} style={this.style}>
         <div
           style={this.contentStyle}
+          role={clickable ? 'button' : null}
+          tabindex={clickable ? 0 : null}
           class={[
             bem('content', {
               center,
@@ -89,8 +119,9 @@ export default createComponent({
             }),
             { [BORDER]: border }
           ]}
+          onClick={this.onClick}
         >
-          {this.renderContent()}
+          {this.genContent()}
         </div>
       </div>
     );

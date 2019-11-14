@@ -1,6 +1,6 @@
 import Picker from '..';
 import PickerColumn from '../PickerColumn';
-import { mount, triggerDrag, later } from '../../../test/utils';
+import { mount, triggerDrag, later } from '../../../test';
 
 const simpleColumn = ['1990', '1991', '1992', '1993', '1994', '1995'];
 const columns = [
@@ -201,6 +201,20 @@ test('not allow html', () => {
     propsData: {
       allowHtml: false,
       columns: ['<div>option</div>']
+    }
+  });
+
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('columns-top、columns-bottom prop', () => {
+  const wrapper = mount(Picker, {
+    propsData: {
+      showToolbar: true
+    },
+    scopedSlots: {
+      'columns-top': () => 'Custom Columns Top',
+      'columns-bottom': () => 'Custom Columns Bottom',
     }
   });
 

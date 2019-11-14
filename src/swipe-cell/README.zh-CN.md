@@ -98,6 +98,7 @@ export default {
 | 事件名 | 说明 | 回调参数 |
 |------|------|------|
 | click | 点击时触发 | 关闭时的点击位置 (`left` `right` `cell` `outside`) |
+| open | 打开时触发 | { position: 'left' \| 'right' , name: string } |
 
 ### onClose 参数
 
@@ -111,7 +112,13 @@ export default {
 
 通过 ref 可以获取到 SwipeCell 实例并调用实例方法
 
-| 方法名 | 参数 | 返回值 | 介绍 |
+| 方法名 | 说明 | 参数 | 返回值 |
 |------|------|------|------|
-| open | position: `left | right` | - | 打开单元格侧边栏 |
-| close | - | - | 收起单元格侧边栏 |
+| open | 打开单元格侧边栏 | position: `left | right` | - |
+| close | 收起单元格侧边栏 | - | - |
+
+## 常见问题
+
+### 在桌面端无法操作组件？
+
+参见[在桌面端使用](#/zh-CN/quickstart#zai-zhuo-mian-duan-shi-yong)。

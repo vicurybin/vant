@@ -1,16 +1,16 @@
-import { createNamespace } from '../utils';
+import { createNamespace, addUnit } from '../utils';
 import { BORDER_TOP, BORDER_LEFT } from '../utils/constant';
 import { PopupMixin } from '../mixins/popup';
-import { CloseOnPopstateMixin } from '../mixins/close-on-popstate';
 import Button from '../button';
 
 const [createComponent, bem, t] = createNamespace('dialog');
 
 export default createComponent({
-  mixins: [PopupMixin, CloseOnPopstateMixin],
+  mixins: [PopupMixin],
 
   props: {
     title: String,
+    width: [Number, String],
     message: String,
     className: null,
     callback: Function,
@@ -21,6 +21,10 @@ export default createComponent({
     confirmButtonText: String,
     confirmButtonColor: String,
     showCancelButton: Boolean,
+    transition: {
+      type: String,
+      default: 'van-dialog-bounce'
+    },
     showConfirmButton: {
       type: Boolean,
       default: true
@@ -73,6 +77,14 @@ export default createComponent({
       if (this.callback) {
         this.callback(action);
       }
+    },
+
+    onOpened() {
+      this.$emit('opened');
+    },
+
+    onClosed() {
+      this.$emit('closed');
     }
   },
 
@@ -131,12 +143,17 @@ export default createComponent({
     );
 
     return (
-      <transition name="van-dialog-bounce">
+      <transition
+        name={this.transition}
+        onAfterEnter={this.onOpened}
+        onAfterLeave={this.onClosed}
+      >
         <div
           vShow={this.value}
           role="dialog"
           aria-labelledby={this.title || message}
           class={[bem(), this.className]}
+          style={{ width: addUnit(this.width) }}
         >
           {Title}
           {Content}

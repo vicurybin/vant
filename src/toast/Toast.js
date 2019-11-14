@@ -24,6 +24,10 @@ export default createComponent({
       type: String,
       default: 'middle'
     },
+    transition: {
+      type: String,
+      default: 'van-fade'
+    },
     lockScroll: {
       type: Boolean,
       default: false
@@ -77,25 +81,24 @@ export default createComponent({
 
     onAfterLeave() {
       this.$emit('closed');
-    }
-  },
+    },
 
-  render() {
-    const { type, icon, message, iconPrefix, loadingType } = this;
+    genIcon() {
+      const { icon, type, iconPrefix, loadingType } = this;
+      const hasIcon = icon || (type === 'success' || type === 'fail');
 
-    const hasIcon = icon || (type === 'success' || type === 'fail');
-
-    function ToastIcon() {
       if (hasIcon) {
         return <Icon class={bem('icon')} classPrefix={iconPrefix} name={icon || type} />;
       }
 
       if (type === 'loading') {
-        return <Loading class={bem('loading')} color="white" type={loadingType} />;
+        return <Loading class={bem('loading')} type={loadingType} />;
       }
-    }
+    },
 
-    function Message() {
+    genMessage() {
+      const { type, message } = this;
+
       if (!isDef(message) || message === '') {
         return;
       }
@@ -106,23 +109,22 @@ export default createComponent({
 
       return <div class={bem('text')}>{message}</div>;
     }
+  },
 
+  render() {
     return (
       <transition
-        name="van-fade"
+        name={this.transition}
         onAfterEnter={this.onAfterEnter}
         onAfterLeave={this.onAfterLeave}
       >
         <div
           vShow={this.value}
-          class={[
-            bem([this.position, { text: !hasIcon && type !== 'loading' }]),
-            this.className
-          ]}
+          class={[bem([this.position, { [this.type]: !this.icon }]), this.className]}
           onClick={this.onClick}
         >
-          {ToastIcon()}
-          {Message()}
+          {this.genIcon()}
+          {this.genMessage()}
         </div>
       </transition>
     );

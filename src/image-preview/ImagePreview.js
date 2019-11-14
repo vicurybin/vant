@@ -3,7 +3,6 @@ import { range } from '../utils/format/number';
 import { preventDefault } from '../utils/dom/event';
 import { PopupMixin } from '../mixins/popup';
 import { TouchMixin } from '../mixins/touch';
-import { CloseOnPopstateMixin } from '../mixins/close-on-popstate';
 import Image from '../image';
 import Loading from '../loading';
 import Swipe from '../swipe';
@@ -13,15 +12,13 @@ const [createComponent, bem] = createNamespace('image-preview');
 
 function getDistance(touches) {
   return Math.sqrt(
-    Math.abs(
-      (touches[0].clientX - touches[1].clientX) *
-        (touches[0].clientY - touches[1].clientY)
-    )
+    (touches[0].clientX - touches[1].clientX) ** 2 +
+      (touches[0].clientY - touches[1].clientY) ** 2
   );
 }
 
 export default createComponent({
-  mixins: [PopupMixin, TouchMixin, CloseOnPopstateMixin],
+  mixins: [PopupMixin, TouchMixin],
 
   props: {
     className: null,
@@ -63,23 +60,17 @@ export default createComponent({
     overlayClass: {
       type: String,
       default: bem('overlay')
-    },
-    closeOnClickOverlay: {
-      type: Boolean,
-      default: true
     }
   },
 
   data() {
-    this.bindStatus = false;
-
     return {
       scale: 1,
       moveX: 0,
       moveY: 0,
+      active: 0,
       moving: false,
       zooming: false,
-      active: 0,
       doubleClickTimer: null
     };
   },
@@ -257,9 +248,17 @@ export default createComponent({
       if (this.showIndex) {
         return (
           <div class={bem('index')}>
-            {this.slots('index') || `${this.active + 1}/${this.images.length}`}
+            {this.slots('index') || `${this.active + 1} / ${this.images.length}`}
           </div>
         );
+      }
+    },
+
+    genCover() {
+      const cover = this.slots('cover');
+
+      if (cover) {
+        return <div class={bem('cover')}>{cover}</div>;
       }
     },
 
@@ -272,11 +271,16 @@ export default createComponent({
         <Swipe
           ref="swipe"
           loop={this.loop}
-          duration={this.swipeDuration}
+          class={bem('swipe')}
           indicatorColor="white"
+          duration={this.swipeDuration}
           initialSwipe={this.startPosition}
           showIndicators={this.showIndicators}
           onChange={this.setActive}
+          nativeOnTouchstart={this.onWrapperTouchStart}
+          nativeOnTouchMove={preventDefault}
+          nativeOnTouchend={this.onWrapperTouchEnd}
+          nativeOnTouchcancel={this.onWrapperTouchEnd}
         >
           {this.images.map((image, index) => (
             <SwipeItem>
@@ -306,15 +310,10 @@ export default createComponent({
 
     return (
       <transition name="van-fade">
-        <div
-          class={[bem(), this.className]}
-          onTouchstart={this.onWrapperTouchStart}
-          onTouchMove={preventDefault}
-          onTouchend={this.onWrapperTouchEnd}
-          onTouchcancel={this.onWrapperTouchEnd}
-        >
+        <div class={[bem(), this.className]}>
           {this.genImages()}
           {this.genIndex()}
+          {this.genCover()}
         </div>
       </transition>
     );

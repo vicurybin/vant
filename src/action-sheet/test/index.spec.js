@@ -1,4 +1,4 @@
-import { mount, later } from '../../../test/utils';
+import { mount, later } from '../../../test';
 import ActionSheet from '..';
 
 test('callback events', () => {
@@ -157,6 +157,18 @@ test('color option', () => {
     propsData: {
       value: true,
       actions: [{ name: 'Option', color: 'red' }]
+    }
+  });
+
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('description prop', () => {
+  const wrapper = mount(ActionSheet, {
+    propsData: {
+      value: true,
+      description: 'This is a description',
+      actions: [{ name: 'Option' }]
     }
   });
 

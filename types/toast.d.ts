@@ -7,16 +7,19 @@ export type ToastOptions = {
   icon?: string;
   type?: string;
   mask?: boolean;
-  position?: string;
+  message?: ToastMessage;
+  onClose?: () => void;
+  onOpened?: () => void;
+  overlay?: boolean;
   duration?: number;
+  position?: string;
   className?: any;
-  onClose?(): void;
-  onOpened?(): void;
+  transition?: string;
+  loadingType?: string;
   forbidClick?: boolean;
   closeOnClick?: boolean;
-  loadingType?: string;
-  message?: ToastMessage;
-  getContainer?: string | (() => HTMLElement);
+  closeOnClickOverlay?: boolean;
+  getContainer?: string | (() => Element);
 };
 
 export interface VanToast extends Vue, VanPopupMixin {

@@ -68,6 +68,10 @@ export default createComponent({
     postalValidator: {
       type: Function,
       default: isPostal
+    },
+    areaColumnsPlaceholder: {
+      type: Array,
+      default: () => []
     }
   },
 
@@ -135,6 +139,11 @@ export default createComponent({
     },
 
     onAreaConfirm(values) {
+      values = values.filter(value => !!value);
+      if (values.some(value => !value.code)) {
+        Toast(t('areaEmpty'));
+        return;
+      }
       this.showAreaPopup = false;
       this.assignAreaValues();
       this.$emit('change-area', values);
@@ -336,6 +345,7 @@ export default createComponent({
             loading={!this.areaListLoaded}
             value={data.areaCode}
             areaList={this.areaList}
+            columnsPlaceholder={this.areaColumnsPlaceholder}
             onConfirm={this.onAreaConfirm}
             onCancel={() => {
               this.showAreaPopup = false;

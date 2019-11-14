@@ -129,6 +129,7 @@ Use `active-color` prop to custom active color of the title and options
 | options | Options | *Option[]* | `[]` | - |
 | disabled | Whether to disable dropdown item | *boolean* | `false` | - |
 | title-class | Title class | *string* | - | - |
+| get-container | Return the mount node for menu | *string \| () => Element* | - | 2.2.4 |
 
 ### DropdownItem Events
 
@@ -139,13 +140,20 @@ Use `active-color` prop to custom active color of the title and options
 | opened | Triggered when opened menu | - |
 | close | Triggered when close menu | - |
 
+### DropdownItem Slots
+
+| Name | Description |
+|------|------|
+| default | Content |
+| title | Custom title |
+
 ### DropdownItem Methods
 
 Use ref to get DropdownItem instance and call instance methods
 
-| Name | Attribute | Return value | Description |
+| Name | Description | Attribute | Return value |
 |------|------|------|------|
-| toggle | show: boolean | - | Toggle display |
+| toggle | Toggle display | show: boolean | - |
 
 ### Data Structure of Option
 

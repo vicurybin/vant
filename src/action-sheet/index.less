@@ -6,10 +6,13 @@
 
   &__item,
   &__cancel {
+    display: block;
+    width: 100%;
     font-size: @action-sheet-item-font-size;
     line-height: @action-sheet-item-height;
     text-align: center;
     background-color: @action-sheet-item-background;
+    border: none;
 
     &:active {
       background-color: @active-color;
@@ -29,7 +32,7 @@
   }
 
   &__subname {
-    margin-left: 5px;
+    margin-left: @padding-base;
     color: @action-sheet-subname-color;
     font-size: @action-sheet-subname-font-size;
   }
@@ -42,8 +45,17 @@
   }
 
   &__header {
+    font-weight: @font-weight-bold;
     font-size: @action-sheet-header-font-size;
     line-height: @action-sheet-header-height;
+    text-align: center;
+  }
+
+  &__description {
+    padding: @padding-md;
+    color: @action-sheet-description-color;
+    font-size: @action-sheet-description-font-size;
+    line-height: @action-sheet-description-line-height;
     text-align: center;
   }
 
@@ -55,10 +67,5 @@
     color: @action-sheet-close-icon-color;
     font-size: @action-sheet-close-icon-size;
     line-height: inherit;
-  }
-
-  &--safe-area-inset-bottom {
-    padding-bottom: constant(safe-area-inset-bottom);
-    padding-bottom: env(safe-area-inset-bottom);
   }
 }

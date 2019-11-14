@@ -28,8 +28,8 @@
   }
 
   &__name {
-    margin-bottom: 5px;
-    font-weight: 500;
+    margin-bottom: @padding-base;
+    font-weight: @font-weight-bold;
     font-size: @font-size-md;
     line-height: 20px;
   }
@@ -53,5 +53,10 @@
     right: @padding-md;
     font-size: @address-list-edit-icon-size;
     transform: translate(0, -50%);
+  }
+
+  .van-radio__icon--checked .van-icon {
+    background-color: @address-list-item-radio-icon-color;
+    border-color: @address-list-item-radio-icon-color;
   }
 }

@@ -1,4 +1,4 @@
-import { mount } from '../../../test/utils';
+import { mount } from '../../../test';
 import Overlay from '..';
 
 test('z-index prop', () => {
@@ -17,6 +17,19 @@ test('class-name prop', () => {
     propsData: {
       show: true,
       className: 'my-overlay'
+    }
+  });
+
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('custom style prop', () => {
+  const wrapper = mount(Overlay, {
+    propsData: {
+      show: true,
+      customStyle: {
+        backgroundColor: 'red'
+      }
     }
   });
 
@@ -46,4 +59,14 @@ test('click event', () => {
 
   wrapper.trigger('click');
   expect(onClick).toHaveBeenCalledTimes(1);
+});
+
+test('default slot', () => {
+  const wrapper = mount(Overlay, {
+    scopedSlots: {
+      default: () => 'Custom Default'
+    }
+  });
+
+  expect(wrapper).toMatchSnapshot();
 });

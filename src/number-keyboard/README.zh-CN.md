@@ -114,7 +114,7 @@ export default {
 | delete-button-text | 删除按钮文字 | *string* | `删除` | - |
 | show-delete-key | 是否展示删除按钮 | *boolean* | `true` | - |
 | hide-on-click-outside | 点击外部时是否收起键盘 | *boolean* | `true` | - |
-| safe-area-inset-bottom | 是否开启 iPhone X 底部安全区适配，需要在 `viewport` meta 标签中设置 `viewport-fit=cover` | *boolean* | `false` | - |
+| safe-area-inset-bottom | 是否开启底部安全区适配，[详细说明](#/zh-CN/quickstart#di-bu-an-quan-qu-gua-pei) | *boolean* | `true` | - |
 
 ### Events
 
@@ -131,5 +131,12 @@ export default {
 
 | 名称 | 说明 |
 |------|------|
-| delete | 自定义删除按钮内容 |
+| delete | 自定义删除按键内容 |
+| extra-key | 自定义左下角按键内容
 | title-left | 自定义标题栏左侧内容 |
+
+## 常见问题
+
+### 在桌面端无法操作组件？
+
+参见[在桌面端使用](#/zh-CN/quickstart#zai-zhuo-mian-duan-shi-yong)。

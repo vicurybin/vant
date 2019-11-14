@@ -1,64 +1,39 @@
 <template>
   <demo-section>
     <demo-block :title="$t('basicUsage')">
-      <van-button
-        type="primary"
-        @click="show1 = true"
-      >
-        {{ $t('buttonText') }}
-      </van-button>
-      <van-action-sheet
-        v-model="show1"
-        :actions="simpleActions"
-        safe-area-inset-bottom
-        @select="onSelect"
-      />
+      <van-button type="primary" @click="show1 = true">{{ $t('buttonText') }}</van-button>
+      <van-action-sheet v-model="show1" :actions="simpleActions" @select="onSelect" />
     </demo-block>
 
     <demo-block :title="$t('status')">
-      <van-button
-        type="primary"
-        @click="show2 = true"
-      >
-        {{ $t('buttonText') }}
-      </van-button>
-      <van-action-sheet
-        v-model="show2"
-        :actions="statusActions"
-        safe-area-inset-bottom
-        @select="onSelect"
-      />
+      <van-button type="primary" @click="show2 = true">{{ $t('buttonText') }}</van-button>
+      <van-action-sheet v-model="show2" close-on-click-action :actions="statusActions" />
     </demo-block>
 
-    <demo-block :title="$t('title2')">
-      <van-button
-        type="primary"
-        @click="show3 = true"
-      >
-        {{ $t('buttonText') }}
-      </van-button>
+    <demo-block :title="$t('showCancel')">
+      <van-button type="primary" @click="show3 = true">{{ $t('buttonText') }}</van-button>
       <van-action-sheet
         v-model="show3"
         :actions="simpleActions"
+        close-on-click-action
         :cancel-text="$t('cancel')"
-        safe-area-inset-bottom
         @cancel="onCancel"
-        @select="onSelect"
       />
     </demo-block>
 
-    <demo-block :title="$t('title3')">
-      <van-button
-        type="primary"
-        @click="show4 = true"
-      >
-        {{ $t('buttonText') }}
-      </van-button>
+    <demo-block :title="$t('showDescription')">
+      <van-button type="primary" @click="show4 = true">{{ $t('buttonText') }}</van-button>
       <van-action-sheet
         v-model="show4"
-        :title="$t('title')"
-        safe-area-inset-bottom
-      >
+        :actions="simpleActions"
+        close-on-click-action
+        :description="$t('description')"
+      />
+    </demo-block>
+
+    <demo-block :title="$t('showTitle')">
+      <van-button type="primary" @click="show5 = true">{{ $t('buttonText') }}</van-button>
+      <van-action-sheet v-model="show5" :title="$t('title')">
         <p>{{ $t('content') }}</p>
       </van-action-sheet>
     </demo-block>
@@ -72,19 +47,23 @@ export default {
   i18n: {
     'zh-CN': {
       buttonText: '弹出菜单',
-      title2: '展示取消按钮',
-      title3: '展示标题栏',
       status: '选项状态',
-      description: '描述信息',
-      disabledOption: '禁用选项'
+      subname: '副文本',
+      disabledOption: '禁用选项',
+      showTitle: '展示标题栏',
+      showCancel: '展示取消按钮',
+      showDescription: '展示描述信息',
+      description: '这是一段描述信息'
     },
     'en-US': {
       buttonText: 'Show ActionSheet',
-      title2: 'ActionSheet with cancel button',
-      title3: 'ActionSheet with title',
       status: 'Status',
-      description: 'Description',
-      disabledOption: 'Disabled Option'
+      subname: 'Subname',
+      disabledOption: 'Disabled Option',
+      showTitle: 'ActionSheet with title',
+      showCancel: 'ActionSheet with cancel button',
+      showDescription: 'ActionSheet with description',
+      description: 'Description'
     }
   },
 
@@ -93,7 +72,8 @@ export default {
       show1: false,
       show2: false,
       show3: false,
-      show4: false
+      show4: false,
+      show5: false
     };
   },
 
@@ -102,7 +82,7 @@ export default {
       return [
         { name: this.$t('option') },
         { name: this.$t('option') },
-        { name: this.$t('option'), subname: this.$t('description') }
+        { name: this.$t('option'), subname: this.$t('subname') }
       ];
     },
 
@@ -118,7 +98,6 @@ export default {
   methods: {
     onSelect(item) {
       this.show1 = false;
-      this.show2 = false;
       this.$toast(item.name);
     },
 
@@ -130,7 +109,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../style/var";
+@import '../../style/var';
 
 .demo-action-sheet {
   background-color: @white;
@@ -140,7 +119,7 @@ export default {
   }
 
   p {
-    padding: 20px;
+    padding: @padding-md @padding-md @padding-md * 10;
   }
 }
 </style>

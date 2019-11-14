@@ -1,6 +1,7 @@
 import { createNamespace } from '../utils';
-import { inherit } from '../utils/functional';
+import { inherit, emit } from '../utils/functional';
 import { BORDER_SURROUND } from '../utils/constant';
+import Icon from '../icon';
 
 // Types
 import { CreateElement, RenderContext } from 'vue/types';
@@ -11,13 +12,14 @@ export type TagType = 'default' | 'primary' | 'success' | 'danger';
 export type TagSize = 'large' | 'medium';
 
 export type TagProps = {
+  type: TagType;
   size?: TagSize;
-  type?: TagType;
   mark?: boolean;
   color?: string;
   plain?: boolean;
   round?: boolean;
   textColor?: string;
+  closeable?: boolean;
 };
 
 const [createComponent, bem] = createNamespace('tag');
@@ -42,18 +44,30 @@ function Tag(
     classes[size] = size;
   }
 
-  return (
+  const Content = (
     <span
       style={style}
-      class={[
-        bem([classes, type]),
-        { [BORDER_SURROUND]: plain }
-      ]}
+      class={[bem([classes, type]), { [BORDER_SURROUND]: plain }]}
       {...inherit(ctx, true)}
     >
       {slots.default && slots.default()}
+      {props.closeable && (
+        <Icon
+          name="cross"
+          class={bem('close')}
+          onClick={() => {
+            emit(ctx, 'close');
+          }}
+        />
+      )}
     </span>
   );
+
+  if (props.closeable) {
+    return <transition name="van-fade">{Content}</transition>;
+  }
+
+  return Content;
 }
 
 Tag.props = {
@@ -63,6 +77,7 @@ Tag.props = {
   plain: Boolean,
   round: Boolean,
   textColor: String,
+  closeable: Boolean,
   type: {
     type: String,
     default: 'default'

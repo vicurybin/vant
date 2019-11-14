@@ -11,7 +11,7 @@ export type OverlayProps = {
   zIndex?: number | string;
   duration: number | string | null;
   className?: any;
-  customStyle?: any;
+  customStyle?: object;
 };
 
 export type OverlayEvents = {
@@ -47,7 +47,9 @@ function Overlay(
         class={[bem(), props.className]}
         onTouchmove={preventTouchMove}
         {...inherit(ctx, true)}
-      />
+      >
+        {slots.default && slots.default()}
+      </div>
     </transition>
   );
 }
@@ -56,7 +58,7 @@ Overlay.props = {
   show: Boolean,
   duration: [Number, String],
   className: null as any,
-  customStyle: null as any,
+  customStyle: Object,
   zIndex: {
     type: [Number, String],
     default: 1

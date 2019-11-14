@@ -12,9 +12,14 @@ export default createComponent({
     duration: Number,
     closeable: Boolean,
     transition: String,
+    safeAreaInsetBottom: Boolean,
     closeIcon: {
       type: String,
       default: 'cross'
+    },
+    closeIconPosition: {
+      type: String,
+      default: 'top-right'
     },
     position: {
       type: String,
@@ -63,12 +68,22 @@ export default createComponent({
         <div
           vShow={this.value}
           style={style}
-          class={bem({ round, [position]: position })}
+          class={bem({
+            round,
+            [position]: position,
+            'safe-area-inset-bottom': this.safeAreaInsetBottom
+          })}
           onClick={this.onClick}
         >
           {this.slots()}
           {this.closeable && (
-            <Icon name={this.closeIcon} class={bem('close-icon')} onClick={this.close} />
+            <Icon
+              role="button"
+              tabindex="0"
+              name={this.closeIcon}
+              class={bem('close-icon', this.closeIconPosition)}
+              onClick={this.close}
+            />
           )}
         </div>
       </transition>

@@ -1,10 +1,21 @@
 import { createNamespace, isDef, addUnit } from '../utils';
 import { resetScroll } from '../utils/dom/reset-scroll';
+import { preventDefault } from '../utils/dom/event';
 
 const [createComponent, bem] = createNamespace('stepper');
 
 const LONG_PRESS_START_TIME = 600;
 const LONG_PRESS_INTERVAL = 200;
+
+function equal(value1, value2) {
+  return String(value1) === String(value2);
+}
+
+// add num and avoid float number
+function add(num1, num2) {
+  const cardinal = 10 ** 10;
+  return Math.round((num1 + num2) * cardinal) / cardinal;
+}
 
 export default createComponent({
   props: {
@@ -15,6 +26,11 @@ export default createComponent({
     buttonSize: [Number, String],
     asyncChange: Boolean,
     disableInput: Boolean,
+    decimalLength: Number,
+    name: {
+      type: [Number, String],
+      default: ''
+    },
     min: {
       type: [Number, String],
       default: 1
@@ -42,8 +58,10 @@ export default createComponent({
   },
 
   data() {
-    const value = this.range(isDef(this.value) ? this.value : this.defaultValue);
-    if (value !== +this.value) {
+    const defaultValue = isDef(this.value) ? this.value : this.defaultValue;
+    const value = this.format(defaultValue);
+
+    if (!equal(value, this.value)) {
       this.$emit('input', value);
     }
 
@@ -76,56 +94,86 @@ export default createComponent({
     },
 
     buttonStyle() {
-      const style = {};
-
       if (this.buttonSize) {
         const size = addUnit(this.buttonSize);
-        style.width = size;
-        style.height = size;
-      }
 
-      return style;
+        return {
+          width: size,
+          height: size
+        };
+      }
     }
   },
 
   watch: {
     value(val) {
-      if (val !== this.currentValue) {
+      if (!equal(val, this.currentValue)) {
         this.currentValue = this.format(val);
       }
     },
 
     currentValue(val) {
       this.$emit('input', val);
-      this.$emit('change', val);
+      this.$emit('change', val, { name: this.name });
     }
   },
 
   methods: {
     // filter illegal characters
-    format(value) {
+    filter(value) {
       value = String(value).replace(/[^0-9.-]/g, '');
-      return value === '' ? 0 : this.integer ? Math.floor(value) : +value;
+
+      if (this.integer && value.indexOf('.') !== -1) {
+        value = value.split('.')[0];
+      }
+
+      return value;
     },
 
-    // limit value range
-    range(value) {
-      return Math.max(Math.min(this.max, this.format(value)), this.min);
+    format(value) {
+      value = this.filter(value);
+
+      // format range
+      value = value === '' ? 0 : +value;
+      value = Math.max(Math.min(this.max, value), this.min);
+
+      // format decimal
+      if (isDef(this.decimalLength)) {
+        value = value.toFixed(this.decimalLength);
+      }
+
+      return value;
     },
 
     onInput(event) {
       const { value } = event.target;
-      const formatted = this.format(value);
 
+      // allow input to be empty
+      if (value === '') {
+        return;
+      }
+
+      let formatted = this.filter(value);
+
+      // limit max decimal length
+      if (isDef(this.decimalLength) && formatted.indexOf('.') !== -1) {
+        const pair = formatted.split('.');
+        formatted = `${pair[0]}.${pair[1].slice(0, this.decimalLength)}`;
+      }
+
+      if (!equal(value, formatted)) {
+        event.target.value = formatted;
+      }
+
+      this.emitChange(formatted);
+    },
+
+    emitChange(value) {
       if (this.asyncChange) {
-        event.target.value = this.currentValue;
-        this.$emit('input', formatted);
-        this.$emit('change', formatted);
+        this.$emit('input', value);
+        this.$emit('change', value, { name: this.name });
       } else {
-        if (+value !== formatted) {
-          event.target.value = formatted;
-        }
-        this.currentValue = formatted;
+        this.currentValue = value;
       }
     },
 
@@ -138,15 +186,10 @@ export default createComponent({
       }
 
       const diff = type === 'minus' ? -this.step : +this.step;
-      const value = Math.round((this.currentValue + diff) * 100) / 100;
 
-      if (this.asyncChange) {
-        this.$emit('input', value);
-        this.$emit('change', value);
-      } else {
-        this.currentValue = this.range(value);
-      }
+      const value = this.format(add(+this.currentValue, diff));
 
+      this.emitChange(value);
       this.$emit(type);
     },
 
@@ -155,13 +198,10 @@ export default createComponent({
     },
 
     onBlur(event) {
-      this.currentValue = this.range(this.currentValue);
+      const value = this.format(event.target.value);
+      event.target.value = value;
+      this.currentValue = value;
       this.$emit('blur', event);
-
-      // fix edge case when input is empty and min is 0
-      if (this.currentValue === 0) {
-        event.target.value = this.currentValue;
-      }
 
       resetScroll();
     },
@@ -188,7 +228,7 @@ export default createComponent({
       clearTimeout(this.longPressTimer);
 
       if (this.isLongPress) {
-        event.preventDefault();
+        preventDefault(event);
       }
     }
   },

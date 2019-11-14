@@ -1,5 +1,5 @@
 import DatePicker from '../DatePicker';
-import { mount, later, triggerDrag } from '../../../test/utils';
+import { mount, later, triggerDrag } from '../../../test';
 
 function filter(type, options) {
   const mod = type === 'year' ? 10 : 5;
@@ -109,4 +109,29 @@ test('dynamic set value', () => {
 
   expect(wrapper.emitted('confirm')[0][0].getFullYear()).toEqual(2019);
   expect(wrapper.emitted('confirm')[1][0].getFullYear()).toEqual(2025);
+});
+
+test('use min-date with filter', async () => {
+  const minDate = new Date(2030, 0, 0, 0, 3);
+  const maxDate = new Date(2040, 0, 0, 0, 0);
+
+  const wrapper = mount(DatePicker, {
+    propsData: {
+      minDate,
+      maxDate,
+      value: new Date(2020, 0, 0, 0, 0),
+      filter(type, values) {
+        if (type === 'minute') {
+          return values.filter(value => value % 30 === 0);
+        }
+
+        return values;
+      }
+    }
+  });
+
+  await later();
+
+  wrapper.find('.van-picker__confirm').trigger('click');
+  expect(wrapper.emitted('confirm')[0][0]).toEqual(new Date(2030, 0, 0, 0, 30));
 });

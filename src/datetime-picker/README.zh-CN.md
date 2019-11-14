@@ -163,7 +163,7 @@ export default {
 | filter | 选项过滤函数 | *(type, values) => values* | - | - |
 | formatter | 选项格式化函数 | *(type, value) => value* | - | - |
 | title | 顶部栏标题 | *string* | `''` | - |
-| show-toolbar | 是否显示顶部栏 | *boolean* | `false` | - |
+| show-toolbar | 是否显示顶部栏 | *boolean* | `true` | - |
 | loading | 是否显示加载状态 | *boolean* | `false` | - |
 | item-height | 选项高度 | *number* | `44` | - |
 | confirm-button-text | 确认按钮文字 | *string* | `确认` | - |
@@ -190,3 +190,21 @@ export default {
 | setColumnValues(index, values) | 设置对应列中所有的备选值 |
 | getValues() | 获取所有列中被选中的值，返回一个数组 |
 | setValues(values) | `values`为一个数组，设置所有列中被选中的值 |
+
+## 常见问题
+
+### 设置 min-date 或 max-date 后出现页面卡死的情况？
+
+请注意不要在模板中直接使用类似`min-date="new Date()"`的写法，这样会导致每次渲染组件时传入一个新的 Date 对象，而传入新的数据会触发下一次渲染，从而陷入死循环。
+
+正确的做法是将`min-date`作为一个数据定义在`data`函数中。
+
+### 在 iOS 系统上初始化组件失败？
+
+如果你遇到了在 iOS 上无法渲染组件的问题，请确认在创建 Date 对象时没有使用`new Date('2020-01-01')`这样的写法，iOS 不支持以中划线分隔的日期格式，正确写法是`new Date('2020/01/01')`。
+
+对此问题的详细解释：[stackoverflow](https://stackoverflow.com/questions/13363673/javascript-date-is-invalid-on-ios)。
+
+### 在桌面端无法操作组件？
+
+参见[在桌面端使用](#/zh-CN/quickstart#zai-zhuo-mian-duan-shi-yong)。

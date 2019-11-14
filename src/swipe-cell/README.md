@@ -93,6 +93,7 @@ export default {
 | Event | Description | Arguments |
 |------|------|------|
 | click | Triggered when clicked | Click positon (`left` `right` `cell` `outside`) |
+| open | Triggered when opened | { position: 'left' \| 'right' , name: string } |
 
 ### onClose Params
 
@@ -106,7 +107,7 @@ export default {
 
 Use ref to get SwipeCell instance and call instance methods
 
-| Name | Attribute | Return value | Description |
+| Name | Description | Attribute | Return value |
 |------|------|------|------|
-| open | position: `left | right` | - | open SwipeCell |
-| close | - | - | close SwipeCell |
+| open | open SwipeCell | position: `left | right` | - |
+| close | close SwipeCell | - | - |

@@ -1,5 +1,4 @@
 @import '../style/var';
-@import '../style/mixins/ellipsis';
 
 .van-card {
   position: relative;
@@ -40,15 +39,13 @@
 
   &__title,
   &__desc {
-    word-break: break-all;
+    word-wrap: break-word;
   }
 
   &__title {
     max-height: 32px;
-    font-weight: 500;
+    font-weight: @font-weight-bold;
     line-height: @card-title-line-height;
-
-    .multi-ellipsis(2);
   }
 
   &__desc {
@@ -64,7 +61,7 @@
   &__price {
     display: inline-block;
     color: @card-price-color;
-    font-weight: 500;
+    font-weight: @font-weight-bold;
   }
 
   &__origin-price {

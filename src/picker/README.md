@@ -198,6 +198,7 @@ When Picker columns data is acquired asynchronously, use `loading` prop to show 
 | visible-item-count | Count of visible columns | *number* | `5` | - |
 | allow-html | Whether to allow HTML in option text | *boolean* | `true` | 2.1.8 |
 | default-index | Default value index of single column picker | *number* | `0` | - |
+| swipe-duration | Duration of the momentum animation，unit `ms` | *number*  | `1000` | `2.2.10` |
 
 ### Events
 
@@ -213,6 +214,7 @@ Picker events will pass different parameters according to the columns are single
 
 | Name | Description |
 |------|------|
+| default | Custom toolbar content |
 | title | Custom title |
 
 ### Data Structure of Column
@@ -227,15 +229,15 @@ Picker events will pass different parameters according to the columns are single
 
 Use ref to get picker instance and call instance methods
 
-| Name | Attribute | Return value | Description |
+| Name | Description | Attribute | Return value |
 |------|------|------|------|
-| getValues | - | values | Get current values of all columns |
-| setValues | values | - |  Set current values of all columns |
-| getIndexes | - | indexes | Get current indexes of all columns |
-| setIndexes | indexes | - | Set current indexes of all columns |
-| getColumnValue | columnIndex | value | Get current value of the column |
-| setColumnValue | columnIndex, value | - | Set current value of the column |
-| getColumnIndex | columnIndex | optionIndex | Get current index of the column |
-| setColumnIndex | columnIndex, optionIndex | - | Set current index of the column |
-| getColumnValues | columnIndex | values | Get columns data of the column |
-| setColumnValues | columnIndex, values | - | Set columns data of the column |
+| getValues | Get current values of all columns | - | values |
+| setValues | Set current values of all columns | values | - |
+| getIndexes | Get current indexes of all columns | - | indexes |
+| setIndexes | Set current indexes of all columns | indexes | - |
+| getColumnValue | Get current value of the column | columnIndex | value |
+| setColumnValue | Set current value of the column | columnIndex, value | - |
+| getColumnIndex | Get current index of the column | columnIndex | optionIndex |
+| setColumnIndex | Set current index of the column | columnIndex, optionIndex | - |
+| getColumnValues | Get columns data of the column | columnIndex | values |
+| setColumnValues | Set columns data of the column | columnIndex, values | - |

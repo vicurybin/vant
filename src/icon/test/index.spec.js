@@ -1,5 +1,5 @@
 import Icon from '..';
-import { mount } from '../../../test/utils';
+import { mount } from '../../../test';
 
 test('render icon with builtin icon name', () => {
   const wrapper = mount(Icon, {
@@ -41,6 +41,15 @@ test('tag prop', () => {
   const wrapper = mount(Icon, {
     propsData: {
       tag: 'div'
+    }
+  });
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('dot prop', () => {
+  const wrapper = mount(Icon, {
+    propsData: {
+      dot: true
     }
   });
   expect(wrapper).toMatchSnapshot();

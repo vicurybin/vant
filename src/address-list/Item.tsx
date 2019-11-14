@@ -1,5 +1,4 @@
 import { createNamespace } from '../utils';
-import { RED } from '../utils/constant';
 import { emit, inherit } from '../utils/functional';
 import Icon from '../icon';
 import Cell from '../cell';
@@ -46,7 +45,7 @@ function AddressItem(
     emit(ctx, 'click');
   }
 
-  const renderRightIcon = () => (
+  const genRightIcon = () => (
     <Icon
       name="edit"
       class={bem('edit')}
@@ -58,7 +57,7 @@ function AddressItem(
     />
   );
 
-  const renderContent = () => {
+  const genContent = () => {
     const { data } = props;
     const Info = [
       <div class={bem('name')}>{`${data.name}，${data.tel}`}</div>,
@@ -66,7 +65,7 @@ function AddressItem(
     ];
 
     return switchable && !disabled ? (
-      <Radio name={data.id} iconSize={16} checkedColor={RED}>
+      <Radio name={data.id} iconSize={16}>
         {Info}
       </Radio>
     ) : (
@@ -80,8 +79,8 @@ function AddressItem(
       valueClass={bem('value')}
       clickable={switchable && !disabled}
       scopedSlots={{
-        default: renderContent,
-        'right-icon': renderRightIcon
+        default: genContent,
+        'right-icon': genRightIcon
       }}
       onClick={onClick}
       {...inherit(ctx)}

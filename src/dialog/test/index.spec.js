@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Dialog from '..';
-import DialogVue from '../Dialog';
-import { mount, later, trigger } from '../../../test/utils';
+import DialogComponent from '../Dialog';
+import { mount, later, trigger } from '../../../test';
 
 test('Dialog function call', async () => {
   Dialog.close();
@@ -33,7 +33,7 @@ test('Dialog function call', async () => {
 });
 
 test('before close', () => {
-  const wrapper = mount(DialogVue, {
+  const wrapper = mount(DialogComponent, {
     propsData: {
       value: true,
       showCancelButton: true,
@@ -72,11 +72,11 @@ test('set default options', () => {
 
 test('register component', () => {
   Vue.use(Dialog);
-  expect(Vue.component(DialogVue.name)).toBeTruthy();
+  expect(Vue.component(DialogComponent.name)).toBeTruthy();
 });
 
 test('button color', () => {
-  const wrapper = mount(DialogVue, {
+  const wrapper = mount(DialogComponent, {
     propsData: {
       value: true,
       showCancelButton: true,
@@ -88,7 +88,7 @@ test('button color', () => {
 });
 
 test('button text', () => {
-  const wrapper = mount(DialogVue, {
+  const wrapper = mount(DialogComponent, {
     propsData: {
       value: true,
       showCancelButton: true,
@@ -100,11 +100,11 @@ test('button text', () => {
 });
 
 test('dialog component', () => {
-  expect(Dialog.Component).toEqual(DialogVue);
+  expect(Dialog.Component).toEqual(DialogComponent);
 });
 
 test('default slot', () => {
-  const wrapper = mount(DialogVue, {
+  const wrapper = mount(DialogComponent, {
     propsData: {
       value: true
     },
@@ -116,7 +116,7 @@ test('default slot', () => {
 });
 
 test('title slot', () => {
-  const wrapper = mount(DialogVue, {
+  const wrapper = mount(DialogComponent, {
     propsData: {
       value: true
     },
@@ -125,4 +125,23 @@ test('title slot', () => {
     }
   });
   expect(wrapper).toMatchSnapshot();
+});
+
+test('open & close event', () => {
+  const wrapper = mount(DialogComponent);
+  wrapper.vm.value = true;
+  expect(wrapper.emitted('open')).toBeTruthy();
+  wrapper.vm.value = false;
+  expect(wrapper.emitted('close')).toBeTruthy();
+});
+
+test('width prop', () => {
+  const wrapper = mount(DialogComponent, {
+    propsData: {
+      value: true,
+      width: 200
+    }
+  });
+
+  expect(wrapper.element.style.width).toEqual('200px');
 });

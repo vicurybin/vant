@@ -29,6 +29,10 @@ export default createComponent({
   },
 
   watch: {
+    filter: 'updateInnerValue',
+    minDate: 'updateInnerValue',
+    maxDate: 'updateInnerValue',
+
     value(val) {
       val = this.formatValue(val);
 
@@ -128,15 +132,19 @@ export default createComponent({
       };
     },
 
-    onChange(picker) {
-      const values = picker.getValues();
-      const year = getTrueValue(values[0]);
-      const month = getTrueValue(values[1]);
+    updateInnerValue() {
+      const indexes = this.$refs.picker.getIndexes();
+      const getValue = index => getTrueValue(this.originColumns[index].values[indexes[index]]);
+
+      const year = getValue(0);
+      const month = getValue(1);
       const maxDate = getMonthEndDay(year, month);
 
-      let date = getTrueValue(values[2]);
+      let date;
       if (this.type === 'year-month') {
         date = 1;
+      } else {
+        date = getValue(2);
       }
 
       date = date > maxDate ? maxDate : date;
@@ -145,13 +153,17 @@ export default createComponent({
       let minute = 0;
 
       if (this.type === 'datetime') {
-        hour = getTrueValue(values[3]);
-        minute = getTrueValue(values[4]);
+        hour = getValue(3);
+        minute = getValue(4);
       }
 
       const value = new Date(year, month - 1, date, hour, minute);
 
       this.innerValue = this.formatValue(value);
+    },
+
+    onChange(picker) {
+      this.updateInnerValue();
 
       this.$nextTick(() => {
         this.$nextTick(() => {
@@ -160,8 +172,10 @@ export default createComponent({
       });
     },
 
-    updateColumnValue(value) {
+    updateColumnValue() {
+      const value = this.innerValue;
       const { formatter } = this;
+
       let values = [
         formatter('year', `${value.getFullYear()}`),
         formatter('month', padZero(value.getMonth() + 1)),

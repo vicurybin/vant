@@ -19,10 +19,19 @@ Toast('提示内容');
 
 ### 加载提示
 
+使用`Toast.loading`方法展示加载提示，通过`forbidClick`属性可以禁用背景点击，通过`loadingType`属性可以自定义加载图标类型。
+
 ```js
 Toast.loading({
-  mask: true,
-  message: '加载中...'
+  message: '加载中...',
+  forbidClick: true
+});
+
+// 自定义加载图标
+Toast.loading({
+  message: '加载中...',
+  forbidClick: true,
+  loadingType: 'spinner'
 });
 ```
 
@@ -47,13 +56,12 @@ Toast({
 });
 ```
 
-### 高级用法
+### 动态更新提示
 
 ```js
 const toast = Toast.loading({
-  duration: 0,       // 持续展示 toast
-  forbidClick: true, // 禁用背景点击
-  loadingType: 'spinner',
+  duration: 0, // 持续展示 toast
+  forbidClick: true,
   message: '倒计时 3 秒'
 });
 
@@ -64,6 +72,7 @@ const timer = setInterval(() => {
     toast.message = `倒计时 ${second} 秒`;
   } else {
     clearInterval(timer);
+    // 手动清除 Toast
     Toast.clear();
   }
 }, 1000);
@@ -95,20 +104,38 @@ toast1.clear();
 toast2.clear();
 ```
 
+### 修改默认配置
+
+通过`Toast.setDefaultOptions`函数可以全局修改 Toast 的默认配置
+
+```js
+// 将所有 Toast 的展示时长设置为 2000 毫秒
+Toast.setDefaultOptions({ duration: 2000 });
+
+// 将所有 loading Toast 设置为背景不可点击 (2.2.10 版本开始支持)
+Toast.setDefaultOptions('loading', { forbidClick: true });
+
+// 重置所有 Toast 的默认配置
+Toast.resetDefaultOptions();
+
+// 重置 loading Toast 的默认配置 (2.2.10 版本开始支持)
+Toast.resetDefaultOptions('loading');
+```
+
 ## API
 
 ### 方法
 
-| 方法名 | 参数 | 返回值 | 介绍 |
+| 方法名 | 说明 | 参数 | 返回值 |
 |------|------|------|------|
-| Toast | `options | message` | toast 实例 | 展示提示 |
-| Toast.loading | `options | message` | toast 实例 | 展示加载提示 |
-| Toast.success | `options | message` | toast 实例 | 展示成功提示 |
-| Toast.fail | `options | message` | toast 实例 | 展示失败提示 |
-| Toast.clear | `clearAll: boolean` | `void` | 关闭提示 |
-| Toast.allowMultiple | - | `void` | 允许同时存在多个 Toast |
-| Toast.setDefaultOptions | `options` | `void` | 修改默认配置，对所有 Toast 生效 |
-| Toast.resetDefaultOptions | - | `void` | 重置默认配置，对所有 Toast 生效 |
+| Toast | 展示提示 | `options | message` | toast 实例 |
+| Toast.loading | 展示加载提示 | `options | message` | toast 实例 |
+| Toast.success | 展示成功提示 | `options | message` | toast 实例 |
+| Toast.fail | 展示失败提示 | `options | message` | toast 实例 |
+| Toast.clear | 关闭提示 | `clearAll: boolean` | `void` |
+| Toast.allowMultiple | 允许同时存在多个 Toast | - | `void` |
+| Toast.setDefaultOptions | 修改默认配置，对所有 Toast 生效。<br>传入 type 可以修改指定类型的默认配置 | `type | options` | `void` |
+| Toast.resetDefaultOptions | 重置默认配置，对所有 Toast 生效。<br>传入 type 可以重置指定类型的默认配置 | `type` | `void` |
 
 ### Options
 
@@ -117,14 +144,16 @@ toast2.clear();
 | type | 提示类型，可选值为 `loading` `success`<br>`fail` `html` | *string* | `text` | - |
 | position | 位置，可选值为 `top` `bottom` | *string* | `middle` | - |
 | message | 文本内容，支持通过`\n`换行 | *string* | `''` | - | - |
-| icon | 自定义图标，支持传入图标名称或图片链接，可选值见 Icon 组件 | *string* | - | 2.0.1 |
+| icon | 自定义图标，支持传入图标名称或图片链接，可选值见 [Icon 组件](#/zh-CN/icon) | *string* | - | 2.0.1 |
 | iconPrefix | 图标类名前缀 | *string* | `van-icon` | 2.0.9 |
-| mask | 是否显示背景遮罩层 | *boolean* | `false` | - |
+| overlay | 是否显示背景遮罩层 | *boolean* | `false` | 2.2.13 |
 | forbidClick | 是否禁止背景点击 | *boolean* | `false` | - |
 | closeOnClick | 是否在点击后关闭 | *boolean* | `false` | 2.1.5 |
+| closeOnClickOverlay | 是否在点击遮罩层后关闭 | *boolean* | `false` | 2.2.13 |
 | loadingType | 加载图标类型, 可选值为 `spinner` | *string* | `circular` | - |
-| duration | 展示时长(ms)，值为 0 时，toast 不会消失 | *number* | `3000` | - |
+| duration | 展示时长(ms)，值为 0 时，toast 不会消失 | *number* | `2000` | - |
 | className | 自定义类名 | *any* | - | - |
 | onOpened | 完全展示后的回调函数 | *Function* | - | - |
 | onClose | 关闭时的回调函数 | *Function* | - | - |
-| getContainer | 指定挂载的节点，可以传入选择器，<br>或一个返回节点的函数 | *string \| () => HTMLElement* | `body` | - |
+| transition | 动画类名，等价于 [transtion](https://cn.vuejs.org/v2/api/index.html#transition) 的`name`属性 | *string* | - | 2.2.6 |
+| getContainer | 指定挂载的节点，可以传入选择器，<br>或一个返回节点的函数 | *string \| () => Element* | `body` | - |

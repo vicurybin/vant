@@ -1,5 +1,5 @@
 import TimePicker from '../TimePicker';
-import { mount, later, triggerDrag } from '../../../test/utils';
+import { mount, later, triggerDrag } from '../../../test';
 
 function filter(type, options) {
   const mod = type === 'minute' ? 10 : 5;
@@ -91,4 +91,19 @@ test('dynamic set value', () => {
 
   expect(wrapper.emitted('confirm')[0][0]).toEqual('00:00');
   expect(wrapper.emitted('confirm')[1][0]).toEqual('22:30');
+});
+
+test('change min-minute and emit correct value', async () => {
+  const wrapper = mount(TimePicker, {
+    propsData: {
+      value: '12:00',
+      minMinute: 0
+    }
+  });
+
+  await later();
+
+  wrapper.setProps({ minMinute: 30 });
+  wrapper.find('.van-picker__confirm').trigger('click');
+  expect(wrapper.emitted('confirm')[0][0]).toEqual('12:30');
 });

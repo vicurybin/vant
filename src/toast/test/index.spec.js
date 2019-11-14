@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Toast from '..';
 import ToastVue from '../Toast';
-import { later } from '../../../test/utils';
+import { later } from '../../../test';
 
 test('create a forbidClick toast', async () => {
   const toast = Toast({
@@ -119,6 +119,15 @@ test('set default options', () => {
   expect(Toast().className).toEqual(className);
   Toast.resetDefaultOptions();
   expect(Toast().className).toEqual('');
+});
+
+test('set default options by type', () => {
+  const className = 'my-toast';
+  Toast.setDefaultOptions('loading', { className });
+  expect(Toast.loading().className).toEqual(className);
+  expect(Toast.success().className).toEqual('');
+  Toast.resetDefaultOptions();
+  expect(Toast.loading().className).toEqual('');
 });
 
 test('toast duration 0', () => {

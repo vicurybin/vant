@@ -1,5 +1,6 @@
 import { createNamespace } from '../utils';
 import { ChildrenMixin } from '../mixins/relation';
+import { routeProps } from '../utils/router';
 
 const [createComponent, bem] = createNamespace('tab');
 
@@ -7,6 +8,7 @@ export default createComponent({
   mixins: [ChildrenMixin('vanTabs')],
 
   props: {
+    ...routeProps,
     name: [Number, String],
     title: String,
     disabled: Boolean
@@ -39,20 +41,10 @@ export default createComponent({
     }
   },
 
-  mounted() {
-    if (this.slots('title')) {
-      this.parent.renderTitle(this.$refs.title, this.index);
-    }
-  },
-
   render(h) {
     const { slots, isActive } = this;
     const shouldRender = this.inited || !this.parent.lazyRender;
-    const Content = [shouldRender ? slots() : h()];
-
-    if (slots('title')) {
-      Content.push(<div ref="title">{slots('title')}</div>);
-    }
+    const Content = shouldRender ? slots() : h();
 
     if (this.parent.animated) {
       return (

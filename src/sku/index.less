@@ -6,22 +6,16 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    height: 80%;
-    max-height: max-content; /* avoid androiod keyboard cover fields */
+    min-height: 50%;
+    max-height: 80%;
     overflow-y: visible;
     font-size: @font-size-md;
     background: @white;
-
-    .van-popup__close-icon {
-      top: @padding-sm;
-      color: @sku-icon-gray-color;
-      font-size: 20px;
-    }
   }
 
   &-body {
     flex: 1 1 auto;
-    max-height: 350px;
+    min-height: 44px;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
 
@@ -40,8 +34,9 @@
       width: 96px;
       height: 96px;
       margin: @padding-sm 0;
+      overflow: hidden;
       background: @background-color;
-      border-radius: 4px;
+      border-radius: @border-radius-md;
 
       img {
         position: absolute;
@@ -56,6 +51,9 @@
     }
 
     &__goods-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
       min-height: 96px;
       padding: @padding-sm 36px @padding-sm @padding-xs;
       overflow: hidden;
@@ -75,10 +73,10 @@
   }
 
   &__price-num {
-    font-weight: 500;
+    font-weight: @font-weight-bold;
     font-size: 22px;
     vertical-align: middle;
-    word-break: break-all;
+    word-wrap: break-word;
   }
 
   &__goods-price {
@@ -144,7 +142,7 @@
       font-size: 13px;
       line-height: 16px;
       vertical-align: middle;
-      border-radius: 4px;
+      border-radius: @border-radius-md;
 
       &::before {
         position: absolute;
@@ -162,7 +160,7 @@
         height: 24px;
         margin: 4px 0 4px 4px;
         object-fit: cover;
-        border-radius: 2px;
+        border-radius: @border-radius-sm;
       }
 
       &-name {
@@ -217,6 +215,10 @@
     margin-right: @padding-xs;
     color: @gray-dark;
     font-size: @font-size-sm;
+
+    &-num--highlight {
+      color: @red;
+    }
   }
 
   &__quota {
@@ -226,8 +228,7 @@
   }
 
   &-messages {
-    padding-bottom: @padding-xs;
-    background: @background-color;
+    padding-bottom: @padding-xl;
 
     &__image-cell {
       .van-cell__title {
@@ -255,7 +256,7 @@
       height: 64px;
       margin-right: @padding-xs;
       background: @sku-item-background-color;
-      border-radius: 2px;
+      border-radius: @border-radius-sm;
 
       img {
         width: 100%;
@@ -311,24 +312,25 @@
 
   &-actions {
     display: flex;
+    flex-shrink: 0;
     padding: @padding-xs @padding-md;
 
     .van-button {
-      height: 36px;
-      font-weight: 500;
+      height: 40px;
+      font-weight: @font-weight-bold;
       font-size: @font-size-md;
       line-height: 34px;
       border: none;
       border-radius: 0;
 
       &:first-of-type {
-        border-top-left-radius: 18px;
-        border-bottom-left-radius: 18px;
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
       }
 
       &:last-of-type {
-        border-top-right-radius: 18px;
-        border-bottom-right-radius: 18px;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
       }
 
       &--warning {

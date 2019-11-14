@@ -36,6 +36,7 @@
     margin: 0 @padding-xs @padding-xs 0;
     background-color: @uploader-upload-background-color;
     border: 1px dashed @uploader-upload-border-color;
+    border-radius: @uploader-upload-border-radius;
 
     &-icon {
       color: @uploader-icon-color;
@@ -61,11 +62,12 @@
 
     &-delete {
       position: absolute;
-      right: 0;
-      bottom: 0;
-      padding: 1px;
+      top: -8px;
+      right: -8px;
       color: @uploader-delete-color;
+      font-size: @uploader-delete-icon-size;
       background-color: @uploader-delete-background-color;
+      border-radius: 100%;
     }
   }
 
@@ -77,6 +79,7 @@
     width: @uploader-size;
     height: @uploader-size;
     background-color: @uploader-file-background-color;
+    border-radius: @uploader-upload-border-radius;
 
     &-icon {
       color: @uploader-file-icon-color;
@@ -86,8 +89,8 @@
     &-name {
       box-sizing: border-box;
       width: 100%;
-      margin-top: @padding-xs;
-      padding: 0 5px;
+      margin-top: @uploader-file-name-margin-top;
+      padding: @uploader-file-name-padding;
       color: @uploader-file-name-text-color;
       font-size: @uploader-file-name-font-size;
       text-align: center;
