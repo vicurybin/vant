@@ -2,7 +2,7 @@
 
 ### 引入
 
-``` javascript
+```js
 import Vue from 'vue';
 import { NavBar } from 'vant';
 
@@ -25,6 +25,8 @@ Vue.use(NavBar);
 ```
 
 ```js
+import { Toast } from 'vant';
+
 export default {
   methods: {
     onClickLeft() {
@@ -37,13 +39,15 @@ export default {
 }
 ```
 
-### 高级用法
+### 使用插槽
 
-通过插槽定制内容
+通过插槽自定义导航栏两侧的内容
 
 ```html
 <van-nav-bar title="标题" left-text="返回" left-arrow>
-  <van-icon name="search" slot="right" />
+  <template #right>
+    <van-icon name="search" size="18" /> 
+  </template>
 </van-nav-bar>
 ```
 
@@ -51,15 +55,16 @@ export default {
 
 ### Props
 
-| 参数 | 说明 | 类型 | 默认值 | 版本 |
-|------|------|------|------|------|
-| title | 标题 | *string* | `''` | - |
-| left-text | 左侧文案 | *string* | `''` | - |
-| right-text | 右侧文案 | *string* | `''` | - |
-| left-arrow | 是否显示左侧箭头 | *boolean* | `false` | - |
-| fixed | 是否固定在顶部 | *boolean* | `false` | - |
-| border | 是否显示下边框 | *boolean* | `true` | - |
-| z-index | 元素 z-index | *number* | `1` | - |
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|------|
+| title | 标题 | *string* | `''` |
+| left-text | 左侧文案 | *string* | `''` |
+| right-text | 右侧文案 | *string* | `''` |
+| left-arrow | 是否显示左侧箭头 | *boolean* | `false` |
+| border | 是否显示下边框 | *boolean* | `true` |
+| fixed | 是否固定在顶部 | *boolean* | `false` |
+| placeholder `v2.5.9` | 固定在顶部时，是否在标签位置生成一个等高的占位元素 | *boolean* | `false` |
+| z-index | 元素 z-index | *number \| string* | `1` |
 
 ### Slots
 

@@ -1,7 +1,10 @@
+// Utils
 import { createNamespace } from '../utils';
 import { emit, inherit } from '../utils/functional';
 import { BORDER_SURROUND, WHITE } from '../utils/constant';
 import { routeProps, RouteProps, functionalRoute } from '../utils/router';
+
+// Components
 import Icon from '../icon';
 import Loading, { LoadingType } from '../loading';
 
@@ -28,6 +31,7 @@ export type ButtonProps = RouteProps & {
   hairline?: boolean;
   disabled?: boolean;
   nativeType?: string;
+  iconPrefix?: string;
   loadingSize: string;
   loadingType?: LoadingType;
   loadingText?: string;
@@ -54,7 +58,7 @@ function Button(
     disabled,
     loading,
     hairline,
-    loadingText
+    loadingText,
   } = props;
 
   const style: Record<string, string | number> = {};
@@ -92,14 +96,15 @@ function Button(
       props.size,
       {
         plain,
+        loading,
         disabled,
         hairline,
         block: props.block,
         round: props.round,
-        square: props.square
-      }
+        square: props.square,
+      },
     ]),
-    { [BORDER_SURROUND]: hairline }
+    { [BORDER_SURROUND]: hairline },
   ];
 
   function Content() {
@@ -115,7 +120,9 @@ function Button(
         />
       );
     } else if (icon) {
-      content.push(<Icon name={icon} class={bem('icon')} />);
+      content.push(
+        <Icon name={icon} class={bem('icon')} classPrefix={props.iconPrefix} />
+      );
     }
 
     let text;
@@ -159,25 +166,26 @@ Button.props = {
   loading: Boolean,
   hairline: Boolean,
   disabled: Boolean,
+  iconPrefix: String,
   nativeType: String,
   loadingText: String,
   loadingType: String,
   tag: {
     type: String,
-    default: 'button'
+    default: 'button',
   },
   type: {
     type: String,
-    default: 'default'
+    default: 'default',
   },
   size: {
     type: String,
-    default: 'normal'
+    default: 'normal',
   },
   loadingSize: {
     type: String,
-    default: '20px'
-  }
+    default: '20px',
+  },
 };
 
 export default createComponent<ButtonProps, ButtonEvents>(Button);

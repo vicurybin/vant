@@ -2,7 +2,7 @@
 
 ### Install
 
-``` javascript
+```js
 import Vue from 'vue';
 import { Card } from 'vant';
 
@@ -19,7 +19,7 @@ Vue.use(Card);
   price="2.00"
   title="Title"
   desc="Description"
-  thumb="https://img.yzcdn.cn/vant/t-thirt.jpg"
+  thumb="https://img.yzcdn.cn/vant/ipad.jpeg"
 />
 ```
 
@@ -33,7 +33,7 @@ Vue.use(Card);
   title="Title"
   desc="Description"
   origin-price="10.00"
-  thumb="https://img.yzcdn.cn/vant/t-thirt.jpg"
+  thumb="https://img.yzcdn.cn/vant/ipad.jpeg"
 />
 ```
 
@@ -45,18 +45,18 @@ Use slot to custom content.
 <van-card
   num="2"
   title="Title"
-  desc="Description"  
+  desc="Description"
   price="2.00"
-  thumb="https://img.yzcdn.cn/vant/t-thirt.jpg"
+  thumb="https://img.yzcdn.cn/vant/ipad.jpeg"
 >
-  <div slot="tags">
+  <template #tags>
     <van-tag plain type="danger">Tag</van-tag>
     <van-tag plain type="danger">Tag</van-tag>
-  </div>
-  <div slot="footer">
+  </template>
+  <template #footer>
     <van-button size="mini">Button</van-button>
     <van-button size="mini">Button</van-button>
-  </div>
+  </template>
 </van-card>
 ```
 
@@ -64,26 +64,26 @@ Use slot to custom content.
 
 ### Props
 
-| Attribute | Description | Type | Default | Version |
-|------|------|------|------|------|
-| thumb | Left thumb image URL | *string* | - | - |
-| title | Title | *string* | - | - |
-| desc | Description | *string* | - | - |
-| tag | Tag | *string* | - | - |
-| num | number | *string \| number* | - | - |
-| price | Price | *string \| number* | - | - |
-| origin-price | Origin price | *string \| number* | - | - |
-| centered | Whether content vertical centered | *boolean* | `false` | - |
-| currency | Currency symbol |  *string* | `¥` | - |
-| thumb-link | Thumb link URL | *string* | - | - |
-| lazy-load | Whether to enable thumb lazy load，should register [Lazyload](#/en-US/lazyload) component | *boolean* | `false` | - |
+| Attribute | Description | Type | Default |
+|------|------|------|------|
+| thumb | Left thumb image URL | *string* | - |
+| title | Title | *string* | - |
+| desc | Description | *string* | - |
+| tag | Tag | *string* | - |
+| num | number | *number \| string* | - |
+| price | Price | *number \| string* | - |
+| origin-price | Origin price | *number \| string* | - |
+| centered | Whether content vertical centered | *boolean* | `false` |
+| currency | Currency symbol |  *string* | `¥` |
+| thumb-link | Thumb link URL | *string* | - |
+| lazy-load | Whether to enable thumb lazy load，should register [Lazyload](#/en-US/lazyload) component | *boolean* | `false` |
 
 ### Events
 
 | Event | Description | Arguments |
 |------|------|------|
-| click | Triggered when clicked | event: Event |
-| click-thumb | Triggered when thumb clicked | event: Event |
+| click | Triggered when clicked | *event: Event* |
+| click-thumb | Triggered when thumb clicked | *event: Event* |
 
 ### Slots
 
@@ -94,6 +94,7 @@ Use slot to custom content.
 | num | Custom num |
 | price | Custom price |
 | origin-price | Custom origin price |
+| price-top | Custom price top |
 | bottom | Custom price bottom |
 | thumb | Custom thumb |
 | tag | Custom thumb tag |

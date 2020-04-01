@@ -1,6 +1,9 @@
+// Utils
 import { createNamespace } from '../utils';
 import { inherit, emit } from '../utils/functional';
 import { BORDER_SURROUND } from '../utils/constant';
+
+// Components
 import Icon from '../icon';
 
 // Types
@@ -44,30 +47,30 @@ function Tag(
     classes[size] = size;
   }
 
-  const Content = (
-    <span
-      style={style}
-      class={[bem([classes, type]), { [BORDER_SURROUND]: plain }]}
-      {...inherit(ctx, true)}
-    >
-      {slots.default && slots.default()}
-      {props.closeable && (
-        <Icon
-          name="cross"
-          class={bem('close')}
-          onClick={() => {
-            emit(ctx, 'close');
-          }}
-        />
-      )}
-    </span>
+  const CloseIcon = props.closeable && (
+    <Icon
+      name="cross"
+      class={bem('close')}
+      onClick={(event: PointerEvent) => {
+        event.stopPropagation();
+        emit(ctx, 'close');
+      }}
+    />
   );
 
-  if (props.closeable) {
-    return <transition name="van-fade">{Content}</transition>;
-  }
-
-  return Content;
+  return (
+    <transition name={props.closeable ? 'van-fade' : null}>
+      <span
+        key="content"
+        style={style}
+        class={[bem([classes, type]), { [BORDER_SURROUND]: plain }]}
+        {...inherit(ctx, true)}
+      >
+        {slots.default?.()}
+        {CloseIcon}
+      </span>
+    </transition>
+  );
 }
 
 Tag.props = {
@@ -80,8 +83,8 @@ Tag.props = {
   closeable: Boolean,
   type: {
     type: String,
-    default: 'default'
-  }
+    default: 'default',
+  },
 };
 
 export default createComponent<TagProps>(Tag);

@@ -1,8 +1,13 @@
-import { createNamespace, isObj, isDef } from '../utils';
+// Utils
+import { createNamespace, isObject, isDef } from '../utils';
+import { route, routeProps } from '../utils/router';
+
+// Mixins
+import { ChildrenMixin } from '../mixins/relation';
+
+// Components
 import Icon from '../icon';
 import Info from '../info';
-import { route, routeProps } from '../utils/router';
-import { ChildrenMixin } from '../mixins/relation';
 
 const [createComponent, bem] = createNamespace('tabbar-item');
 
@@ -14,12 +19,14 @@ export default createComponent({
     dot: Boolean,
     icon: String,
     name: [Number, String],
-    info: [Number, String]
+    info: [Number, String],
+    badge: [Number, String],
+    iconPrefix: String,
   },
 
   data() {
     return {
-      active: false
+      active: false,
     };
   },
 
@@ -27,13 +34,13 @@ export default createComponent({
     routeActive() {
       const { to, $route } = this;
       if (to && $route) {
-        const config = isObj(to) ? to : { path: to };
+        const config = isObject(to) ? to : { path: to };
         const pathMatched = config.path === $route.path;
         const nameMatched = isDef(config.name) && config.name === $route.name;
 
         return pathMatched || nameMatched;
       }
-    }
+    },
   },
 
   methods: {
@@ -41,22 +48,36 @@ export default createComponent({
       this.parent.onChange(this.name || this.index);
       this.$emit('click', event);
       route(this.$router, this);
-    }
+    },
+
+    genIcon(active) {
+      const slot = this.slots('icon', { active });
+
+      if (slot) {
+        return slot;
+      }
+
+      if (this.icon) {
+        return <Icon name={this.icon} classPrefix={this.iconPrefix} />;
+      }
+    },
   },
 
   render() {
-    const { icon, slots } = this;
     const active = this.parent.route ? this.routeActive : this.active;
     const color = this.parent[active ? 'activeColor' : 'inactiveColor'];
 
     return (
       <div class={bem({ active })} style={{ color }} onClick={this.onClick}>
         <div class={bem('icon')}>
-          {slots('icon', { active }) || (icon && <Icon name={icon} />)}
-          <Info dot={this.dot} info={this.info} />
+          {this.genIcon(active)}
+          <Info
+            dot={this.dot}
+            info={isDef(this.badge) ? this.badge : this.info}
+          />
         </div>
-        <div class={bem('text')}>{slots('default', { active })}</div>
+        <div class={bem('text')}>{this.slots('default', { active })}</div>
       </div>
     );
-  }
+  },
 });

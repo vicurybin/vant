@@ -8,7 +8,7 @@ module.exports = {
     'arrow',
     'arrow-left',
     'arrow-up',
-    'arrow-down'
+    'arrow-down',
   ],
   outline: [
     // has corresponding filled icon
@@ -65,7 +65,7 @@ module.exports = {
     'photo-o',
     'gift-card-o',
     'expand-o',
-    'medel-o',
+    'medal-o',
     'good-job-o',
     'manager-o',
     'label-o',
@@ -103,7 +103,6 @@ module.exports = {
     'desktop-o',
     'apps-o',
     'home-o',
-    'share',
     'search',
     'points',
     'edit',
@@ -142,7 +141,7 @@ module.exports = {
     'discount',
     'idcard',
     'replay',
-    'shrink'
+    'shrink',
   ],
   filled: [
     // has corresponding outline icon
@@ -199,7 +198,7 @@ module.exports = {
     'photo',
     'gift-card',
     'expand',
-    'medel',
+    'medal',
     'good-job',
     'manager',
     'label',
@@ -212,6 +211,7 @@ module.exports = {
     'goods-collect',
     'eye',
     // without corresponding outline icon
+    'share',
     'alipay',
     'wechat',
     'photograph',
@@ -235,6 +235,6 @@ module.exports = {
     'ascending',
     'descending',
     'bars',
-    'wap-nav'
-  ]
+    'wap-nav',
+  ],
 };

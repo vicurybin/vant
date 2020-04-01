@@ -3,6 +3,7 @@ const MarkdownIt = require('markdown-it');
 const markdownItAnchor = require('markdown-it-anchor');
 const frontMatter = require('front-matter');
 const highlight = require('./highlight');
+const linkOpen = require('./link-open');
 const cardWrapper = require('./card-wrapper');
 const { slugify } = require('transliteration');
 
@@ -46,10 +47,10 @@ export default {
 
 const parser = new MarkdownIt({
   html: true,
-  highlight
+  highlight,
 }).use(markdownItAnchor, {
   level: 2,
-  slugify
+  slugify,
 });
 
 module.exports = function(source) {
@@ -58,7 +59,8 @@ module.exports = function(source) {
 
   options = {
     wrapper,
-    ...options
+    linkOpen: true,
+    ...options,
   };
 
   let fm;
@@ -66,6 +68,10 @@ module.exports = function(source) {
   if (options.enableMetaData) {
     fm = frontMatter(source);
     source = fm.body;
+  }
+
+  if (options.linkOpen) {
+    linkOpen(parser);
   }
 
   return options.wrapper(parser.render(source), fm);

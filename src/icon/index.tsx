@@ -1,7 +1,9 @@
-import { createNamespace, addUnit } from '../utils';
+// Utils
+import { createNamespace, addUnit, isDef } from '../utils';
 import { inherit } from '../utils/functional';
+
+// Components
 import Info from '../info';
-import Image from '../image';
 
 // Types
 import { CreateElement, RenderContext } from 'vue/types';
@@ -10,10 +12,11 @@ import { DefaultSlots } from '../utils/types';
 export type IconProps = {
   dot?: boolean;
   tag: keyof HTMLElementTagNameMap | string;
-  name: string;
+  name?: string;
   size?: string | number;
-  color?: string;
   info?: string | number;
+  badge?: string | number;
+  color?: string;
   classPrefix: string;
 };
 
@@ -27,28 +30,43 @@ function isImage(name?: string): boolean {
   return name ? name.indexOf('/') !== -1 : false;
 }
 
+// compatible with legacy usage, should be removed in next major version
+const LEGACY_MAP: Record<string, string> = {
+  medel: 'medal',
+  'medel-o': 'medal-o',
+};
+
+function correctName(name?: string) {
+  return (name && LEGACY_MAP[name]) || name;
+}
+
 function Icon(
   h: CreateElement,
   props: IconProps,
   slots: DefaultSlots,
   ctx: RenderContext<IconProps>
 ) {
-  const imageIcon = isImage(props.name);
+  const name = correctName(props.name);
+  const imageIcon = isImage(name);
 
   return (
     <props.tag
-      class={[props.classPrefix, imageIcon ? '' : `${props.classPrefix}-${props.name}`]}
+      class={[
+        props.classPrefix,
+        imageIcon ? '' : `${props.classPrefix}-${name}`,
+      ]}
       style={{
         color: props.color,
-        fontSize: addUnit(props.size)
+        fontSize: addUnit(props.size),
       }}
       {...inherit(ctx, true)}
     >
       {slots.default && slots.default()}
-      {imageIcon && (
-        <Image class={bem('image')} fit="contain" src={props.name} showLoading={false} />
-      )}
-      <Info dot={props.dot} info={props.info} />
+      {imageIcon && <img class={bem('image')} src={name} />}
+      <Info
+        dot={props.dot}
+        info={isDef(props.badge) ? props.badge : props.info}
+      />
     </props.tag>
   );
 }
@@ -57,16 +75,19 @@ Icon.props = {
   dot: Boolean,
   name: String,
   size: [Number, String],
+  // @deprecated
+  // should be removed in next major version
   info: [Number, String],
+  badge: [Number, String],
   color: String,
   tag: {
     type: String,
-    default: 'i'
+    default: 'i',
   },
   classPrefix: {
     type: String,
-    default: bem()
-  }
+    default: bem(),
+  },
 };
 
 export default createComponent<IconProps, IconEvents>(Icon);

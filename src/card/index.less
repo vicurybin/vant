@@ -22,6 +22,10 @@
     width: @card-thumb-size;
     height: @card-thumb-size;
     margin-right: @padding-xs;
+
+    img {
+      border-radius: @card-thumb-border-radius;
+    }
   }
 
   &__content {
@@ -29,6 +33,7 @@
     display: flex;
     flex: 1;
     flex-direction: column;
+    justify-content: space-between;
     min-width: 0; /* hack for flex box ellipsis */
     min-height: @card-thumb-size;
 
@@ -62,6 +67,16 @@
     display: inline-block;
     color: @card-price-color;
     font-weight: @font-weight-bold;
+    font-size: @card-price-font-size;
+  }
+
+  &__price-integer {
+    font-size: @card-price-integer-font-size;
+    font-family: @card-price-font-family;
+  }
+
+  &__price-decimal {
+    font-family: @card-price-font-family;
   }
 
   &__origin-price {
@@ -74,6 +89,7 @@
 
   &__num {
     float: right;
+    color: @card-num-color;
   }
 
   &__tag {

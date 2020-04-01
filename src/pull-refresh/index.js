@@ -1,10 +1,17 @@
+// Utils
 import { createNamespace } from '../utils';
 import { preventDefault } from '../utils/dom/event';
+import { getScrollTop, getScroller } from '../utils/dom/scroll';
+
+// Mixins
 import { TouchMixin } from '../mixins/touch';
-import { getScrollTop, getScrollEventTarget } from '../utils/dom/scroll';
+
+// Components
 import Loading from '../loading';
 
 const [createComponent, bem, t] = createNamespace('pull-refresh');
+
+const DEFAULT_HEAD_HEIGHT = 50;
 const TEXT_STATUS = ['pulling', 'loosing', 'success'];
 
 export default createComponent({
@@ -18,90 +25,104 @@ export default createComponent({
     loadingText: String,
     value: {
       type: Boolean,
-      required: true
+      required: true,
     },
     successDuration: {
-      type: Number,
-      default: 500
+      type: [Number, String],
+      default: 500,
     },
     animationDuration: {
-      type: Number,
-      default: 300
+      type: [Number, String],
+      default: 300,
     },
     headHeight: {
-      type: Number,
-      default: 50
-    }
+      type: [Number, String],
+      default: DEFAULT_HEAD_HEIGHT,
+    },
   },
 
   data() {
     return {
       status: 'normal',
       distance: 0,
-      duration: 0
+      duration: 0,
     };
   },
 
   computed: {
-    untouchable() {
-      return this.status === 'loading' || this.status === 'success' || this.disabled;
-    }
+    touchable() {
+      return (
+        this.status !== 'loading' && this.status !== 'success' && !this.disabled
+      );
+    },
+
+    headStyle() {
+      if (this.headHeight !== DEFAULT_HEAD_HEIGHT) {
+        return {
+          height: `${this.headHeight}px`,
+        };
+      }
+    },
   },
 
   watch: {
     value(loading) {
       this.duration = this.animationDuration;
 
-      if (!loading && this.successText) {
-        this.status = 'success';
-        setTimeout(() => {
-          this.setStatus(0);
-        }, this.successDuration);
+      if (loading) {
+        this.setStatus(+this.headHeight, true);
+      } else if (this.slots('success') || this.successText) {
+        this.showSuccessTip();
       } else {
-        this.setStatus(loading ? this.headHeight : 0, loading);
+        this.setStatus(0, false);
       }
-    }
+    },
   },
 
   mounted() {
-    this.scrollEl = getScrollEventTarget(this.$el);
+    this.bindTouchEvent(this.$refs.track);
+    this.scrollEl = getScroller(this.$el);
   },
 
   methods: {
-    onTouchStart(event) {
-      if (!this.untouchable && this.getCeiling()) {
+    checkPullStart(event) {
+      this.ceiling = getScrollTop(this.scrollEl) === 0;
+
+      if (this.ceiling) {
         this.duration = 0;
         this.touchStart(event);
       }
     },
 
+    onTouchStart(event) {
+      if (this.touchable) {
+        this.checkPullStart(event);
+      }
+    },
+
     onTouchMove(event) {
-      if (this.untouchable) {
+      if (!this.touchable) {
         return;
+      }
+
+      if (!this.ceiling) {
+        this.checkPullStart(event);
       }
 
       this.touchMove(event);
 
-      if (!this.ceiling && this.getCeiling()) {
-        this.duration = 0;
-        this.startY = event.touches[0].clientY;
-        this.deltaY = 0;
-      }
-
-      if (this.ceiling && this.deltaY >= 0) {
-        if (this.direction === 'vertical') {
-          this.setStatus(this.ease(this.deltaY));
-          preventDefault(event);
-        }
+      if (this.ceiling && this.deltaY >= 0 && this.direction === 'vertical') {
+        preventDefault(event);
+        this.setStatus(this.ease(this.deltaY));
       }
     },
 
     onTouchEnd() {
-      if (!this.untouchable && this.ceiling && this.deltaY) {
+      if (this.touchable && this.ceiling && this.deltaY) {
         this.duration = this.animationDuration;
 
         if (this.status === 'loosing') {
-          this.setStatus(this.headHeight, true);
+          this.setStatus(+this.headHeight, true);
           this.$emit('input', true);
 
           // ensure value change can be watched
@@ -114,66 +135,83 @@ export default createComponent({
       }
     },
 
-    getCeiling() {
-      this.ceiling = getScrollTop(this.scrollEl) === 0;
-      return this.ceiling;
-    },
-
     ease(distance) {
-      const { headHeight } = this;
-      return Math.round(
-        distance < headHeight
-          ? distance
-          : distance < headHeight * 2
-            ? headHeight + (distance - headHeight) / 2
-            : headHeight * 1.5 + (distance - headHeight * 2) / 4
-      );
+      const headHeight = +this.headHeight;
+
+      if (distance > headHeight) {
+        if (distance < headHeight * 2) {
+          distance = headHeight + (distance - headHeight) / 2;
+        } else {
+          distance = headHeight * 1.5 + (distance - headHeight * 2) / 4;
+        }
+      }
+
+      return Math.round(distance);
     },
 
     setStatus(distance, isLoading) {
-      this.distance = distance;
+      let status;
+      if (isLoading) {
+        status = 'loading';
+      } else if (distance === 0) {
+        status = 'normal';
+      } else {
+        status = distance < this.headHeight ? 'pulling' : 'loosing';
+      }
 
-      const status = isLoading
-        ? 'loading'
-        : distance === 0
-          ? 'normal'
-          : distance < this.headHeight
-            ? 'pulling'
-            : 'loosing';
+      this.distance = distance;
 
       if (status !== this.status) {
         this.status = status;
       }
-    }
+    },
+
+    genStatus() {
+      const { status, distance } = this;
+      const slot = this.slots(status, { distance });
+
+      if (slot) {
+        return slot;
+      }
+
+      const nodes = [];
+      const text = this[`${status}Text`] || t(status);
+
+      if (TEXT_STATUS.indexOf(status) !== -1) {
+        nodes.push(<div class={bem('text')}>{text}</div>);
+      }
+
+      if (status === 'loading') {
+        nodes.push(<Loading size="16">{text}</Loading>);
+      }
+
+      return nodes;
+    },
+
+    showSuccessTip() {
+      this.status = 'success';
+
+      setTimeout(() => {
+        this.setStatus(0);
+      }, this.successDuration);
+    },
   },
 
   render() {
-    const { status, distance } = this;
-    const text = this[`${status}Text`] || t(status);
-    const style = {
+    const trackStyle = {
       transitionDuration: `${this.duration}ms`,
-      transform: this.distance ? `translate3d(0,${this.distance}px, 0)` : ''
+      transform: this.distance ? `translate3d(0,${this.distance}px, 0)` : '',
     };
-
-    const Status = this.slots(status, { distance }) || [
-      TEXT_STATUS.indexOf(status) !== -1 && <div class={bem('text')}>{text}</div>,
-      status === 'loading' && <Loading size="16">{text}</Loading>
-    ];
 
     return (
       <div class={bem()}>
-        <div
-          class={bem('track')}
-          style={style}
-          onTouchstart={this.onTouchStart}
-          onTouchmove={this.onTouchMove}
-          onTouchend={this.onTouchEnd}
-          onTouchcancel={this.onTouchEnd}
-        >
-          <div class={bem('head')}>{Status}</div>
+        <div ref="track" class={bem('track')} style={trackStyle}>
+          <div class={bem('head')} style={this.headStyle}>
+            {this.genStatus()}
+          </div>
           {this.slots()}
         </div>
       </div>
     );
-  }
+  },
 });

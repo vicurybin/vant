@@ -1,10 +1,5 @@
-import Vue from 'vue';
-import Tab from '..';
 import Tabs from '../../tabs';
-import { mount, later, triggerDrag } from '../../../test';
-
-Vue.use(Tab);
-Vue.use(Tabs);
+import { mount, later, triggerDrag, mockScrollTop } from '../../../test';
 
 function createWrapper(options = {}) {
   return mount({
@@ -29,10 +24,10 @@ function createWrapper(options = {}) {
         type: 'line',
         sticky: true,
         lineWidth: 2,
-        lazyRender: true
+        lazyRender: true,
       };
     },
-    ...options
+    ...options,
   });
 }
 
@@ -47,8 +42,8 @@ test('click to switch tab', async () => {
       </van-tabs>
     `,
     methods: {
-      onChange
-    }
+      onChange,
+    },
   });
 
   await later();
@@ -73,8 +68,8 @@ test('swipe to switch tab', async () => {
       </van-tabs>
     `,
     methods: {
-      onChange
-    }
+      onChange,
+    },
   });
 
   const content = wrapper.find('.van-tabs__content');
@@ -105,7 +100,7 @@ test('change tabs data', async () => {
     swipeable: false,
     sticky: false,
     type: 'card',
-    color: 'blue'
+    color: 'blue',
   });
 
   await later();
@@ -118,7 +113,7 @@ test('lazy render', async () => {
   expect(wrapper).toMatchSnapshot();
 
   wrapper.setData({
-    lazyRender: false
+    lazyRender: false,
   });
 
   await later();
@@ -130,7 +125,7 @@ test('render nav-left & nav-right slot', async () => {
     extraTemplate: `
       <template v-slot:nav-left>Nav Left</template>
       <template v-slot:nav-right>Nav Right</template>
-    `
+    `,
   });
 
   expect(wrapper).toMatchSnapshot();
@@ -139,13 +134,12 @@ test('render nav-left & nav-right slot', async () => {
 test('border props', async () => {
   const wrapper = mount(Tabs, {
     propsData: {
-      border: false
-    }
+      border: false,
+    },
   });
 
   expect(wrapper).toMatchSnapshot();
 });
-
 
 test('click event', async () => {
   const onClick = jest.fn();
@@ -160,8 +154,8 @@ test('click event', async () => {
     `,
     methods: {
       onClick,
-      onDisabled
-    }
+      onDisabled,
+    },
   });
 
   const tabs = wrapper.findAll('.van-tab');
@@ -189,8 +183,8 @@ test('name prop', async () => {
     methods: {
       onClick,
       onChange,
-      onDisabled
-    }
+      onDisabled,
+    },
   });
 
   await later();
@@ -219,8 +213,8 @@ test('set name to zero', async () => {
       </van-tabs>
     `,
     methods: {
-      onClick
-    }
+      onClick,
+    },
   });
 
   const tabs = wrapper.findAll('.van-tab');
@@ -234,8 +228,113 @@ test('title-style prop', () => {
       <van-tabs>
         <van-tab title="title1" title-style="color: red;">Text</van-tab>
       </van-tabs>
-    `
+    `,
   });
 
   expect(wrapper.find('.van-tab').element.style.color).toEqual('red');
+});
+
+test('dot prop', () => {
+  const wrapper = mount({
+    template: `
+      <van-tabs>
+        <van-tab dot>Text</van-tab>
+      </van-tabs>
+    `,
+  });
+
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('info prop', () => {
+  const wrapper = mount({
+    template: `
+      <van-tabs>
+        <van-tab info="10">Text</van-tab>
+      </van-tabs>
+    `,
+  });
+
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('scrollspy', async () => {
+  const onChange = jest.fn();
+  window.scrollTo = jest.fn();
+
+  const wrapper = mount({
+    template: `
+      <van-tabs scrollspy sticky @change="onChange">
+        <van-tab name="a" title="title1">Text</van-tab>
+        <van-tab name="b" title="title2">Text</van-tab>
+        <van-tab name="c" title="title3">Text</van-tab>
+      </van-tabs>
+    `,
+    methods: {
+      onChange,
+    },
+  });
+
+  await later();
+  expect(wrapper).toMatchSnapshot();
+
+  const tabs = wrapper.findAll('.van-tab');
+  tabs.at(2).trigger('click');
+  expect(onChange).toHaveBeenCalledWith('c', 'title3');
+
+  await later();
+  mockScrollTop(100);
+  expect(wrapper).toMatchSnapshot();
+  expect(onChange).toHaveBeenCalledWith('c', 'title3');
+});
+
+test('rendered event', async () => {
+  const onRendered = jest.fn();
+
+  const wrapper = mount({
+    template: `
+      <van-tabs v-model="active" @rendered="onRendered">
+        <van-tab name="a" title="title1">Text</van-tab>
+        <van-tab name="b" title="title2">Title2</van-tab>
+      </van-tabs>
+    `,
+    data() {
+      return {
+        active: 'a',
+      };
+    },
+    methods: {
+      onRendered,
+    },
+  });
+
+  await later();
+  expect(onRendered).toHaveBeenCalledWith('a', 'title1');
+  expect(wrapper.find('.van-tab__pane')).toMatchSnapshot();
+
+  const tabs = wrapper.findAll('.van-tab');
+  tabs.at(1).trigger('click');
+  tabs.at(0).trigger('click');
+
+  await later();
+  expect(onRendered).toHaveBeenCalledTimes(2);
+});
+
+test('should not trigger rendered event when disable lazy-render', async () => {
+  const onRendered = jest.fn();
+
+  mount({
+    template: `
+      <van-tabs :lazy-render="false" @rendered="onRendered">
+        <van-tab>Text</van-tab>
+        <van-tab>Title2</van-tab>
+      </van-tabs>
+    `,
+    methods: {
+      onRendered,
+    },
+  });
+
+  await later();
+  expect(onRendered).toHaveBeenCalledTimes(0);
 });

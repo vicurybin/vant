@@ -1,22 +1,46 @@
 <template>
   <demo-section>
-    <demo-block :title="$t('basicUsage')">
-      <van-button type="danger" :text="$t('basicUsage')" @click="showNotify" />
+    <demo-block :title="t('basicUsage')">
+      <van-button type="danger" :text="t('basicUsage')" @click="showNotify" />
     </demo-block>
 
-    <demo-block :title="$t('notifyType')">
+    <demo-block :title="t('notifyType')">
       <div style="margin-bottom: 15px;">
-        <van-button type="info" :text="$t('primary')" @click="showType('primary')" />
-        <van-button type="primary" :text="$t('success')" @click="showType('success')" />
+        <van-button
+          type="info"
+          :text="t('primary')"
+          @click="showType('primary')"
+        />
+        <van-button
+          type="primary"
+          :text="t('success')"
+          @click="showType('success')"
+        />
       </div>
 
-      <van-button type="danger" :text="$t('danger')" @click="showType('danger')" />
-      <van-button type="warning" :text="$t('warning')" @click="showType('warning')" />
+      <van-button
+        type="danger"
+        :text="t('danger')"
+        @click="showType('danger')"
+      />
+      <van-button
+        type="warning"
+        :text="t('warning')"
+        @click="showType('warning')"
+      />
     </demo-block>
 
-    <demo-block :title="$t('customNotify')">
-      <van-button type="primary" :text="$t('customColor')" @click="showCustomColor" />
-      <van-button type="primary" :text="$t('customDuration')" @click="showCustomDuration" />
+    <demo-block :title="t('customNotify')">
+      <van-button
+        type="primary"
+        :text="t('customColor')"
+        @click="showCustomColor"
+      />
+      <van-button
+        type="primary"
+        :text="t('customDuration')"
+        @click="showCustomDuration"
+      />
     </demo-block>
   </demo-section>
 </template>
@@ -33,7 +57,7 @@ export default {
       notifyType: '通知类型',
       customColor: '自定义颜色',
       customNotify: '自定义配置',
-      customDuration: '自定义时长'
+      customDuration: '自定义时长',
     },
     'en-US': {
       primary: 'Primary',
@@ -44,37 +68,37 @@ export default {
       notifyType: 'Notify Type',
       customColor: 'Custom Color',
       customNotify: 'Custom Notify',
-      customDuration: 'Custom Duration'
-    }
+      customDuration: 'Custom Duration',
+    },
   },
 
   methods: {
     showNotify() {
-      this.$notify(this.$t('content'));
+      this.$notify(this.t('content'));
     },
 
     showCustomColor() {
       this.$notify({
-        message: this.$t('customColor'),
+        message: this.t('customColor'),
         color: '#ad0000',
-        background: '#ffe1e1'
+        background: '#ffe1e1',
       });
     },
 
     showCustomDuration() {
       this.$notify({
-        message: this.$t('customDuration'),
-        duration: 1000
+        message: this.t('customDuration'),
+        duration: 1000,
       });
     },
 
     showType(type) {
       this.$notify({
-        message: this.$t('content'),
-        type
+        message: this.t('content'),
+        type,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

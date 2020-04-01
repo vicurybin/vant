@@ -17,8 +17,8 @@ window.FileReader = function() {
     this.onload &&
       this.onload({
         target: {
-          result: mockFileDataUrl
-        }
+          result: mockFileDataUrl,
+        },
       });
   };
   this.readAsDataURL = this.readAsText;
@@ -29,29 +29,29 @@ test('disabled', () => {
   const wrapper = mount(Uploader, {
     propsData: {
       disabled: true,
-      afterRead
-    }
+      afterRead,
+    },
   });
 
   wrapper.vm.onChange(file);
   expect(afterRead).toHaveBeenCalledTimes(0);
 });
 
-it('result-type as text', done => {
+test('result-type as text', done => {
   const wrapper = mount(Uploader, {
     propsData: {
       resultType: 'text',
       afterRead: readFile => {
         expect(readFile.content).toEqual(mockFileDataUrl);
         done();
-      }
-    }
+      },
+    },
   });
 
   wrapper.vm.onChange(file);
 });
 
-it('result-type as file', done => {
+test('result-type as file', done => {
   const wrapper = mount(Uploader, {
     propsData: {
       resultType: 'file',
@@ -59,14 +59,14 @@ it('result-type as file', done => {
         expect(readFile.file).toBeTruthy();
         expect(readFile.content).toBeFalsy();
         done();
-      }
-    }
+      },
+    },
   });
 
   wrapper.vm.onChange(file);
 });
 
-it('set input name', done => {
+test('set input name', done => {
   const wrapper = mount(Uploader, {
     propsData: {
       name: 'uploader',
@@ -77,32 +77,32 @@ it('set input name', done => {
       afterRead: (readFile, detail) => {
         expect(detail.name).toEqual('uploader');
         done();
-      }
-    }
+      },
+    },
   });
 
   wrapper.vm.onChange(file);
 });
 
-it('unknown resultType', () => {
+test('unknown resultType', () => {
   const afterRead = jest.fn();
   const wrapper = mount(Uploader, {
     propsData: {
       resultType: 'xxxx',
-      afterRead
-    }
+      afterRead,
+    },
   });
   wrapper.vm.onChange(file);
   expect(afterRead).toHaveBeenCalledTimes(0);
 });
 
-it('before read return false', () => {
+test('before read return false', () => {
   const afterRead = jest.fn();
   const wrapper = mount(Uploader, {
     propsData: {
       beforeRead: () => false,
-      afterRead
-    }
+      afterRead,
+    },
   });
 
   const input = wrapper.find('input');
@@ -112,16 +112,16 @@ it('before read return false', () => {
   expect(input.element.value).toEqual('');
 });
 
-it('before read return promise and resolve', async () => {
+test('before read return promise and resolve', async () => {
   const afterRead = jest.fn();
   const wrapper = mount(Uploader, {
     propsData: {
       beforeRead: () =>
         new Promise(resolve => {
-          resolve();
+          resolve(file);
         }),
-      afterRead
-    }
+      afterRead,
+    },
   });
 
   wrapper.vm.onChange(file);
@@ -130,7 +130,26 @@ it('before read return promise and resolve', async () => {
   expect(afterRead).toHaveBeenCalledTimes(1);
 });
 
-it('before read return promise and reject', async () => {
+test('before read return promise and resolve no value', async () => {
+  const afterRead = jest.fn();
+  const wrapper = mount(Uploader, {
+    propsData: {
+      beforeRead: () =>
+        new Promise(resolve => {
+          resolve();
+        }),
+      afterRead,
+    },
+  });
+
+  const input = wrapper.find('input');
+  wrapper.vm.onChange(file);
+  await later();
+  expect(afterRead).toHaveBeenCalledTimes(1);
+  expect(input.element.value).toEqual('');
+});
+
+test('before read return promise and reject', async () => {
   const afterRead = jest.fn();
   const wrapper = mount(Uploader, {
     propsData: {
@@ -138,14 +157,14 @@ it('before read return promise and reject', async () => {
         new Promise((resolve, reject) => {
           reject();
         }),
-      afterRead
-    }
+      afterRead,
+    },
   });
 
   const input = wrapper.find('input');
+  wrapper.vm.onChange(file);
 
   await later();
-  wrapper.vm.onChange(file);
   expect(afterRead).toHaveBeenCalledTimes(0);
   expect(input.element.value).toEqual('');
 });
@@ -153,8 +172,8 @@ it('before read return promise and reject', async () => {
 test('file size overlimit', async () => {
   const wrapper = mount(Uploader, {
     propsData: {
-      maxSize: 1
-    }
+      maxSize: 1,
+    },
   });
   wrapper.vm.onChange(file);
   wrapper.vm.onChange(multiFile);
@@ -170,30 +189,30 @@ test('file size overlimit', async () => {
   expect(wrapper.emitted('oversize')[2]).toBeFalsy();
 });
 
-it('render upload-text', () => {
+test('render upload-text', () => {
   const wrapper = mount(Uploader, {
     propsData: {
-      uploadText: 'Text'
-    }
+      uploadText: 'Text',
+    },
   });
 
   expect(wrapper).toMatchSnapshot();
 });
 
-it('render preview image', async () => {
+test('render preview image', async () => {
   const wrapper = mount(Uploader, {
     propsData: {
       fileList: [
         { url: 'https://img.yzcdn.cn/vant/cat.jpeg' },
         { url: 'https://img.yzcdn.cn/vant/test.pdf' },
-        { file: { name: 'test.pdf' } }
-      ]
+        { file: { name: 'test.pdf' } },
+      ],
     },
     listeners: {
       input(fileList) {
         wrapper.setProps({ fileList });
-      }
-    }
+      },
+    },
   });
 
   wrapper.vm.onChange(file);
@@ -202,28 +221,38 @@ it('render preview image', async () => {
   expect(wrapper).toMatchSnapshot();
 });
 
-it('image-fit prop', () => {
+test('image-fit prop', () => {
   const wrapper = mount(Uploader, {
     propsData: {
       imageFit: 'contain',
-      fileList: [{ url: 'https://img.yzcdn.cn/vant/cat.jpeg' }]
-    }
+      fileList: [{ url: 'https://img.yzcdn.cn/vant/cat.jpeg' }],
+    },
   });
 
   expect(wrapper).toMatchSnapshot();
 });
 
-it('disable preview image', async () => {
+test('upload-icon prop', () => {
+  const wrapper = mount(Uploader, {
+    propsData: {
+      uploadIcon: 'add',
+    },
+  });
+
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('disable preview image', async () => {
   const wrapper = mount(Uploader, {
     propsData: {
       fileList: [],
-      previewImage: false
+      previewImage: false,
     },
     listeners: {
       input(fileList) {
         wrapper.setProps({ fileList });
-      }
-    }
+      },
+    },
   });
 
   wrapper.vm.onChange(file);
@@ -232,17 +261,17 @@ it('disable preview image', async () => {
   expect(wrapper).toMatchSnapshot();
 });
 
-it('max-count prop', async () => {
+test('max-count prop', async () => {
   const wrapper = mount(Uploader, {
     propsData: {
       fileList: [],
-      maxCount: 1
+      maxCount: 1,
     },
     listeners: {
       input(fileList) {
         wrapper.setProps({ fileList });
-      }
-    }
+      },
+    },
   });
 
   wrapper.vm.onChange(multiFile);
@@ -251,17 +280,17 @@ it('max-count prop', async () => {
   expect(wrapper).toMatchSnapshot();
 });
 
-it('preview-size prop', async () => {
+test('preview-size prop', async () => {
   const wrapper = mount(Uploader, {
     propsData: {
       fileList: [],
-      previewSize: 30
+      previewSize: 30,
     },
     listeners: {
       input(fileList) {
         wrapper.setProps({ fileList });
-      }
-    }
+      },
+    },
   });
 
   wrapper.vm.onChange(file);
@@ -270,11 +299,11 @@ it('preview-size prop', async () => {
   expect(wrapper).toMatchSnapshot();
 });
 
-it('deletable prop', () => {
+test('deletable prop', () => {
   const wrapper = mount(Uploader, {
     propsData: {
-      fileList: [{ url: IMAGE }]
-    }
+      fileList: [{ url: IMAGE }],
+    },
   });
 
   expect(wrapper.find('.van-uploader__preview-delete').element).toBeTruthy();
@@ -283,17 +312,17 @@ it('deletable prop', () => {
   expect(wrapper.find('.van-uploader__preview-delete').element).toBeFalsy();
 });
 
-it('delete preview image', () => {
+test('delete preview image', () => {
   const wrapper = mount(Uploader, {
     propsData: {
       fileList: [{ url: IMAGE }],
-      previewSize: 30
+      previewSize: 30,
     },
     listeners: {
       input(fileList) {
         wrapper.setProps({ fileList });
-      }
-    }
+      },
+    },
   });
 
   wrapper.find('.van-uploader__preview-delete').trigger('click');
@@ -303,36 +332,36 @@ it('delete preview image', () => {
   expect(wrapper.emitted('delete')[0]).toBeTruthy();
 });
 
-it('before-delete prop return false', () => {
+test('before-delete prop return false', () => {
   const wrapper = mount(Uploader, {
     propsData: {
       fileList: [{ url: IMAGE }],
-      beforeDelete: () => false
-    }
+      beforeDelete: () => false,
+    },
   });
 
   wrapper.find('.van-uploader__preview-delete').trigger('click');
   expect(wrapper.emitted('delete')).toBeFalsy();
 });
 
-it('before-delete prop return true', () => {
+test('before-delete prop return true', () => {
   const wrapper = mount(Uploader, {
     propsData: {
       fileList: [{ url: IMAGE }],
-      beforeDelete: () => true
-    }
+      beforeDelete: () => true,
+    },
   });
 
   wrapper.find('.van-uploader__preview-delete').trigger('click');
   expect(wrapper.emitted('delete')).toBeTruthy();
 });
 
-it('before-delete prop resolved', async () => {
+test('before-delete prop resolved', async () => {
   const wrapper = mount(Uploader, {
     propsData: {
       fileList: [{ url: IMAGE }],
-      beforeDelete: () => new Promise(resolve => resolve())
-    }
+      beforeDelete: () => new Promise(resolve => resolve()),
+    },
   });
 
   wrapper.find('.van-uploader__preview-delete').trigger('click');
@@ -340,12 +369,12 @@ it('before-delete prop resolved', async () => {
   expect(wrapper.emitted('delete')).toBeTruthy();
 });
 
-it('before-delete prop rejected', async () => {
+test('before-delete prop rejected', async () => {
   const wrapper = mount(Uploader, {
     propsData: {
       fileList: [{ url: IMAGE }],
-      beforeDelete: () => new Promise((resolve, reject) => reject())
-    }
+      beforeDelete: () => new Promise((resolve, reject) => reject()),
+    },
   });
 
   wrapper.find('.van-uploader__preview-delete').trigger('click');
@@ -353,12 +382,12 @@ it('before-delete prop rejected', async () => {
   expect(wrapper.emitted('delete')).toBeFalsy();
 });
 
-it('click to preview image', () => {
+test('click to preview image', async () => {
   const wrapper = mount(Uploader, {
     propsData: {
       previewFullImage: false,
-      fileList: [{ url: IMAGE }, { url: PDF }]
-    }
+      fileList: [{ url: IMAGE }, { url: PDF }],
+    },
   });
 
   wrapper.find('.van-image').trigger('click');
@@ -368,18 +397,23 @@ it('click to preview image', () => {
   wrapper.setProps({ previewFullImage: true });
   wrapper.find('.van-image').trigger('click');
 
+  await later();
+
   const imagePreviewNode2 = document.querySelector('.van-image-preview');
-  expect(imagePreviewNode2.querySelectorAll('.van-image-preview__image').length).toEqual(1);
+  const images = imagePreviewNode2.querySelectorAll(
+    '.van-image-preview__image'
+  );
+  expect(images.length).toEqual(1);
 });
 
-it('closeImagePreview method', () => {
+test('closeImagePreview method', () => {
   const close = jest.fn();
   const wrapper = mount(Uploader, {
     mocks: {
       imagePreview: {
-        close
-      }
-    }
+        close,
+      },
+    },
   });
 
   wrapper.vm.closeImagePreview();
@@ -390,24 +424,27 @@ it('closeImagePreview method', () => {
   wrapper2.vm.closeImagePreview();
 });
 
-it('click-preview event', () => {
+test('click-preview event', () => {
   const wrapper = mount(Uploader, {
     propsData: {
       previewFullImage: false,
-      fileList: [{ url: IMAGE }, { url: PDF }]
-    }
+      fileList: [{ url: IMAGE }, { url: PDF }],
+    },
   });
 
   wrapper.find('.van-image').trigger('click');
   expect(wrapper.emitted('click-preview')[0][0]).toEqual({ url: IMAGE });
-  expect(wrapper.emitted('click-preview')[0][1]).toEqual({ name: '', index: 0 });
+  expect(wrapper.emitted('click-preview')[0][1]).toEqual({
+    name: '',
+    index: 0,
+  });
 });
 
-it('close-preview event', async () => {
+test('close-preview event', async () => {
   const wrapper = mount(Uploader, {
     propsData: {
-      fileList: [{ url: IMAGE }]
-    }
+      fileList: [{ url: IMAGE }],
+    },
   });
 
   wrapper.find('.van-image').trigger('click');
@@ -418,4 +455,11 @@ it('close-preview event', async () => {
 
   await later(300);
   expect(wrapper.emitted('close-preview')).toBeTruthy();
+});
+
+test('show-upload prop', () => {
+  const wrapper = mount(Uploader);
+  expect(wrapper.contains('.van-uploader__upload')).toBeTruthy();
+  wrapper.setProps({ showUpload: false });
+  expect(wrapper.contains('.van-uploader__upload')).toBeFalsy();
 });

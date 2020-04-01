@@ -6,15 +6,15 @@ test('speed is 0', async () => {
   const wrapper = mount(Circle, {
     propsData: {
       rate: 50,
-      value: 0
+      value: 0,
     },
     listeners: {
       input(value) {
         Vue.nextTick(() => {
           wrapper.setProps({ value });
         });
-      }
-    }
+      },
+    },
   });
 
   await later();
@@ -26,11 +26,11 @@ test('animate', async () => {
   mount(Circle, {
     propsData: {
       rate: 50,
-      speed: 100
+      speed: 100,
     },
     listeners: {
-      input: onInput
-    }
+      input: onInput,
+    },
   });
 
   await later(50);
@@ -41,8 +41,18 @@ test('animate', async () => {
 test('size prop', () => {
   const wrapper = mount(Circle, {
     propsData: {
-      size: 100
-    }
+      size: 100,
+    },
+  });
+
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('stroke-linecap prop', () => {
+  const wrapper = mount(Circle, {
+    propsData: {
+      strokeLinecap: 'square',
+    },
   });
 
   expect(wrapper).toMatchSnapshot();

@@ -1,6 +1,9 @@
+// Utils
 import { createNamespace } from '../utils';
 import { range } from '../utils/format/number';
 import { preventDefault } from '../utils/dom/event';
+
+// Mixins
 import { TouchMixin } from '../mixins/touch';
 import { ClickOutsideMixin } from '../mixins/click-outside';
 
@@ -12,37 +15,44 @@ export default createComponent({
     TouchMixin,
     ClickOutsideMixin({
       event: 'touchstart',
-      method: 'onClick'
-    })
+      method: 'onClick',
+    }),
   ],
 
   props: {
+    // @deprecated
+    // should be removed in next major version, use beforeClose instead
     onClose: Function,
     disabled: Boolean,
-    leftWidth: Number,
-    rightWidth: Number,
+    leftWidth: [Number, String],
+    rightWidth: [Number, String],
+    beforeClose: Function,
     stopPropagation: Boolean,
     name: {
       type: [Number, String],
-      default: ''
-    }
+      default: '',
+    },
   },
 
   data() {
     return {
       offset: 0,
-      dragging: false
+      dragging: false,
     };
   },
 
   computed: {
     computedLeftWidth() {
-      return this.leftWidth || this.getWidthByRef('left');
+      return +this.leftWidth || this.getWidthByRef('left');
     },
 
     computedRightWidth() {
-      return this.rightWidth || this.getWidthByRef('right');
-    }
+      return +this.rightWidth || this.getWidthByRef('right');
+    },
+  },
+
+  mounted() {
+    this.bindTouchEvent(this.$el);
   },
 
   methods: {
@@ -55,71 +65,46 @@ export default createComponent({
       return 0;
     },
 
+    // @exposed-api
     open(position) {
-      const offset = position === 'left' ? this.computedLeftWidth : -this.computedRightWidth;
-      this.swipeMove(offset);
-      this.resetSwipeStatus();
+      const offset =
+        position === 'left' ? this.computedLeftWidth : -this.computedRightWidth;
+
+      this.opened = true;
+      this.offset = offset;
 
       this.$emit('open', {
         position,
-        detail: this.name
+        name: this.name,
+        // @deprecated
+        // should be removed in next major version
+        detail: this.name,
       });
     },
 
-    close() {
+    // @exposed-api
+    close(position) {
       this.offset = 0;
-    },
 
-    resetSwipeStatus() {
-      this.swiping = false;
-      this.opened = true;
-    },
-
-    swipeMove(offset = 0) {
-      this.offset = range(offset, -this.computedRightWidth, this.computedLeftWidth);
-
-      if (this.offset) {
-        this.swiping = true;
-      } else {
+      if (this.opened) {
         this.opened = false;
+        this.$emit('close', {
+          position,
+          name: this.name,
+        });
       }
     },
 
-    swipeLeaveTransition(direction) {
-      const { offset, computedLeftWidth, computedRightWidth } = this;
-      const threshold = this.opened ? 1 - THRESHOLD : THRESHOLD;
-
-      // right
-      if (
-        direction === 'right' &&
-        -offset > computedRightWidth * threshold &&
-        computedRightWidth > 0
-      ) {
-        this.open('right');
-        // left
-      } else if (
-        direction === 'left' &&
-        offset > computedLeftWidth * threshold &&
-        computedLeftWidth > 0
-      ) {
-        this.open('left');
-        // reset
-      } else {
-        this.swipeMove(0);
-      }
-    },
-
-    startDrag(event) {
+    onTouchStart(event) {
       if (this.disabled) {
         return;
       }
 
-      this.dragging = true;
       this.startOffset = this.offset;
       this.touchStart(event);
     },
 
-    onDrag(event) {
+    onTouchMove(event) {
       if (this.disabled) {
         return;
       }
@@ -127,84 +112,135 @@ export default createComponent({
       this.touchMove(event);
 
       if (this.direction === 'horizontal') {
-        const shouldPrevent = !this.opened || this.deltaX * this.startOffset < 0;
+        this.dragging = true;
+        this.lockClick = true;
 
-        if (shouldPrevent) {
+        const isPrevent = !this.opened || this.deltaX * this.startOffset < 0;
+
+        if (isPrevent) {
           preventDefault(event, this.stopPropagation);
         }
 
-        this.swipeMove(this.deltaX + this.startOffset);
+        this.offset = range(
+          this.deltaX + this.startOffset,
+          -this.computedRightWidth,
+          this.computedLeftWidth
+        );
       }
     },
 
-    endDrag() {
+    onTouchEnd() {
       if (this.disabled) {
         return;
       }
 
-      this.dragging = false;
-      if (this.swiping) {
-        this.swipeLeaveTransition(this.offset > 0 ? 'left' : 'right');
+      if (this.dragging) {
+        this.toggle(this.offset > 0 ? 'left' : 'right');
+        this.dragging = false;
+
+        // compatible with desktop scenario
+        setTimeout(() => {
+          this.lockClick = false;
+        }, 0);
+      }
+    },
+
+    toggle(direction) {
+      const offset = Math.abs(this.offset);
+      const threshold = this.opened ? 1 - THRESHOLD : THRESHOLD;
+      const { computedLeftWidth, computedRightWidth } = this;
+
+      if (
+        computedRightWidth &&
+        direction === 'right' &&
+        offset > computedRightWidth * threshold
+      ) {
+        this.open('right');
+      } else if (
+        computedLeftWidth &&
+        direction === 'left' &&
+        offset > computedLeftWidth * threshold
+      ) {
+        this.open('left');
+      } else {
+        this.close();
       }
     },
 
     onClick(position = 'outside') {
       this.$emit('click', position);
 
-      if (!this.offset) {
-        return;
+      if (this.opened && !this.lockClick) {
+        if (this.beforeClose) {
+          this.beforeClose({
+            position,
+            name: this.name,
+            instance: this,
+          });
+        } else if (this.onClose) {
+          this.onClose(position, this, { name: this.name });
+        } else {
+          this.close(position);
+        }
       }
+    },
 
-      if (this.onClose) {
-        this.onClose(position, this, { name: this.name });
-      } else {
-        this.swipeMove(0);
+    getClickHandler(position, stop) {
+      return event => {
+        if (stop) {
+          event.stopPropagation();
+        }
+        this.onClick(position);
+      };
+    },
+
+    genLeftPart() {
+      const content = this.slots('left');
+
+      if (content) {
+        return (
+          <div
+            ref="left"
+            class={bem('left')}
+            onClick={this.getClickHandler('left', true)}
+          >
+            {content}
+          </div>
+        );
       }
-    }
+    },
+
+    genRightPart() {
+      const content = this.slots('right');
+
+      if (content) {
+        return (
+          <div
+            ref="right"
+            class={bem('right')}
+            onClick={this.getClickHandler('right', true)}
+          >
+            {content}
+          </div>
+        );
+      }
+    },
   },
 
   render() {
-    const onClick = (position, stop) => event => {
-      if (stop) {
-        event.stopPropagation();
-      }
-      this.onClick(position);
-    };
-
     const wrapperStyle = {
       transform: `translate3d(${this.offset}px, 0, 0)`,
-      transitionDuration: this.dragging ? '0s' : '.6s'
+      transitionDuration: this.dragging ? '0s' : '.6s',
     };
 
     return (
-      <div
-        class={bem()}
-        onClick={onClick('cell')}
-        onTouchstart={this.startDrag}
-        onTouchmove={this.onDrag}
-        onTouchend={this.endDrag}
-        onTouchcancel={this.endDrag}
-      >
-        <div
-          class={bem('wrapper')}
-          style={wrapperStyle}
-          onTransitionend={() => {
-            this.swiping = false;
-          }}
-        >
-          {this.slots('left') && (
-            <div ref="left" class={bem('left')} onClick={onClick('left', true)}>
-              {this.slots('left')}
-            </div>
-          )}
+      <div class={bem()} onClick={this.getClickHandler('cell')}>
+        <div class={bem('wrapper')} style={wrapperStyle}>
+          {this.genLeftPart()}
           {this.slots()}
-          {this.slots('right') && (
-            <div ref="right" class={bem('right')} onClick={onClick('right', true)}>
-              {this.slots('right')}
-            </div>
-          )}
+          {this.genRightPart()}
         </div>
       </div>
     );
-  }
+  },
 });

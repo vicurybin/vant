@@ -5,17 +5,21 @@ exports[`renders demo correctly 1`] = `
   <div>
     <div class="van-card">
       <div class="van-card__header"><a class="van-card__thumb">
-          <div class="van-image" style="width: 100%; height: 100%;"><img src="https://img.yzcdn.cn/vant/t-thirt.jpg" class="van-image__img" style="object-fit: contain;">
-            <div class="van-image__loading"><i class="van-icon van-icon-photo-o" style="font-size: 22px;">
+          <div class="van-image" style="width: 100%; height: 100%;"><img src="https://img.yzcdn.cn/vant/ipad.jpeg" class="van-image__img" style="object-fit: cover;">
+            <div class="van-image__loading"><i class="van-icon van-icon-photo-o van-image__loading-icon">
                 <!----></i></div>
           </div>
         </a>
         <div class="van-card__content">
-          <div class="van-card__title van-multi-ellipsis--l2">商品名称</div>
-          <div class="van-card__desc van-ellipsis">描述信息</div>
+          <div>
+            <div class="van-card__title van-multi-ellipsis--l2">商品名称</div>
+            <div class="van-card__desc van-ellipsis">描述信息</div>
+          </div>
           <div class="van-card__bottom">
-            <div class="van-card__price">¥ 2.00</div>
-            <div class="van-card__num">x 2</div>
+            <div class="van-card__price">
+              <div><span class="van-card__price-currency">¥</span><span class="van-card__price-integer">2</span>.<span class="van-card__price-decimal">00</span></div>
+            </div>
+            <div class="van-card__num">x2</div>
           </div>
         </div>
       </div>
@@ -24,19 +28,23 @@ exports[`renders demo correctly 1`] = `
   <div>
     <div class="van-card">
       <div class="van-card__header"><a class="van-card__thumb">
-          <div class="van-image" style="width: 100%; height: 100%;"><img src="https://img.yzcdn.cn/vant/t-thirt.jpg" class="van-image__img" style="object-fit: contain;">
-            <div class="van-image__loading"><i class="van-icon van-icon-photo-o" style="font-size: 22px;">
+          <div class="van-image" style="width: 100%; height: 100%;"><img src="https://img.yzcdn.cn/vant/ipad.jpeg" class="van-image__img" style="object-fit: cover;">
+            <div class="van-image__loading"><i class="van-icon van-icon-photo-o van-image__loading-icon">
                 <!----></i></div>
           </div>
           <div class="van-card__tag"><span class="van-tag van-tag--mark van-tag--danger">标签</span></div>
         </a>
         <div class="van-card__content">
-          <div class="van-card__title van-multi-ellipsis--l2">商品名称</div>
-          <div class="van-card__desc van-ellipsis">描述信息</div>
+          <div>
+            <div class="van-card__title van-multi-ellipsis--l2">商品名称</div>
+            <div class="van-card__desc van-ellipsis">描述信息</div>
+          </div>
           <div class="van-card__bottom">
-            <div class="van-card__price">¥ 2.00</div>
+            <div class="van-card__price">
+              <div><span class="van-card__price-currency">¥</span><span class="van-card__price-integer">2</span>.<span class="van-card__price-decimal">00</span></div>
+            </div>
             <div class="van-card__origin-price">¥ 10.00</div>
-            <div class="van-card__num">x 2</div>
+            <div class="van-card__num">x2</div>
           </div>
         </div>
       </div>
@@ -45,22 +53,26 @@ exports[`renders demo correctly 1`] = `
   <div>
     <div class="van-card">
       <div class="van-card__header"><a class="van-card__thumb">
-          <div class="van-image" style="width: 100%; height: 100%;"><img src="https://img.yzcdn.cn/vant/t-thirt.jpg" class="van-image__img" style="object-fit: contain;">
-            <div class="van-image__loading"><i class="van-icon van-icon-photo-o" style="font-size: 22px;">
+          <div class="van-image" style="width: 100%; height: 100%;"><img src="https://img.yzcdn.cn/vant/ipad.jpeg" class="van-image__img" style="object-fit: cover;">
+            <div class="van-image__loading"><i class="van-icon van-icon-photo-o van-image__loading-icon">
                 <!----></i></div>
           </div>
         </a>
         <div class="van-card__content">
-          <div class="van-card__title van-multi-ellipsis--l2">商品名称</div>
-          <div class="van-card__desc van-ellipsis">描述信息</div>
-          <div><span class="van-tag van-tag--plain van-tag--danger van-hairline--surround" style="margin-right: 5px;">
+          <div>
+            <div class="van-card__title van-multi-ellipsis--l2">商品名称</div>
+            <div class="van-card__desc van-ellipsis">描述信息</div>
+            <div><span class="van-tag van-tag--plain van-tag--danger van-hairline--surround" style="margin-right: 5px;">
             标签
           </span> <span class="van-tag van-tag--plain van-tag--danger van-hairline--surround">
             标签
           </span></div>
+          </div>
           <div class="van-card__bottom">
-            <div class="van-card__price">¥ 2.00</div>
-            <div class="van-card__num">x 2</div>
+            <div class="van-card__price">
+              <div><span class="van-card__price-currency">¥</span><span class="van-card__price-integer">2</span>.<span class="van-card__price-decimal">00</span></div>
+            </div>
+            <div class="van-card__num">x2</div>
           </div>
         </div>
       </div>

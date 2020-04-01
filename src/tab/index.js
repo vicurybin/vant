@@ -9,15 +9,18 @@ export default createComponent({
 
   props: {
     ...routeProps,
+    dot: Boolean,
     name: [Number, String],
+    info: [Number, String],
+    badge: [Number, String],
     title: String,
     titleStyle: null,
-    disabled: Boolean
+    disabled: Boolean,
   },
 
   data() {
     return {
-      inited: false
+      inited: false,
     };
   },
 
@@ -28,7 +31,7 @@ export default createComponent({
 
     isActive() {
       return this.computedName === this.parent.currentName;
-    }
+    },
   },
 
   watch: {
@@ -39,15 +42,24 @@ export default createComponent({
 
     title() {
       this.parent.setLine();
-    }
+    },
+
+    inited(val) {
+      if (this.parent.lazyRender && val) {
+        this.$nextTick(() => {
+          this.parent.$emit('rendered', this.computedName, this.title);
+        });
+      }
+    },
   },
 
   render(h) {
-    const { slots, isActive } = this;
-    const shouldRender = this.inited || !this.parent.lazyRender;
+    const { slots, parent, isActive } = this;
+    const shouldRender = this.inited || parent.scrollspy || !parent.lazyRender;
+    const show = parent.scrollspy || isActive;
     const Content = shouldRender ? slots() : h();
 
-    if (this.parent.animated) {
+    if (parent.animated) {
       return (
         <div
           role="tabpanel"
@@ -60,9 +72,9 @@ export default createComponent({
     }
 
     return (
-      <div vShow={isActive} role="tabpanel" class={bem('pane')}>
+      <div vShow={show} role="tabpanel" class={bem('pane')}>
         {Content}
       </div>
     );
-  }
+  },
 });

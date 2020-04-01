@@ -12,13 +12,13 @@ export default createComponent({
     text: [Number, String],
     theme: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
 
   data() {
     return {
-      active: false
+      active: false,
     };
   },
 
@@ -35,7 +35,11 @@ export default createComponent({
       }
 
       return bem(classNames);
-    }
+    },
+  },
+
+  mounted() {
+    this.bindTouchEvent(this.$el);
   },
 
   methods: {
@@ -60,22 +64,14 @@ export default createComponent({
         this.active = false;
         this.$emit('press', this.text, this.type);
       }
-    }
+    },
   },
 
   render() {
     return (
-      <i
-        role="button"
-        tabindex="0"
-        class={[BORDER, this.className]}
-        onTouchstart={this.onTouchStart}
-        onTouchmove={this.onTouchMove}
-        onTouchend={this.onTouchEnd}
-        onTouchcancel={this.onTouchEnd}
-      >
+      <i role="button" tabindex="0" class={[BORDER, this.className]}>
         {this.slots('default') || this.text}
       </i>
     );
-  }
+  },
 });

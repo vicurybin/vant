@@ -4,13 +4,17 @@ exports[`renders demo correctly 1`] = `
 <div>
   <div>
     <div class="van-picker van-datetime-picker">
-      <div class="van-hairline--top-bottom van-picker__toolbar"><button class="van-picker__cancel">取消</button><button class="van-picker__confirm">确认</button></div>
+      <div class="van-hairline--top-bottom van-picker__toolbar"><button type="button" class="van-picker__cancel">取消</button><button type="button" class="van-picker__confirm">确认</button></div>
       <!---->
       <div class="van-picker__columns" style="height: 220px;">
         <div class="van-picker-column">
           <ul class="van-picker-column__wrapper" style="transform: translate3d(0, 88px, 0); transition-duration: 0ms; transition-property: none; line-height: 44px;">
-            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item van-picker-column__item--selected" style="height: 44px;">2018</li>
-            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2019</li>
+            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item van-picker-column__item--selected" style="height: 44px;">2020</li>
+            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2021</li>
+            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2022</li>
+            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2023</li>
+            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2024</li>
+            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2025</li>
           </ul>
         </div>
         <div class="van-picker-column">
@@ -164,23 +168,17 @@ exports[`renders demo correctly 1`] = `
   </div>
   <div>
     <div class="van-picker van-datetime-picker">
-      <div class="van-hairline--top-bottom van-picker__toolbar"><button class="van-picker__cancel">取消</button><button class="van-picker__confirm">确认</button></div>
+      <div class="van-hairline--top-bottom van-picker__toolbar"><button type="button" class="van-picker__cancel">取消</button><button type="button" class="van-picker__confirm">确认</button></div>
       <!---->
       <div class="van-picker__columns" style="height: 220px;">
         <div class="van-picker-column">
           <ul class="van-picker-column__wrapper" style="transform: translate3d(0, 88px, 0); transition-duration: 0ms; transition-property: none; line-height: 44px;">
-            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item van-picker-column__item--selected" style="height: 44px;">2018</li>
-            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2019</li>
-            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2020</li>
+            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item van-picker-column__item--selected" style="height: 44px;">2020</li>
             <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2021</li>
             <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2022</li>
             <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2023</li>
             <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2024</li>
             <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2025</li>
-            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2026</li>
-            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2027</li>
-            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2028</li>
-            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2029</li>
           </ul>
         </div>
         <div class="van-picker-column">
@@ -242,23 +240,17 @@ exports[`renders demo correctly 1`] = `
   </div>
   <div>
     <div class="van-picker van-datetime-picker">
-      <div class="van-hairline--top-bottom van-picker__toolbar"><button class="van-picker__cancel">取消</button><button class="van-picker__confirm">确认</button></div>
+      <div class="van-hairline--top-bottom van-picker__toolbar"><button type="button" class="van-picker__cancel">取消</button><button type="button" class="van-picker__confirm">确认</button></div>
       <!---->
       <div class="van-picker__columns" style="height: 220px;">
         <div class="van-picker-column">
           <ul class="van-picker-column__wrapper" style="transform: translate3d(0, 88px, 0); transition-duration: 0ms; transition-property: none; line-height: 44px;">
-            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item van-picker-column__item--selected" style="height: 44px;">2018年</li>
-            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2019年</li>
-            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2020年</li>
+            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item van-picker-column__item--selected" style="height: 44px;">2020年</li>
             <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2021年</li>
             <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2022年</li>
             <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2023年</li>
             <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2024年</li>
             <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2025年</li>
-            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2026年</li>
-            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2027年</li>
-            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2028年</li>
-            <li role="button" tabindex="0" class="van-ellipsis van-picker-column__item" style="height: 44px;">2029年</li>
           </ul>
         </div>
         <div class="van-picker-column">
@@ -285,7 +277,7 @@ exports[`renders demo correctly 1`] = `
   </div>
   <div>
     <div class="van-picker van-datetime-picker">
-      <div class="van-hairline--top-bottom van-picker__toolbar"><button class="van-picker__cancel">取消</button><button class="van-picker__confirm">确认</button></div>
+      <div class="van-hairline--top-bottom van-picker__toolbar"><button type="button" class="van-picker__cancel">取消</button><button type="button" class="van-picker__confirm">确认</button></div>
       <!---->
       <div class="van-picker__columns" style="height: 220px;">
         <div class="van-picker-column">
@@ -375,7 +367,7 @@ exports[`renders demo correctly 1`] = `
   </div>
   <div>
     <div class="van-picker van-datetime-picker">
-      <div class="van-hairline--top-bottom van-picker__toolbar"><button class="van-picker__cancel">取消</button><button class="van-picker__confirm">确认</button></div>
+      <div class="van-hairline--top-bottom van-picker__toolbar"><button type="button" class="van-picker__cancel">取消</button><button type="button" class="van-picker__confirm">确认</button></div>
       <!---->
       <div class="van-picker__columns" style="height: 220px;">
         <div class="van-picker-column">

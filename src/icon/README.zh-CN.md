@@ -2,11 +2,11 @@
 
 ### 介绍
 
-基于字体的图标集，可以通过 Icon 组件使用，也可以在其他组件中通过`icon`属性引用
+基于字体的图标集，可以通过 Icon 组件使用，也可以在其他组件中通过`icon`属性引用
 
 ### 引入
 
-``` javascript
+```js
 import Vue from 'vue';
 import { Icon } from 'vant';
 
@@ -20,18 +20,36 @@ Vue.use(Icon);
 `Icon`的`name`属性支持传入图标名称或图片链接，所有可用的图标名称见右侧示例
 
 ```html
-<van-icon name="close" />
+<van-icon name="chat-o" />
 <van-icon name="https://b.yzcdn.cn/vant/icon-demo-1126.png" />
 ```
 
-### 提示信息
+### 徽标提示
 
-设置`dot`属性后，会在图标右上角展示一个小红点。设置`info`属性后，会在图标右上角展示相应的徽标
+设置`dot`属性后，会在图标右上角展示一个小红点。设置`badge`属性后，会在图标右上角展示相应的徽标
 
 ```html
-<van-icon name="chat" dot />
-<van-icon name="chat" info="9" />
-<van-icon name="chat" info="99+" />
+<van-icon name="chat-o" dot />
+<van-icon name="chat-o" badge="9" />
+<van-icon name="chat-o" badge="99+" />
+```
+
+### 图标颜色
+
+`Icon`的`color`属性用来设置图标的颜色
+
+```html
+<van-icon name="chat-o" color="#1989fa" />
+<van-icon name="chat-o" color="#07c160" />
+```
+
+### 图标大小
+
+`Icon`的`size`属性用来设置图标的尺寸大小，默认单位为`px`
+
+```html
+<van-icon name="chat-o" size="40" />
+<van-icon name="chat-o" size="3rem" />
 ```
 
 ### 使用本地字体文件
@@ -71,18 +89,19 @@ import 'vant/lib/icon/local.css';
 
 ### Props
 
-| 参数 | 说明 | 类型 | 默认值 | 版本 |
-|------|------|------|------|------|
-| name | 图标名称或图片链接 | *string* | - | - |
-| dot | 是否显示图标右上角小红点 | *boolean* | `false` | 2.2.1 |
-| info | 图标右上角徽标的内容 | *string \| number* | - | - |
-| color | 图标颜色 | *string* | `inherit` | - |
-| size | 图标大小，如 `20px` `2em`，默认单位为`px` | *string \| number* | `inherit` | - |
-| class-prefix | 类名前缀 | *string* | `van-icon` | - |
-| tag | HTML 标签 | *string* | `i` | - |
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|------|
+| name | 图标名称或图片链接 | *string* | - |
+| dot `v2.2.1` | 是否显示图标右上角小红点 | *boolean* | `false` |
+| badge `v2.5.6` | 图标右上角徽标的内容 | *number \| string* | - |
+| info | 图标右上角徽标的内容（已废弃，请使用 badge 属性） | *number \| string* | - |
+| color | 图标颜色 | *string* | `inherit` |
+| size | 图标大小，如 `20px` `2em`，默认单位为`px` | *number \| string* | `inherit` |
+| class-prefix | 类名前缀，用于使用自定义图标 | *string* | `van-icon` |
+| tag | HTML 标签 | *string* | `i` |
 
 ### Events
 
 | 事件名 | 说明 | 回调参数 |
 |------|------|------|
-| click | 点击图标时触发 | event: Event |
+| click | 点击图标时触发 | *event: Event* |

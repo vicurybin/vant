@@ -1,7 +1,10 @@
+// Utils
 import { createNamespace } from '../utils';
 import { emit, inherit } from '../utils/functional';
-import Button, { ButtonType } from '../button';
+
+// Components
 import Icon from '../icon';
+import Button, { ButtonType } from '../button';
 
 // Types
 import { CreateElement, RenderContext } from 'vue/types';
@@ -20,6 +23,7 @@ export type SubmitBarProps = {
   suffixLabel?: string;
   decimalLength: number;
   safeAreaInsetBottom?: boolean;
+  textAlign?: 'right' | 'left';
 };
 
 export type SubmitBarSlots = DefaultSlots & {
@@ -39,12 +43,19 @@ function SubmitBar(
 
   function Text() {
     if (typeof price === 'number') {
-      const priceText = `${props.currency} ${(price / 100).toFixed(props.decimalLength)}`;
-
+      const priceArr = (price / 100).toFixed(props.decimalLength).split('.');
+      const decimalStr = props.decimalLength ? `.${priceArr[1]}` : '';
       return (
-        <div class={bem('text')}>
+        <div
+          style={{ textAlign: props.textAlign ? props.textAlign : '' }}
+          class={bem('text')}
+        >
           <span>{props.label || t('label')}</span>
-          <span class={bem('price')}>{priceText}</span>
+          <span class={bem('price')}>
+            {props.currency}
+            <span class={bem('price', 'integer')}>{priceArr[0]}</span>
+            {decimalStr}
+          </span>
           {props.suffixLabel && (
             <span class={bem('suffix-label')}>{props.suffixLabel}</span>
           )}
@@ -66,19 +77,15 @@ function SubmitBar(
   }
 
   return (
-    <div
-      class={bem({ 'safe-area-inset-bottom': props.safeAreaInsetBottom })}
-      {...inherit(ctx)}
-    >
+    <div class={bem({ unfit: !props.safeAreaInsetBottom })} {...inherit(ctx)}>
       {slots.top && slots.top()}
       {Tip()}
       <div class={bem('bar')}>
         {slots.default && slots.default()}
         {Text()}
         <Button
-          square
-          size="large"
-          class={bem('button')}
+          round
+          class={bem('button', props.buttonType)}
           type={props.buttonType}
           loading={props.loading}
           disabled={props.disabled}
@@ -99,21 +106,25 @@ SubmitBar.props = {
   tipIcon: String,
   loading: Boolean,
   disabled: Boolean,
+  textAlign: String,
   buttonText: String,
   suffixLabel: String,
-  safeAreaInsetBottom: Boolean,
+  safeAreaInsetBottom: {
+    type: Boolean,
+    default: true,
+  },
   decimalLength: {
-    type: Number,
-    default: 2
+    type: [Number, String],
+    default: 2,
   },
   currency: {
     type: String,
-    default: '¥'
+    default: '¥',
   },
   buttonType: {
     type: String,
-    default: 'danger'
-  }
+    default: 'danger',
+  },
 };
 
 export default createComponent<SubmitBarProps, {}, SubmitBarSlots>(SubmitBar);

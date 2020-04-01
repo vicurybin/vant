@@ -1,8 +1,4 @@
 import { mount, mockScrollTop } from '../../../test';
-import Vue from 'vue';
-import Sticky from '..';
-
-Vue.use(Sticky);
 
 test('sticky to top', () => {
   const wrapper = mount({
@@ -10,7 +6,7 @@ test('sticky to top', () => {
       <van-sticky style="height: 10px;">
         Content
       </van-sticky>
-    `
+    `,
   });
 
   expect(wrapper).toMatchSnapshot();
@@ -25,7 +21,7 @@ test('z-index prop', () => {
       <van-sticky style="height: 10px;" :z-index="0">
         Content
       </van-sticky>
-    `
+    `,
   });
 
   mockScrollTop(100);
@@ -39,12 +35,28 @@ test('offset-top prop', () => {
       <van-sticky style="height: 10px;" :offset-top="10">
         Content
       </van-sticky>
-    `
+    `,
   });
 
   mockScrollTop(100);
   expect(wrapper).toMatchSnapshot();
   mockScrollTop(0);
+});
+
+test('should not trigger scroll event when hidden', () => {
+  const scroll = jest.fn();
+  mount({
+    template: `
+      <van-sticky style="height: 10px; display: none;" @scroll="scroll">
+        Content
+      </van-sticky>
+    `,
+    methods: {
+      scroll,
+    },
+  });
+
+  expect(scroll).toHaveBeenCalledTimes(0);
 });
 
 test('container prop', () => {
@@ -58,12 +70,12 @@ test('container prop', () => {
     `,
     data() {
       return {
-        container: null
+        container: null,
       };
     },
     mounted() {
       this.container = this.$refs.container;
-    }
+    },
   });
 
   mockScrollTop(15);
@@ -71,4 +83,53 @@ test('container prop', () => {
   mockScrollTop(25);
   expect(wrapper).toMatchSnapshot();
   mockScrollTop(0);
+});
+
+test('trigger scroll when visibility changed', () => {
+  const originIntersectionObserver = window.IntersectionObserver;
+
+  const observe = jest.fn();
+  const unobserve = jest.fn();
+  const scroll = jest.fn();
+
+  let observerCallback;
+
+  window.IntersectionObserver = class IntersectionObserver {
+    constructor(callback) {
+      observerCallback = callback;
+    }
+
+    observe() {
+      observe();
+    }
+
+    unobserve() {
+      unobserve();
+    }
+  };
+
+  const wrapper = mount({
+    template: `
+      <van-sticky style="height: 10px;" @scroll="scroll">
+        Content
+      </van-sticky>
+    `,
+    methods: {
+      scroll,
+    },
+  });
+
+  expect(observe).toHaveBeenCalledTimes(1);
+  expect(scroll).toHaveBeenCalledTimes(1);
+
+  observerCallback([{ intersectionRatio: 1 }]);
+  expect(scroll).toHaveBeenCalledTimes(2);
+
+  observerCallback([{ intersectionRatio: 0 }]);
+  expect(scroll).toHaveBeenCalledTimes(2);
+
+  wrapper.destroy();
+  expect(unobserve).toHaveBeenCalledTimes(1);
+
+  window.IntersectionObserver = originIntersectionObserver;
 });

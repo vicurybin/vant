@@ -16,6 +16,7 @@
     vertical-align: middle;
     background-color: @stepper-background-color;
     border: 0;
+    cursor: pointer;
 
     &::before {
       width: 13px;
@@ -46,6 +47,7 @@
     &--disabled {
       color: @stepper-button-disabled-icon-color;
       background-color: @stepper-button-disabled-color;
+      cursor: not-allowed;
 
       &:active {
         background-color: @stepper-button-disabled-color;
@@ -81,15 +83,15 @@
     border-radius: 0;
     -webkit-appearance: none;
 
-    &[disabled] {
+    &:disabled {
       color: @stepper-input-disabled-text-color;
       background-color: @stepper-input-disabled-background-color;
+      -webkit-text-fill-color: currentColor; // fix disabled color in iOS
+      opacity: 1;
     }
-  }
 
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    margin: 0;
-    -webkit-appearance: none;
+    &:read-only {
+      cursor: default;
+    }
   }
 }

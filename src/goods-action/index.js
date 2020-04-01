@@ -7,14 +7,17 @@ export default createComponent({
   mixins: [ParentMixin('vanGoodsAction')],
 
   props: {
-    safeAreaInsetBottom: Boolean
+    safeAreaInsetBottom: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   render() {
     return (
-      <div class={bem({ 'safe-area-inset-bottom': this.safeAreaInsetBottom })}>
+      <div class={bem({ unfit: !this.safeAreaInsetBottom })}>
         {this.slots()}
       </div>
     );
-  }
+  },
 });

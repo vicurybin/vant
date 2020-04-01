@@ -1,7 +1,12 @@
-import { createNamespace, addUnit } from '../utils';
+// Utils
+import { createNamespace, addUnit, isDef } from '../utils';
 import { BORDER } from '../utils/constant';
-import { ChildrenMixin } from '../mixins/relation';
 import { route, routeProps } from '../utils/router';
+
+// Mixins
+import { ChildrenMixin } from '../mixins/relation';
+
+// Components
 import Info from '../info';
 import Icon from '../icon';
 
@@ -15,7 +20,9 @@ export default createComponent({
     dot: Boolean,
     text: String,
     icon: String,
-    info: [Number, String]
+    iconPrefix: String,
+    info: [Number, String],
+    badge: [Number, String],
   },
 
   computed: {
@@ -24,7 +31,7 @@ export default createComponent({
       const percent = `${100 / columnNum}%`;
 
       const style = {
-        flexBasis: percent
+        flexBasis: percent,
       };
 
       if (square) {
@@ -50,10 +57,10 @@ export default createComponent({
         return {
           right: gutterValue,
           bottom: gutterValue,
-          height: 'auto'
+          height: 'auto',
         };
       }
-    }
+    },
   },
 
   methods: {
@@ -64,12 +71,13 @@ export default createComponent({
 
     genIcon() {
       const iconSlot = this.slots('icon');
+      const info = isDef(this.badge) ? this.badge : this.info;
 
       if (iconSlot) {
         return (
           <div class={bem('icon-wrapper')}>
             {iconSlot}
-            <Info dot={this.dot} info={this.info} />
+            <Info dot={this.dot} info={info} />
           </div>
         );
       }
@@ -79,11 +87,24 @@ export default createComponent({
           <Icon
             name={this.icon}
             dot={this.dot}
-            info={this.info}
+            info={info}
             size={this.parent.iconSize}
             class={bem('icon')}
+            classPrefix={this.iconPrefix}
           />
         );
+      }
+    },
+
+    getText() {
+      const textSlot = this.slots('text');
+
+      if (textSlot) {
+        return textSlot;
+      }
+
+      if (this.text) {
+        return <span class={bem('text')}>{this.text}</span>;
       }
     },
 
@@ -94,11 +115,8 @@ export default createComponent({
         return slot;
       }
 
-      return [
-        this.genIcon(),
-        this.slots('text') || (this.text && <span class={bem('text')}>{this.text}</span>)
-      ];
-    }
+      return [this.genIcon(), this.getText()];
+    },
   },
 
   render() {
@@ -115,9 +133,9 @@ export default createComponent({
               center,
               square,
               clickable,
-              surround: border && gutter
+              surround: border && gutter,
             }),
-            { [BORDER]: border }
+            { [BORDER]: border },
           ]}
           onClick={this.onClick}
         >
@@ -125,5 +143,5 @@ export default createComponent({
         </div>
       </div>
     );
-  }
+  },
 });

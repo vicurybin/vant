@@ -13,24 +13,32 @@ const defaultConfig = {
   className: '',
   onClose: null,
   onChange: null,
-  lazyLoad: false,
   showIndex: true,
+  closeable: false,
+  closeIcon: 'clear',
   asyncClose: false,
   startPosition: 0,
   swipeDuration: 500,
   showIndicators: false,
-  closeOnPopstate: false
+  closeOnPopstate: false,
+  closeIconPosition: 'top-right',
 };
 
 const initInstance = () => {
   instance = new (Vue.extend(VueImagePreview))({
-    el: document.createElement('div')
+    el: document.createElement('div'),
   });
   document.body.appendChild(instance.$el);
 
   instance.$on('change', index => {
     if (instance.onChange) {
       instance.onChange(index);
+    }
+  });
+
+  instance.$on('scale', data => {
+    if (instance.onScale) {
+      instance.onScale(data);
     }
   });
 };
@@ -53,7 +61,12 @@ const ImagePreview = (images, startPosition = 0) => {
     instance.value = show;
   });
 
+  instance.$once('closed', () => {
+    instance.images = [];
+  });
+
   if (options.onClose) {
+    instance.$off('close');
     instance.$once('close', options.onClose);
   }
 

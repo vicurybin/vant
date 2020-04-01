@@ -8,22 +8,22 @@ export default createComponent({
   props: {
     millisecond: Boolean,
     time: {
-      type: Number,
-      default: 0
+      type: [Number, String],
+      default: 0,
     },
     format: {
       type: String,
-      default: 'HH:mm:ss'
+      default: 'HH:mm:ss',
     },
     autoStart: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data() {
     return {
-      remain: 0
+      remain: 0,
     };
   },
 
@@ -34,14 +34,14 @@ export default createComponent({
 
     formattedTime() {
       return parseFormat(this.format, this.timeData);
-    }
+    },
   },
 
   watch: {
     time: {
       immediate: true,
-      handler: 'reset'
-    }
+      handler: 'reset',
+    },
   },
 
   activated() {
@@ -64,6 +64,7 @@ export default createComponent({
   },
 
   methods: {
+    // @exposed-api
     start() {
       if (this.counting) {
         return;
@@ -74,14 +75,16 @@ export default createComponent({
       this.tick();
     },
 
+    // @exposed-api
     pause() {
       this.counting = false;
       cancelRaf(this.rafId);
     },
 
+    // @exposed-api
     reset() {
       this.pause();
-      this.remain = this.time;
+      this.remain = +this.time;
 
       if (this.autoStart) {
         this.start();
@@ -98,9 +101,15 @@ export default createComponent({
 
     microTick() {
       this.rafId = raf(() => {
+        /* istanbul ignore if */
+        // in case of call reset immediately after finish
+        if (!this.counting) {
+          return;
+        }
+
         this.setRemain(this.getRemain());
 
-        if (this.remain !== 0) {
+        if (this.remain > 0) {
           this.microTick();
         }
       });
@@ -108,13 +117,19 @@ export default createComponent({
 
     macroTick() {
       this.rafId = raf(() => {
+        /* istanbul ignore if */
+        // in case of call reset immediately after finish
+        if (!this.counting) {
+          return;
+        }
+
         const remain = this.getRemain();
 
         if (!isSameSecond(remain, this.remain) || remain === 0) {
           this.setRemain(remain);
         }
 
-        if (this.remain !== 0) {
+        if (this.remain > 0) {
           this.macroTick();
         }
       });
@@ -126,12 +141,13 @@ export default createComponent({
 
     setRemain(remain) {
       this.remain = remain;
+      this.$emit('change', this.timeData);
 
       if (remain === 0) {
         this.pause();
         this.$emit('finish');
       }
-    }
+    },
   },
 
   render() {
@@ -140,5 +156,5 @@ export default createComponent({
         {this.slots('default', this.timeData) || this.formattedTime}
       </div>
     );
-  }
+  },
 });

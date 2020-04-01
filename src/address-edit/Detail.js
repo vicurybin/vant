@@ -1,5 +1,8 @@
+// Utils
 import { createNamespace } from '../utils';
 import { isAndroid } from '../utils/validate/system';
+
+// Components
 import Cell from '../cell';
 import Field from '../field';
 
@@ -9,12 +12,18 @@ const android = isAndroid();
 export default createComponent({
   props: {
     value: String,
-    error: Boolean,
+    errorMessage: String,
     focused: Boolean,
-    detailRows: Number,
+    detailRows: [Number, String],
     searchResult: Array,
-    detailMaxlength: Number,
-    showSearchResult: Boolean
+    detailMaxlength: [Number, String],
+    showSearchResult: Boolean,
+  },
+
+  computed: {
+    shouldShowSearchResult() {
+      return this.focused && this.searchResult && this.showSearchResult;
+    },
   },
 
   methods: {
@@ -42,23 +51,35 @@ export default createComponent({
     },
 
     genSearchResult() {
-      const { searchResult } = this;
-      const show = this.focused && searchResult && this.showSearchResult;
-      if (show) {
+      const { value, shouldShowSearchResult, searchResult } = this;
+      if (shouldShowSearchResult) {
         return searchResult.map(express => (
           <Cell
             key={express.name + express.address}
-            title={express.name}
-            label={express.address}
-            icon="location-o"
             clickable
+            border={false}
+            icon="location-o"
+            label={express.address}
+            class={bem('search-item')}
             onClick={() => {
               this.onSelect(express);
+            }}
+            scopedSlots={{
+              title: () => {
+                if (express.name) {
+                  const text = express.name.replace(
+                    value,
+                    `<span class=${bem('keyword')}>${value}</span>`
+                  );
+
+                  return <div domPropsInnerHTML={text} />;
+                }
+              },
             }}
           />
         ));
       }
-    }
+    },
   },
 
   render() {
@@ -71,7 +92,8 @@ export default createComponent({
           clearable={!android}
           type="textarea"
           value={this.value}
-          error={this.error}
+          errorMessage={this.errorMessage}
+          border={!this.shouldShowSearchResult}
           label={t('label')}
           maxlength={this.detailMaxlength}
           placeholder={t('placeholder')}
@@ -81,5 +103,5 @@ export default createComponent({
         {this.genSearchResult()}
       </Cell>
     );
-  }
+  },
 });

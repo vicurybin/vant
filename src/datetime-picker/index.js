@@ -7,7 +7,14 @@ const [createComponent, bem] = createNamespace('datetime-picker');
 export default createComponent({
   props: {
     ...TimePicker.props,
-    ...DatePicker.props
+    ...DatePicker.props,
+  },
+
+  methods: {
+    // @exposed-api
+    getPicker() {
+      return this.$refs.root.getPicker();
+    },
   },
 
   render() {
@@ -15,12 +22,13 @@ export default createComponent({
 
     return (
       <Component
+        ref="root"
         class={bem()}
         {...{
           props: this.$props,
-          on: this.$listeners
+          on: this.$listeners,
         }}
       />
     );
-  }
+  },
 });

@@ -6,6 +6,7 @@ export type SharedCellProps = {
   isLink?: boolean;
   required?: boolean;
   clickable?: boolean;
+  iconPrefix?: string;
   titleStyle?: any;
   titleClass?: any;
   valueClass?: any;
@@ -14,7 +15,7 @@ export type SharedCellProps = {
   value?: string | number;
   label?: string | number;
   arrowDirection?: 'up' | 'down' | 'left' | 'right';
-}
+};
 
 export const cellProps = {
   icon: String,
@@ -23,6 +24,7 @@ export const cellProps = {
   isLink: Boolean,
   required: Boolean,
   clickable: Boolean,
+  iconPrefix: String,
   titleStyle: null as any,
   titleClass: null as any,
   valueClass: null as any,
@@ -33,6 +35,6 @@ export const cellProps = {
   arrowDirection: String,
   border: {
     type: Boolean,
-    default: true
-  }
+    default: true,
+  },
 };

@@ -1,5 +1,5 @@
 import Vue, { CreateElement } from 'vue';
-import '../docs/site/mobile/demo-common';
+import '../docs/site/mobile';
 import Locale from '../src/locale';
 import { mount, later } from '.';
 
@@ -7,7 +7,7 @@ const Empty = {
   render(h: CreateElement): ReturnType<CreateElement> {
     return h('div', [(this as any).$slots.default]);
   },
-  inheritAttrs: false
+  inheritAttrs: false,
 };
 
 Vue.component('demo-block', Empty);

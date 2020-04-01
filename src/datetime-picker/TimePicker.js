@@ -11,21 +11,21 @@ export default createComponent({
   props: {
     ...sharedProps,
     minHour: {
-      type: Number,
-      default: 0
+      type: [Number, String],
+      default: 0,
     },
     maxHour: {
-      type: Number,
-      default: 23
+      type: [Number, String],
+      default: 23,
     },
     minMinute: {
-      type: Number,
-      default: 0
+      type: [Number, String],
+      default: 0,
     },
     maxMinute: {
-      type: Number,
-      default: 59
-    }
+      type: [Number, String],
+      default: 59,
+    },
   },
 
   computed: {
@@ -33,14 +33,14 @@ export default createComponent({
       return [
         {
           type: 'hour',
-          range: [this.minHour, this.maxHour]
+          range: [+this.minHour, +this.maxHour],
         },
         {
           type: 'minute',
-          range: [this.minMinute, this.maxMinute]
-        }
+          range: [+this.minMinute, +this.maxMinute],
+        },
       ];
-    }
+    },
   },
 
   watch: {
@@ -55,9 +55,9 @@ export default createComponent({
 
       if (val !== this.innerValue) {
         this.innerValue = val;
-        this.updateColumnValue(val);
+        this.updateColumnValue();
       }
-    }
+    },
   },
 
   methods: {
@@ -74,12 +74,14 @@ export default createComponent({
     },
 
     updateInnerValue() {
-      const [hourIndex, minuteIndex] = this.$refs.picker.getIndexes();
-      const hour = this.originColumns[0].values[hourIndex] || this.originColumns[0].values[0];
-      const minute = this.originColumns[1].values[minuteIndex] || this.originColumns[1].values[0];
-      const value = `${hour}:${minute}`;
+      const [hourIndex, minuteIndex] = this.getPicker().getIndexes();
+      const [hourColumn, minuteColumn] = this.originColumns;
 
-      this.innerValue = this.formatValue(value);
+      const hour = hourColumn.values[hourIndex] || hourColumn.values[0];
+      const minute = minuteColumn.values[minuteIndex] || minuteColumn.values[0];
+
+      this.innerValue = this.formatValue(`${hour}:${minute}`);
+      this.updateColumnValue();
     },
 
     onChange(picker) {
@@ -98,8 +100,8 @@ export default createComponent({
       const values = [formatter('hour', pair[0]), formatter('minute', pair[1])];
 
       this.$nextTick(() => {
-        this.$refs.picker.setValues(values);
+        this.getPicker().setValues(values);
       });
-    }
-  }
+    },
+  },
 });

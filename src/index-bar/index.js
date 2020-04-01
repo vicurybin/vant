@@ -1,17 +1,30 @@
-import { createNamespace } from '../utils';
-import { TouchMixin } from '../mixins/touch';
-import { ParentMixin } from '../mixins/relation';
-import { BindEventMixin } from '../mixins/bind-event';
-import { GREEN } from '../utils/constant';
-import { preventDefault } from '../utils/dom/event';
+// Utils
+import { createNamespace, isDef } from '../utils';
 import { isHidden } from '../utils/dom/style';
+import { preventDefault } from '../utils/dom/event';
 import {
+  getScroller,
   getScrollTop,
   getElementTop,
   getRootScrollTop,
   setRootScrollTop,
-  getScrollEventTarget
 } from '../utils/dom/scroll';
+
+// Mixins
+import { TouchMixin } from '../mixins/touch';
+import { ParentMixin } from '../mixins/relation';
+import { BindEventMixin } from '../mixins/bind-event';
+
+function genAlphabet() {
+  const indexList = [];
+  const charCodeOfA = 'A'.charCodeAt(0);
+
+  for (let i = 0; i < 26; i++) {
+    indexList.push(String.fromCharCode(charCodeOfA + i));
+  }
+
+  return indexList;
+}
 
 const [createComponent, bem] = createNamespace('index-bar');
 
@@ -19,69 +32,61 @@ export default createComponent({
   mixins: [
     TouchMixin,
     ParentMixin('vanIndexBar'),
-    BindEventMixin(function (bind) {
+    BindEventMixin(function(bind) {
       if (!this.scroller) {
-        this.scroller = getScrollEventTarget(this.$el);
+        this.scroller = getScroller(this.$el);
       }
 
       bind(this.scroller, 'scroll', this.onScroll);
-    })
+    }),
   ],
 
   props: {
+    zIndex: [Number, String],
+    highlightColor: String,
     sticky: {
       type: Boolean,
-      default: true
-    },
-    zIndex: {
-      type: Number,
-      default: 1
-    },
-    highlightColor: {
-      type: String,
-      default: GREEN
+      default: true,
     },
     stickyOffsetTop: {
       type: Number,
-      default: 0
+      default: 0,
     },
     indexList: {
       type: Array,
-      default() {
-        const indexList = [];
-        const charCodeOfA = 'A'.charCodeAt(0);
-
-        for (let i = 0; i < 26; i++) {
-          indexList.push(String.fromCharCode(charCodeOfA + i));
-        }
-
-        return indexList;
-      }
-    }
+      default: genAlphabet,
+    },
   },
 
   data() {
     return {
-      activeAnchorIndex: null
+      activeAnchorIndex: null,
     };
   },
 
   computed: {
+    sidebarStyle() {
+      if (isDef(this.zIndex)) {
+        return {
+          zIndex: this.zIndex + 1,
+        };
+      }
+    },
+
     highlightStyle() {
       const { highlightColor } = this;
       if (highlightColor) {
-        /* istanbul ignore else */
         return {
-          color: highlightColor
+          color: highlightColor,
         };
       }
-    }
+    },
   },
 
   watch: {
     indexList() {
       this.$nextTick(this.onScroll);
-    }
+    },
   },
 
   methods: {
@@ -94,7 +99,7 @@ export default createComponent({
       const scrollerRect = this.getScrollerRect();
       const rects = this.children.map(item => ({
         height: item.height,
-        top: this.getElementTop(item.$el, scrollerRect)
+        top: this.getElementTop(item.$el, scrollerRect),
       }));
 
       const active = this.getActiveAnchorIndex(scrollTop, rects);
@@ -102,45 +107,41 @@ export default createComponent({
       this.activeAnchorIndex = this.indexList[active];
 
       if (this.sticky) {
-        let activeItemTop = 0;
-        let isReachEdge = false;
-
-        if (active !== -1) {
-          activeItemTop = rects[active].top - scrollTop - this.stickyOffsetTop;
-          isReachEdge = activeItemTop <= 0;
-        }
-
         this.children.forEach((item, index) => {
+          if (index === active || index === active - 1) {
+            const rect = item.$el.getBoundingClientRect();
+            item.left = rect.left;
+            item.width = rect.width;
+          } else {
+            item.left = null;
+            item.width = null;
+          }
+
           if (index === active) {
             item.active = true;
-            item.position = isReachEdge ? 'fixed' : 'relative';
-            item.top = isReachEdge
-              ? this.stickyOffsetTop + scrollerRect.top
-              : 0;
+            item.top =
+              Math.max(this.stickyOffsetTop, rects[index].top - scrollTop) +
+              scrollerRect.top;
           } else if (index === active - 1) {
-            item.active = !isReachEdge;
-            item.position = 'relative';
-            item.top = item.$el.parentElement.offsetHeight - item.height;
+            const activeItemTop = rects[active].top - scrollTop;
+            item.active = activeItemTop > 0;
+            item.top = activeItemTop + scrollerRect.top - item.height;
           } else {
             item.active = false;
-            item.position = 'static';
           }
         });
       }
     },
 
     getScrollerRect() {
-      const { scroller } = this;
-      let scrollerRect = {
+      if (this.scroller.getBoundingClientRect) {
+        return this.scroller.getBoundingClientRect();
+      }
+
+      return {
         top: 0,
         left: 0,
       };
-
-      if (scroller.getBoundingClientRect) {
-        scrollerRect = scroller.getBoundingClientRect();
-      }
-
-      return scrollerRect;
     },
 
     getElementTop(ele, scrollerRect) {
@@ -211,7 +212,7 @@ export default createComponent({
 
     onTouchEnd() {
       this.active = null;
-    }
+    },
   },
 
   render() {
@@ -233,7 +234,7 @@ export default createComponent({
       <div class={bem()}>
         <div
           class={bem('sidebar')}
-          style={{ zIndex: this.zIndex + 1 }}
+          style={this.sidebarStyle}
           onClick={this.onClick}
           onTouchstart={this.touchStart}
           onTouchmove={this.onTouchMove}
@@ -245,5 +246,5 @@ export default createComponent({
         {this.slots('default')}
       </div>
     );
-  }
+  },
 });

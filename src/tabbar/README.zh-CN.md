@@ -2,11 +2,12 @@
 
 ### 引入
 
-``` javascript
+```js
 import Vue from 'vue';
 import { Tabbar, TabbarItem } from 'vant';
 
-Vue.use(Tabbar).use(TabbarItem);
+Vue.use(Tabbar);
+Vue.use(TabbarItem);
 ```
 
 ## 代码演示
@@ -24,7 +25,7 @@ Vue.use(Tabbar).use(TabbarItem);
 </van-tabbar>
 ```
 
-```javascript
+```js
 export default {
   data() {
     return {
@@ -47,7 +48,7 @@ export default {
 </van-tabbar>
 ```
 
-```javascript
+```js
 export default {
   data() {
     return {
@@ -57,16 +58,16 @@ export default {
 }
 ```
 
-### 提示信息
+### 徽标提示
 
-设置`dot`属性后，会在图标右上角展示一个小红点。设置`info`属性后，会在图标右上角展示相应的徽标
+设置`dot`属性后，会在图标右上角展示一个小红点。设置`badge`属性后，会在图标右上角展示相应的徽标
 
 ```html
 <van-tabbar v-model="active">
   <van-tabbar-item icon="home-o">标签</van-tabbar-item>
   <van-tabbar-item icon="search" dot>标签</van-tabbar-item>
-  <van-tabbar-item icon="friends-o" info="5">标签</van-tabbar-item>
-  <van-tabbar-item icon="setting-o" info="20">标签</van-tabbar-item>
+  <van-tabbar-item icon="friends-o" badge="5">标签</van-tabbar-item>
+  <van-tabbar-item icon="setting-o" badge="20">标签</van-tabbar-item>
 </van-tabbar>
 ```
 
@@ -76,20 +77,18 @@ export default {
 
 ```html
 <van-tabbar v-model="active">
-  <van-tabbar-item info="3">
+  <van-tabbar-item badge="3">
     <span>自定义</span>
-    <img
-      slot="icon"
-      slot-scope="props"
-      :src="props.active ? icon.active : icon.inactive"
-    >
+      <template #icon="props">
+        <img :src="props.active ? icon.active : icon.inactive"/>
+      </template>
   </van-tabbar-item>
   <van-tabbar-item icon="search">标签</van-tabbar-item>
   <van-tabbar-item icon="setting-o">标签</van-tabbar-item>
 </van-tabbar>
 ```
 
-```javascript
+```js
 export default {
   data() {
     return {
@@ -118,6 +117,29 @@ export default {
 </van-tabbar>
 ```
 
+### 监听切换事件
+
+```html
+<van-tabbar v-model="active" @change="onChange">
+  <van-tabbar-item icon="home-o">标签1</van-tabbar-item>
+  <van-tabbar-item icon="search">标签2</van-tabbar-item>
+  <van-tabbar-item icon="freinds-o">标签3</van-tabbar-item>
+  <van-tabbar-item icon="setting-o">标签4</van-tabbar-item>
+</van-tabbar>
+```
+
+```js
+import { Notify } from 'vant';
+
+export default {
+  methods: {
+    onChange(index) {
+      Notify({ type: 'primary', message: index });
+    }
+  }
+}
+```
+
 ### 路由模式
 
 标签栏支持路由模式，用于搭配`vue-router`使用。路由模式下会匹配页面路径和标签的`to`属性，并自动选中对应的标签
@@ -126,18 +148,10 @@ export default {
 <router-view />
 
 <van-tabbar route>
-  <van-tabbar-item
-    replace
-    to="/home"
-    icon="home-o"
-  >
+  <van-tabbar-item replace to="/home" icon="home-o">
     标签
   </van-tabbar-item>
-  <van-tabbar-item
-    replace
-    to="/search"
-    icon="search"
-  >
+  <van-tabbar-item replace to="/search" icon="search">
     标签
   </van-tabbar-item>
 </van-tabbar>
@@ -147,16 +161,16 @@ export default {
 
 ### Tabbar Props
 
-| 参数 | 说明 | 类型 | 默认值 | 版本 |
-|------|------|------|------|------|
-| v-model | 当前选中标签的名称或索引值 | *string \| number* | `0` | - |
-| fixed | 是否固定在底部 | *boolean* | `true` | - |
-| border | 是否显示外边框 | *boolean* | `true` | - |
-| z-index | 元素 z-index | *number* | `1` | - |
-| active-color | 选中标签的颜色 | *string* | `#1989fa` | - |
-| inactive-color | 未选中标签的颜色 | *string* | `#7d7e80` | - |
-| route | 是否开启路由模式 | *boolean* | `false` | - |
-| safe-area-inset-bottom | 是否开启底部安全区适配，[详细说明](#/zh-CN/quickstart#di-bu-an-quan-qu-gua-pei) | *boolean* | `false` | - |
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|------|
+| v-model | 当前选中标签的名称或索引值 | *number \| string* | `0` |
+| fixed | 是否固定在底部 | *boolean* | `true` |
+| border | 是否显示外边框 | *boolean* | `true` |
+| z-index | 元素 z-index | *number \| string* | `1` |
+| active-color | 选中标签的颜色 | *string* | `#1989fa` |
+| inactive-color | 未选中标签的颜色 | *string* | `#7d7e80` |
+| route | 是否开启路由模式 | *boolean* | `false` |
+| safe-area-inset-bottom | 是否开启[底部安全区适配](#/zh-CN/quickstart#di-bu-an-quan-qu-gua-pei)，设置 fixed 时默认开启 | *boolean* | `false` |
 
 ### Tabbar Events
 
@@ -166,15 +180,17 @@ export default {
 
 ### TabbarItem Props
 
-| 参数 | 说明 | 类型 | 默认值 | 版本 |
-|------|------|------|------|------|
-| name | 标签名称，作为匹配的标识符 | *string \| number* | 当前标签的索引值 | - |
-| icon | 图标名称或图片链接，可选值见 [Icon 组件](#/zh-CN/icon)| *string* | - | - |
-| dot | 是否显示图标右上角小红点 | *boolean* | `false` | - |
-| info | 图标右上角徽标的内容 | *string \| number* | - | - |
-| url | 点击后跳转的链接地址 | *string* | - | - |
-| to | 点击后跳转的目标路由对象，同 vue-router 的 [to 属性](https://router.vuejs.org/zh/api/#to) | *string \| object* | - | - |
-| replace | 是否在跳转时替换当前页面历史 | *boolean* | `false` | - |
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|------|
+| name | 标签名称，作为匹配的标识符 | *number \| string* | 当前标签的索引值 |
+| icon | [图标名称](#/zh-CN/icon)或图片链接| *string* | - |
+| icon-prefix `v2.5.3` | 图标类名前缀，同 Icon 组件的 [class-prefix 属性](#/zh-CN/icon#props) | *string* | `van-icon` |
+| dot | 是否显示图标右上角小红点 | *boolean* | `false` |
+| badge `v2.5.6` | 图标右上角徽标的内容 | *number \| string* | - |
+| info | 图标右上角徽标的内容（已废弃，请使用 badge 属性） | *number \| string* | - |
+| url | 点击后跳转的链接地址 | *string* | - |
+| to | 点击后跳转的目标路由对象，同 vue-router 的 [to 属性](https://router.vuejs.org/zh/api/#to) | *string \| object* | - |
+| replace | 是否在跳转时替换当前页面历史 | *boolean* | `false` |
 
 ### TabbarItem Slots
 

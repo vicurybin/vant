@@ -9,16 +9,30 @@ var supportTouch = 'ontouchstart' in window;
 
 // polyfills
 if (!document.createTouch) {
-  document.createTouch = function(view, target, identifier, pageX, pageY, screenX, screenY) {
+  document.createTouch = function(
+    view,
+    target,
+    identifier,
+    pageX,
+    pageY,
+    screenX,
+    screenY
+  ) {
     // auto set
-    return new Touch(target, identifier, {
-      pageX: pageX,
-      pageY: pageY,
-      screenX: screenX,
-      screenY: screenY,
-      clientX: pageX - window.pageXOffset,
-      clientY: pageY - window.pageYOffset
-    }, 0, 0);
+    return new Touch(
+      target,
+      identifier,
+      {
+        pageX: pageX,
+        pageY: pageY,
+        screenX: screenX,
+        screenY: screenY,
+        clientX: pageX - window.pageXOffset,
+        clientY: pageY - window.pageYOffset,
+      },
+      0,
+      0
+    );
   };
 }
 
@@ -79,39 +93,36 @@ function TouchList() {
 }
 
 /**
- * Simple trick to fake touch event support
- * this is enough for most libraries like Modernizr and Hammer
- */
-function fakeTouchSupport() {
-  var objs = [window, document.documentElement];
-  var props = ['ontouchstart', 'ontouchmove', 'ontouchcancel', 'ontouchend'];
-
-  for (var o = 0; o < objs.length; o++) {
-    for (var p = 0; p < props.length; p++) {
-      if (objs[o] && objs[o][props[p]] === undefined) {
-        objs[o][props[p]] = null;
-      }
-    }
-  }
-}
-
-/**
  * only trigger touches when the left mousebutton has been pressed
  * @param touchType
  * @returns {Function}
  */
+
+var initiated = false;
 function onMouse(touchType) {
   return function(ev) {
     // prevent mouse events
 
-    if (ev.which !== 1) {
+    if (ev.type === 'mousedown') {
+      initiated = true;
+    }
+
+    if (ev.type === 'mouseup') {
+      initiated = false;
+    }
+
+    if (ev.type === 'mousemove' && !initiated) {
       return;
     }
 
     // The EventTarget on which the touch point started when it was first placed on the surface,
     // even if the touch point has since moved outside the interactive area of that element.
     // also, when the target doesnt exist anymore, we update it
-    if (ev.type === 'mousedown' || !eventTarget || eventTarget && !eventTarget.dispatchEvent) {
+    if (
+      ev.type === 'mousedown' ||
+      !eventTarget ||
+      (eventTarget && !eventTarget.dispatchEvent)
+    ) {
       eventTarget = ev.target;
     }
 
@@ -173,8 +184,6 @@ function getActiveTouches(mouseEv) {
  * TouchEmulator initializer
  */
 function TouchEmulator() {
-  fakeTouchSupport();
-
   window.addEventListener('mousedown', onMouse('touchstart'), true);
   window.addEventListener('mousemove', onMouse('touchmove'), true);
   window.addEventListener('mouseup', onMouse('touchend'), true);

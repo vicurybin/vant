@@ -1,5 +1,8 @@
-import { createNamespace, addUnit } from '../utils';
+// Utils
+import { createNamespace, addUnit, isDef } from '../utils';
 import { emit, inherit } from '../utils/functional';
+
+// Components
 import Icon from '../icon';
 import Sidebar from '../sidebar';
 import SidebarItem from '../sidebar-item';
@@ -12,6 +15,7 @@ export type TreeSelectItem = {
   text: string;
   dot?: boolean;
   info?: string | number;
+  badge?: string | number;
   disabled?: boolean;
   className?: any;
   children: TreeSelectChildren[];
@@ -26,11 +30,11 @@ export type TreeSelectChildren = {
 export type TreeSelectActiveId = number | string | (number | string)[];
 
 export type TreeSelectProps = {
-  max: number;
+  max: number | string;
   height: number | string;
   items: TreeSelectItem[];
   activeId: TreeSelectActiveId;
-  mainActiveIndex: number;
+  mainActiveIndex: number | string;
 };
 
 export type TreeSelectSlots = DefaultSlots & {
@@ -47,7 +51,7 @@ function TreeSelect(
 ) {
   const { height, items, mainActiveIndex, activeId } = props;
 
-  const selectedItem: Partial<TreeSelectItem> = items[mainActiveIndex] || {};
+  const selectedItem: Partial<TreeSelectItem> = items[+mainActiveIndex] || {};
   const subItems = selectedItem.children || [];
   const isMultiple = Array.isArray(activeId);
 
@@ -60,7 +64,7 @@ function TreeSelect(
   const Navs = items.map(item => (
     <SidebarItem
       dot={item.dot}
-      info={item.info}
+      info={isDef(item.badge) ? item.badge : item.info}
       title={item.text}
       disabled={item.disabled}
       class={[bem('nav-item'), item.className]}
@@ -79,8 +83,8 @@ function TreeSelect(
           'van-ellipsis',
           bem('item', {
             active: isActiveItem(item.id),
-            disabled: item.disabled
-          })
+            disabled: item.disabled,
+          }),
         ]}
         onClick={() => {
           if (!item.disabled) {
@@ -97,17 +101,16 @@ function TreeSelect(
               }
             }
 
-            emit(ctx, 'click-item', item);
             emit(ctx, 'update:active-id', newActiveId);
-
-            // compatible for old usage, should be removed in next major version
+            emit(ctx, 'click-item', item);
+            // compatible with legacy usage, should be removed in next major version
             emit(ctx, 'itemclick', item);
           }
         }}
       >
         {item.text}
         {isActiveItem(item.id) && (
-          <Icon name="checked" size="16px" class={bem('selected')} />
+          <Icon name="checked" class={bem('selected')} />
         )}
       </div>
     ));
@@ -119,10 +122,9 @@ function TreeSelect(
         class={bem('nav')}
         activeKey={mainActiveIndex}
         onChange={(index: number) => {
-          emit(ctx, 'click-nav', index);
           emit(ctx, 'update:main-active-index', index);
-
-          // compatible for old usage, should be removed in next major version
+          emit(ctx, 'click-nav', index);
+          // compatible with legacy usage, should be removed in next major version
           emit(ctx, 'navclick', index);
         }}
       >
@@ -135,25 +137,25 @@ function TreeSelect(
 
 TreeSelect.props = {
   max: {
-    type: Number,
-    default: Infinity
+    type: [Number, String],
+    default: Infinity,
   },
   items: {
     type: Array,
-    default: () => []
+    default: () => [],
   },
   height: {
     type: [Number, String],
-    default: 300
+    default: 300,
   },
   activeId: {
     type: [Number, String, Array],
-    default: 0
+    default: 0,
   },
   mainActiveIndex: {
-    type: Number,
-    default: 0
-  }
+    type: [Number, String],
+    default: 0,
+  },
 };
 
 export default createComponent<TreeSelectProps>(TreeSelect);

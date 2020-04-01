@@ -1,5 +1,8 @@
+// Utils
 import { createNamespace, isDef } from '../utils';
 import { emit, inherit } from '../utils/functional';
+
+// Components
 import Tag from '../tag';
 import Image from '../image';
 
@@ -32,6 +35,7 @@ export type CardSlots = DefaultSlots & {
   bottom?: ScopedSlot;
   footer?: ScopedSlot;
   'origin-price'?: ScopedSlot;
+  'price-top'?: ScopedSlot;
 };
 
 export type CardEvents = {
@@ -51,7 +55,7 @@ function Card(
   const showNum = slots.num || isDef(props.num);
   const showPrice = slots.price || isDef(props.price);
   const showOriginPrice = slots['origin-price'] || isDef(props.originPrice);
-  const showBottom = showNum || showPrice || showOriginPrice;
+  const showBottom = showNum || showPrice || showOriginPrice || slots.bottom;
 
   function onThumbClick(event: MouseEvent) {
     emit(ctx, 'click-thumb', event);
@@ -84,7 +88,7 @@ function Card(
               src={thumb}
               width="100%"
               height="100%"
-              fit="contain"
+              fit="cover"
               lazy-load={props.lazyLoad}
             />
           )}
@@ -100,7 +104,11 @@ function Card(
     }
 
     if (props.title) {
-      return <div class={[bem('title'), 'van-multi-ellipsis--l2']}>{props.title}</div>;
+      return (
+        <div class={[bem('title'), 'van-multi-ellipsis--l2']}>
+          {props.title}
+        </div>
+      );
     }
   }
 
@@ -114,11 +122,22 @@ function Card(
     }
   }
 
+  function PriceContent() {
+    const priceArr = props.price!.toString().split('.');
+    return (
+      <div>
+        <span class={bem('price-currency')}>{props.currency}</span>
+        <span class={bem('price-integer')}>{priceArr[0]}</span>.
+        <span class={bem('price-decimal')}>{priceArr[1]}</span>
+      </div>
+    );
+  }
+
   function Price() {
     if (showPrice) {
       return (
         <div class={bem('price')}>
-          {slots.price ? slots.price() : `${props.currency} ${props.price}`}
+          {slots.price ? slots.price() : PriceContent()}
         </div>
       );
     }
@@ -137,7 +156,11 @@ function Card(
 
   function Num() {
     if (showNum) {
-      return <div class={bem('num')}>{slots.num ? slots.num() : `x ${props.num}`}</div>;
+      return (
+        <div class={bem('num')}>
+          {slots.num ? slots.num() : `x${props.num}`}
+        </div>
+      );
     }
   }
 
@@ -152,15 +175,18 @@ function Card(
       <div class={bem('header')}>
         {Thumb()}
         <div class={bem('content', { centered: props.centered })}>
-          {Title()}
-          {Desc()}
-          {slots.tags && slots.tags()}
+          <div>
+            {Title()}
+            {Desc()}
+            {slots.tags?.()}
+          </div>
           {showBottom && (
             <div class="van-card__bottom">
+              {slots['price-top']?.()}
               {Price()}
               {OriginPrice()}
               {Num()}
-              {slots.bottom && slots.bottom()}
+              {slots.bottom?.()}
             </div>
           )}
         </div>
@@ -183,8 +209,8 @@ Card.props = {
   originPrice: [Number, String],
   currency: {
     type: String,
-    default: '¥'
-  }
+    default: '¥',
+  },
 };
 
 export default createComponent<CardProps, CardEvents>(Card);

@@ -1,3 +1,4 @@
+// Utils
 import { createNamespace, isDef } from '../utils';
 import { inherit } from '../utils/functional';
 
@@ -8,6 +9,7 @@ import { DefaultSlots } from '../utils/types';
 export type InfoProps = {
   dot?: boolean;
   info?: string | number;
+  badge?: string | number;
 };
 
 const [createComponent, bem] = createNamespace('info');
@@ -34,7 +36,7 @@ function Info(
 
 Info.props = {
   dot: Boolean,
-  info: [Number, String]
+  info: [Number, String],
 };
 
 export default createComponent<InfoProps>(Info);

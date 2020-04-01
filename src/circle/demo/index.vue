@@ -1,6 +1,6 @@
 <template>
   <demo-section>
-    <demo-block :title="$t('basicUsage')">
+    <demo-block :title="t('basicUsage')">
       <van-circle
         v-model="currentRate1"
         :rate="rate"
@@ -9,13 +9,13 @@
       />
     </demo-block>
 
-    <demo-block :title="$t('customStyle')">
+    <demo-block :title="t('customStyle')">
       <van-circle
         v-model="currentRate3"
         :rate="rate"
         :speed="100"
         :stroke-width="60"
-        :text="$t('customWidth')"
+        :text="t('customWidth')"
       />
 
       <van-circle
@@ -24,7 +24,7 @@
         :rate="rate"
         layer-color="#ebedf0"
         :speed="100"
-        :text="$t('customColor')"
+        :text="t('customColor')"
       />
 
       <van-circle
@@ -32,7 +32,7 @@
         :rate="rate"
         :speed="100"
         :color="gradientColor"
-        :text="$t('gradient')"
+        :text="t('gradient')"
       />
 
       <van-circle
@@ -41,7 +41,7 @@
         :rate="rate"
         :speed="100"
         :clockwise="false"
-        :text="$t('counterClockwise')"
+        :text="t('counterClockwise')"
         style="margin-top: 15px;"
       />
 
@@ -52,20 +52,15 @@
         :speed="100"
         size="120px"
         :clockwise="false"
-        :text="$t('customSize')"
+        :text="t('customSize')"
         style="margin-top: 15px;"
       />
     </demo-block>
 
     <div style="margin-top: 15px;">
+      <van-button :text="t('add')" type="primary" size="small" @click="add" />
       <van-button
-        :text="$t('add')"
-        type="primary"
-        size="small"
-        @click="add"
-      />
-      <van-button
-        :text="$t('decrease')"
+        :text="t('decrease')"
         type="danger"
         size="small"
         @click="reduce"
@@ -85,7 +80,7 @@ export default {
       customStyle: '样式定制',
       customColor: '颜色定制',
       customWidth: '宽度定制',
-      counterClockwise: '逆时针'
+      counterClockwise: '逆时针',
     },
     'en-US': {
       gradient: 'Gradient',
@@ -93,8 +88,8 @@ export default {
       customStyle: 'Custom Style',
       customColor: 'Custom Color',
       customWidth: 'Custom Width',
-      counterClockwise: 'Counter Clockwise'
-    }
+      counterClockwise: 'Counter Clockwise',
+    },
   },
 
   data() {
@@ -106,8 +101,8 @@ export default {
       currentRate4: 70,
       gradientColor: {
         '0%': '#3fecff',
-        '100%': '#6149f6'
-      }
+        '100%': '#6149f6',
+      },
     };
   },
 
@@ -118,13 +113,13 @@ export default {
 
     reduce() {
       this.rate = format(this.rate - 20);
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="less">
-@import "../../style/var";
+@import '../../style/var';
 
 .demo-circle {
   .van-circle {

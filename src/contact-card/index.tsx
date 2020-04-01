@@ -1,5 +1,8 @@
+// Utils
 import { createNamespace } from '../utils';
 import { emit, inherit } from '../utils/functional';
+
+// Components
 import Cell from '../cell';
 
 // Types
@@ -30,6 +33,17 @@ function ContactCard(
     }
   }
 
+  function Content() {
+    if (type === 'add') {
+      return props.addText || t('addText');
+    }
+
+    return [
+      <div>{`${t('name')}：${props.name}`}</div>,
+      <div>{`${t('tel')}：${props.tel}`}</div>,
+    ];
+  }
+
   return (
     <Cell
       center
@@ -41,12 +55,7 @@ function ContactCard(
       onClick={onClick}
       {...inherit(ctx)}
     >
-      {type === 'add'
-        ? props.addText || t('addText')
-        : [
-            <div>{`${t('name')}：${props.name}`}</div>,
-            <div>{`${t('tel')}：${props.tel}`}</div>
-        ]}
+      {Content()}
     </Cell>
   );
 }
@@ -57,12 +66,12 @@ ContactCard.props = {
   addText: String,
   editable: {
     type: Boolean,
-    default: true
+    default: true,
   },
   type: {
     type: String,
-    default: 'add'
-  }
+    default: 'add',
+  },
 };
 
 export default createComponent<ContactCardProps>(ContactCard);
