@@ -1,56 +1,47 @@
 <template>
   <div>
     <demo-section>
-      <van-notice-bar>{{ $t('tips') }}</van-notice-bar>
-      <demo-block :title="$t('basicUsage')">
+      <demo-block :title="t('basicUsage')">
         <van-swipe-cell>
           <template #left>
-            <van-button
-              square
-              type="primary"
-              :text="$t('select')"
-            />
+            <van-button square type="primary" :text="t('select')" />
           </template>
-          <van-cell
-            :border="false"
-            :title="$t('title')"
-            :value="$t('content')"
+          <van-cell :border="false" :title="t('title')" :value="t('content')" />
+          <template #right>
+            <van-button square type="danger" :text="t('delete')" />
+            <van-button square type="primary" :text="t('collect')" />
+          </template>
+        </van-swipe-cell>
+      </demo-block>
+
+      <demo-block :title="t('customContent')">
+        <van-swipe-cell>
+          <van-card
+            num="2"
+            price="2.00"
+            :desc="t('desc')"
+            :title="t('cardTitle')"
+            :thumb="imageURL"
           />
           <template #right>
             <van-button
               square
               type="danger"
-              :text="$t('delete')"
-            />
-            <van-button
-              square
-              type="primary"
-              :text="$t('collect')"
+              class="delete-button"
+              :text="t('delete')"
             />
           </template>
         </van-swipe-cell>
       </demo-block>
 
-      <demo-block :title="$t('title2')">
-        <van-swipe-cell :on-close="onClose">
+      <demo-block :title="t('beforeClose')">
+        <van-swipe-cell :before-close="beforeClose">
           <template #left>
-            <van-button
-              square
-              type="primary"
-              :text="$t('select')"
-            />
+            <van-button square type="primary" :text="t('select')" />
           </template>
-          <van-cell
-            :border="false"
-            :title="$t('title')"
-            :value="$t('content')"
-          />
+          <van-cell :border="false" :title="t('title')" :value="t('content')" />
           <template #right>
-            <van-button
-              square
-              type="danger"
-              :text="$t('delete')"
-            />
+            <van-button square type="danger" :text="t('delete')" />
           </template>
         </van-swipe-cell>
       </demo-block>
@@ -66,39 +57,49 @@ export default {
       delete: '删除',
       collect: '收藏',
       title: '单元格',
-      title2: '异步关闭',
       confirm: '确定删除吗？',
-      tips: '建议在手机模式下浏览本示例'
+      cardTitle: '商品标题',
+      beforeClose: '异步关闭',
+      customContent: '自定义内容',
     },
     'en-US': {
       select: 'Select',
       delete: 'Delete',
       collect: 'Collect',
       title: 'Cell',
-      title2: 'Async close',
       confirm: 'Are you sure to delete?',
-      tips: 'Please try this demo in mobile mode'
-    }
+      cardTitle: 'Title',
+      beforeClose: 'Before Close',
+      customContent: 'Custom Content',
+    },
+  },
+
+  data() {
+    return {
+      imageURL: 'https://img.yzcdn.cn/vant/ipad.jpeg',
+    };
   },
 
   methods: {
-    onClose(clickPosition, instance) {
-      switch (clickPosition) {
+    beforeClose({ position, instance }) {
+      switch (position) {
         case 'left':
         case 'cell':
         case 'outside':
           instance.close();
           break;
         case 'right':
-          this.$dialog.confirm({
-            message: this.$t('confirm')
-          }).then(() => {
-            instance.close();
-          });
+          this.$dialog
+            .confirm({
+              message: this.t('confirm'),
+            })
+            .then(() => {
+              instance.close();
+            });
           break;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -107,5 +108,14 @@ export default {
 
 .demo-swipe-cell {
   user-select: none;
+
+  .van-card {
+    margin: 0;
+    background-color: @white;
+  }
+
+  .delete-button {
+    height: 100%;
+  }
 }
 </style>

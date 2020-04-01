@@ -2,7 +2,8 @@
 
 ### Install
 
-``` javascript
+```js
+import Vue from 'vue';
 import { Rate } from 'vant';
 
 Vue.use(Rate);
@@ -16,7 +17,7 @@ Vue.use(Rate);
 <van-rate v-model="value" />
 ```
 
-```javascript
+```js
 export default {
   data() {
     return {
@@ -42,7 +43,7 @@ export default {
 <van-rate
   v-model="value"
   :size="25"
-  color="#f44"
+  color="#ee0a24"
   void-icon="star"
   void-color="#eee"
 />
@@ -59,7 +60,7 @@ export default {
 />
 ```
 
-```javascript
+```js
 export default {
   data() {
     return {
@@ -87,24 +88,42 @@ export default {
 <van-rate v-model="value" readonly />
 ```
 
+### Change Event
+
+```html
+<van-rate v-model="value" @change="onChange" />
+```
+
+```javascript
+export default {
+  method: {
+    onChange(value) {
+       Toast('current value:'+ value);
+    }
+  }
+}
+```
+
 ## API
 
 ### Props
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|
-| v-model | Current rate | `number` | - |
-| count | Count | `number` | `5` |
-| size | Icon size| `string | number` | `20px` |
-| gutter | Icon gutter | `string | number` | `4px` |
-| color | Selected color | `string` | `#ffd21e` |
-| void-color | Void color | `string` | `#c7c7c7` |
-| icon | Selected icon | `string` | `star` |
-| void-icon | Void icon | `string` | `star-o` |
-| allow-half | Whether to allow half star | `boolean` | `false` |
-| readonly | Whether to be readonly | `boolean` | `false` |
-| disabled | Whether to disable rate | `boolean` | `false` |
-| disabled-color | Disabled color | `string` | `#bdbdbd` | 
+| v-model | Current rate | *number* | - |
+| count | Count | *number \| string* | `5` |
+| size | Icon size| *number \| string* | `20px` |
+| gutter | Icon gutter | *number \| string* | `4px` |
+| color | Selected color | *string* | `#ffd21e` |
+| void-color | Void color | *string* | `#c8c9cc` |
+| disabled-color | Disabled color | *string* | `#bdbdbd` |
+| icon | Selected icon | *string* | `star` |
+| void-icon | Void icon | *string* | `star-o` |
+| icon-prefix `v2.5.3` | Icon className prefix | *string* | `van-icon` |
+| allow-half | Whether to allow half star | *boolean* | `false` |
+| readonly | Whether to be readonly | *boolean* | `false` |
+| disabled | Whether to disable rate | *boolean* | `false` |
+| touchable `v2.2.0` | Whether to allow select rate by touch gesture | *boolean* | `true` |
 
 ### Events
 

@@ -2,7 +2,7 @@
 
 ### 介绍
 
-Vant 提供了一套默认主题，CSS 命名采用 BEM 的风格，方便使用者覆盖样式。如果你想完全替换主题色或者其他样式，可以使用下面提供的方法
+Vant 提供了一套默认主题，CSS 命名采用 BEM 的风格，方便使用者覆盖样式。如果你想完全替换主题色或者其他样式，可以使用下面提供的方法。
 
 ### 示例工程
 
@@ -15,39 +15,25 @@ Vant 使用了 [Less](http://lesscss.org/) 对样式进行预处理，并内置�
 下面是一些基本的样式变量，所有可用的颜色变量请参考 [配置文件](https://github.com/youzan/vant/blob/dev/src/style/var.less)。
 
 ```less
-// color variables
-@black: #000;
-@white: #fff;
-@red: #f44;
-@blue: #1989fa;
-@orange: #ff976a;
-@orange-dark: #ed6a0c;
-@orange-light: #fffbe8;
-@green: #07c160;
-@gray: #c9c9c9;
-@gray-light: #e5e5e5;
-@gray-darker: #7d7e80;
-@gray-dark: #969799;
-
-// default colors
+// Component Colors
 @text-color: #323233;
 @border-color: #ebedf0;
 @active-color: #f2f3f5;
-@background-color: #f8f8f8;
+@background-color: #f7f8fa;
 @background-color-light: #fafafa;
 ```
 
-### 定制方法
+## 定制方法
 
-定制主题分为两步：引入样式源文件和修改样式变量
+### 步骤一 引入样式源文件
 
-#### 步骤一. 引入样式源文件
+定制主题时，需要引入组件对应的 Less 样式文件，支持按需引入和手动引入两种方式。
 
-Vant 支持通过 babel 插件按需引入和手动引入两种方式，推荐使用按需引入的方式。
+#### 按需引入样式（推荐）
+
+在 babel.config.js 中配置按需引入样式源文件，注意 babel6 不支持按需引入样式，请手动引入样式
 
 ```js
-// 在 babel.config.js 中配置按需引入样式源文件
-// 注意：babel6 不支持按需引入样式，请手动引入
 module.exports = {
   plugins: [
     [
@@ -64,17 +50,19 @@ module.exports = {
 };
 ```
 
-下面是手动引入的方法：
+#### 手动引入样式
 
 ```js
-// 手动引入组件的样式源文件
-import Button from 'vant/lib/button';
+// 引入全部样式
+import 'vant/lib/index.less';
+
+// 引入单个组件样式
 import 'vant/lib/button/style/less';
 ```
 
-#### 步骤二. 修改样式变量
+### 步骤二 修改样式变量
 
-使用 less 提供的 [modifyVars](http://lesscss.org/usage/#using-less-in-the-browser-modify-variables) 即可对变量进行修改，下面是参考的 webpack 配置。
+使用 Less 提供的 [modifyVars](http://lesscss.org/usage/#using-less-in-the-browser-modify-variables) 即可对变量进行修改，下面是参考的 webpack 配置。
 
 ```js
 // webpack.config.js
@@ -83,20 +71,42 @@ module.exports = {
     {
       test: /\.less$/,
       use: [
-        // ...other loaders
+        // ...其他 loader 配置
         {
           loader: 'less-loader',
           options: {
             modifyVars: {
-              red: '#03a9f4',
-              blue: '#3eaf7c',
-              orange: '#f08d49',
-              'text-color': '#111'
-            }
-          }
-        }
-      ]
-    }
-  ]
+              // 直接覆盖变量
+              'text-color': '#111',
+              'border-color': '#eee',
+              // 或者可以通过 less 文件覆盖（文件路径为绝对路径）
+              hack: `true; @import "your-less-file-path.less";`,
+            },
+          },
+        },
+      ],
+    },
+  ],
+};
+```
+
+如果 vue-cli 搭建的项目，可以在 `vue.config.js` 中进行配置。
+
+```js
+// vue.config.js
+module.exports = {
+  css: {
+    loaderOptions: {
+      less: {
+        modifyVars: {
+          // 直接覆盖变量
+          'text-color': '#111',
+          'border-color': '#eee',
+          // 或者可以通过 less 文件覆盖（文件路径为绝对路径）
+          hack: `true; @import "your-less-file-path.less";`,
+        },
+      },
+    },
+  },
 };
 ```

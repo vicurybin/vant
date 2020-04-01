@@ -1,7 +1,6 @@
-/* eslint-disable camelcase */
 import AddressEdit from '..';
-import areaList from '../../area/demo/area.simple';
-import { mount, later } from '../../../test/utils';
+import areaList from '../../area/demo/area-simple';
+import { mount, later } from '../../../test';
 
 const addressInfo = {
   name: '测试',
@@ -12,7 +11,7 @@ const addressInfo = {
   addressDetail: '详细地址',
   areaCode: '110101',
   postalCode: '10000',
-  isDefault: true
+  isDefault: true,
 };
 
 const createComponent = () => {
@@ -20,8 +19,9 @@ const createComponent = () => {
     propsData: {
       areaList,
       addressInfo,
-      showPostal: true
-    }
+      showPostal: true,
+      showSetDefault: true,
+    },
   });
 
   const button = wrapper.find('.van-button');
@@ -33,7 +33,7 @@ const createComponent = () => {
     field,
     button,
     wrapper,
-    errorInfo
+    errorInfo,
   };
 };
 
@@ -48,11 +48,68 @@ test('create a AddressEdit with props', () => {
       addressInfo,
       showPostal: true,
       showSetDefault: true,
-      showSearchResult: true
-    }
+      showSearchResult: true,
+    },
   });
 
   expect(wrapper).toMatchSnapshot();
+});
+
+test('valid area placeholder confirm', async () => {
+  const wrapper = mount(AddressEdit, {
+    propsData: {
+      areaList,
+      areaColumnsPlaceholder: ['请选择', '请选择', '请选择'],
+    },
+  });
+
+  const { data } = wrapper.vm;
+
+  wrapper.find('.van-picker__confirm').trigger('click');
+
+  expect(data.areaCode).toBe('');
+  await later(50);
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('show area component', async () => {
+  const { wrapper } = createComponent();
+
+  const field = wrapper.findAll('.van-field').at(2);
+  field.trigger('click');
+
+  await later(50);
+  expect(wrapper).toMatchSnapshot();
+
+  wrapper.find('.van-picker__cancel').trigger('click');
+
+  await later(50);
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('set-default', () => {
+  const { wrapper } = createComponent();
+  wrapper.find('.van-switch').trigger('click');
+
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('validator props', async () => {
+  const wrapper = mount(AddressEdit, {
+    propsData: {
+      areaList,
+      validator(key, value) {
+        return `${key}${value}`;
+      },
+    },
+  });
+
+  const { errorInfo, data } = wrapper.vm;
+  data.name = '';
+  const button = wrapper.find('.van-button');
+  button.trigger('click');
+
+  expect(errorInfo.name).toBeTruthy();
 });
 
 test('valid name', () => {
@@ -66,7 +123,7 @@ test('valid name', () => {
   expect(errorInfo.name).toBeFalsy();
 });
 
-it('valid tel', () => {
+test('valid tel', () => {
   const { data, field, button, errorInfo } = createComponent();
   data.tel = '';
   button.trigger('click');
@@ -75,7 +132,7 @@ it('valid tel', () => {
   expect(errorInfo.tel).toBeFalsy();
 });
 
-it('valid areaCode', () => {
+test('valid areaCode', () => {
   const { data, button, errorInfo } = createComponent();
   // areaCode empty
   data.areaCode = '';
@@ -88,7 +145,7 @@ it('valid areaCode', () => {
   expect(errorInfo.areaCode).toBeTruthy();
 });
 
-it('valid addressDetail', () => {
+test('valid addressDetail', () => {
   const { data, field, button, errorInfo } = createComponent();
   data.addressDetail = '';
   button.trigger('click');
@@ -135,13 +192,13 @@ test('watch address info', () => {
 
 test('set/get area code', async () => {
   const wrapper = mount(AddressEdit, {
-    propsData: { areaList }
+    propsData: { areaList },
   });
 
   expect(wrapper.vm.getArea()).toEqual([
     { code: '110000', name: '北京市' },
     { code: '110100', name: '北京市' },
-    { code: '110101', name: '东城区' }
+    { code: '110101', name: '东城区' },
   ]);
 
   wrapper.vm.setAreaCode('110102');
@@ -151,7 +208,7 @@ test('set/get area code', async () => {
   expect(wrapper.vm.getArea()).toEqual([
     { code: '110000', name: '北京市' },
     { code: '110100', name: '北京市' },
-    { code: '110102', name: '西城区' }
+    { code: '110102', name: '西城区' },
   ]);
 
   wrapper.vm.$refs = [];
@@ -164,9 +221,9 @@ test('watch area code', async () => {
     propsData: {
       areaList: {},
       addressInfo: {
-        areaCode: '110101'
-      }
-    }
+        areaCode: '110101',
+      },
+    },
   });
 
   expect(wrapper.vm.data.city).toEqual('');
@@ -183,9 +240,9 @@ test('show search result', async () => {
       searchResult: [
         { name: 'name1', address: 'address1' },
         { name: 'name2' },
-        { address: 'address2' }
-      ]
-    }
+        { address: 'address2' },
+      ],
+    },
   });
 
   const field = wrapper.findAll('.van-field__control').at(3);
@@ -209,8 +266,8 @@ test('delete address', async () => {
   const wrapper = mount(AddressEdit, {
     attachToDocument: true,
     propsData: {
-      showDelete: true
-    }
+      showDelete: true,
+    },
   });
 
   const deleteButton = wrapper.findAll('.van-button').at(1);
@@ -236,4 +293,16 @@ test('select area', () => {
   const { wrapper, data } = createComponent();
   wrapper.find('.van-picker__confirm').trigger('click');
   expect(data.areaCode).toEqual('110101');
+});
+
+test('click-area event', () => {
+  const wrapper = mount(AddressEdit, {
+    propsData: {
+      disableArea: true,
+    },
+  });
+
+  const field = wrapper.findAll('.van-field').at(2);
+  field.trigger('click');
+  expect(wrapper.emitted('click-area')[0]).toBeTruthy();
 });

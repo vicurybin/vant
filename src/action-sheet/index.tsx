@@ -1,6 +1,12 @@
+// Utils
 import { createNamespace } from '../utils';
 import { emit, inherit } from '../utils/functional';
-import { PopupMixin } from '../mixins/popup';
+import { BORDER_TOP } from '../utils/constant';
+
+// Mixins
+import { popupMixinProps } from '../mixins/popup';
+
+// Components
 import Icon from '../icon';
 import Popup from '../popup';
 import Loading from '../loading';
@@ -12,6 +18,7 @@ import { PopupMixinProps } from '../mixins/popup/type';
 
 export type ActionSheetItem = {
   name: string;
+  color?: string;
   subname?: string;
   loading?: boolean;
   disabled?: boolean;
@@ -20,12 +27,14 @@ export type ActionSheetItem = {
 };
 
 export type ActionSheetProps = PopupMixinProps & {
+  round: boolean;
   title?: string;
-  titleAlign: string;
-  actions: ActionSheetItem[];
-  round?: boolean;
-  duration: number;
+  actions?: ActionSheetItem[];
+  duration: number | string;
+  closeIcon: string;
   cancelText?: string;
+  description?: string;
+  closeOnPopstate?: boolean;
   closeOnClickAction?: boolean;
   safeAreaInsetBottom?: boolean;
 };
@@ -38,7 +47,7 @@ function ActionSheet(
   slots: DefaultSlots,
   ctx: RenderContext<ActionSheetProps>
 ) {
-  const { title, titleAlign, cancelText } = props;
+  const { title, cancelText } = props;
 
   function onCancel() {
     emit(ctx, 'input', false);
@@ -48,9 +57,13 @@ function ActionSheet(
   function Header() {
     if (title) {
       return (
-        <div class={[bem('header', { [titleAlign]: titleAlign }), 'van-hairline--bottom']}>
+        <div class={bem('header')}>
           {title}
-          <Icon name="close" class={bem('close')} onClick={onCancel} />
+          <Icon
+            name={props.closeIcon}
+            class={bem('close')}
+            onClick={onCancel}
+          />
         </div>
       );
     }
@@ -63,17 +76,17 @@ function ActionSheet(
   }
 
   function Option(item: ActionSheetItem, index: number) {
-    const disabled = item.disabled || item.loading;
+    const { disabled, loading, callback } = item;
 
     function onClickOption(event: MouseEvent) {
       event.stopPropagation();
 
-      if (item.disabled || item.loading) {
+      if (disabled || loading) {
         return;
       }
 
-      if (item.callback) {
-        item.callback(item);
+      if (callback) {
+        callback(item);
       }
 
       emit(ctx, 'select', item, index);
@@ -84,39 +97,45 @@ function ActionSheet(
     }
 
     function OptionContent() {
-      if (item.loading) {
+      if (loading) {
         return <Loading size="20px" />;
       }
 
       return [
         <span class={bem('name')}>{item.name}</span>,
-        item.subname && <span class={bem('subname')}>{item.subname}</span>
+        item.subname && <span class={bem('subname')}>{item.subname}</span>,
       ];
     }
 
     return (
-      <div
-        class={[bem('item', { disabled }), item.className, 'van-hairline--top']}
+      <button
+        type="button"
+        class={[bem('item', { disabled, loading }), item.className, BORDER_TOP]}
+        style={{ color: item.color }}
         onClick={onClickOption}
       >
         {OptionContent()}
-      </div>
+      </button>
     );
   }
 
   function CancelText() {
     if (cancelText) {
       return (
-        <div class={bem('cancel')} onClick={onCancel}>
+        <button type="button" class={bem('cancel')} onClick={onCancel}>
           {cancelText}
-        </div>
+        </button>
       );
     }
   }
 
+  const Description = props.description && (
+    <div class={bem('description')}>{props.description}</div>
+  );
+
   return (
     <Popup
-      class={bem({ 'safe-area-inset-bottom': props.safeAreaInsetBottom })}
+      class={bem()}
       position="bottom"
       round={props.round}
       value={props.value}
@@ -125,10 +144,13 @@ function ActionSheet(
       lazyRender={props.lazyRender}
       lockScroll={props.lockScroll}
       getContainer={props.getContainer}
+      closeOnPopstate={props.closeOnPopstate}
       closeOnClickOverlay={props.closeOnClickOverlay}
+      safeAreaInsetBottom={props.safeAreaInsetBottom}
       {...inherit(ctx, true)}
     >
       {Header()}
+      {Description}
       {props.actions && props.actions.map(Option)}
       {Content()}
       {CancelText()}
@@ -137,27 +159,35 @@ function ActionSheet(
 }
 
 ActionSheet.props = {
-  ...PopupMixin.props,
+  ...popupMixinProps,
   title: String,
-  titleAlign: {
-    type: String,
-    default: 'center',
-  },
-  round: Boolean,
   actions: Array,
-  duration: Number,
+  duration: [Number, String],
   cancelText: String,
+  description: String,
   getContainer: [String, Function],
+  closeOnPopstate: Boolean,
   closeOnClickAction: Boolean,
-  safeAreaInsetBottom: Boolean,
+  round: {
+    type: Boolean,
+    default: true,
+  },
+  closeIcon: {
+    type: String,
+    default: 'cross',
+  },
+  safeAreaInsetBottom: {
+    type: Boolean,
+    default: true,
+  },
   overlay: {
     type: Boolean,
-    default: true
+    default: true,
   },
   closeOnClickOverlay: {
     type: Boolean,
-    default: true
-  }
+    default: true,
+  },
 };
 
 export default createComponent<ActionSheetProps>(ActionSheet);

@@ -10,7 +10,7 @@ export type OverlayConfig = {
 
 const defaultConfig: OverlayConfig = {
   className: '',
-  customStyle: {}
+  customStyle: {},
 };
 
 let overlay: any;
@@ -31,13 +31,17 @@ function onClickOverlay(): void {
   }
 }
 
+function mountOverlay() {
+  overlay = mount(Overlay, {
+    on: {
+      click: onClickOverlay,
+    },
+  });
+}
+
 export function updateOverlay(): void {
   if (!overlay) {
-    overlay = mount(Overlay, {
-      on: {
-        click: onClickOverlay
-      }
-    });
+    mountOverlay();
   }
 
   if (context.top) {
@@ -51,7 +55,7 @@ export function updateOverlay(): void {
     }
 
     Object.assign(overlay, defaultConfig, config, {
-      show: true
+      show: true,
     });
   } else {
     overlay.show = false;

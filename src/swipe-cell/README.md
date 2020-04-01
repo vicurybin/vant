@@ -2,7 +2,8 @@
 
 ### Install
 
-``` javascript
+```js
+import Vue from 'vue';
 import { SwipeCell } from 'vant';
 
 Vue.use(SwipeCell);
@@ -14,30 +15,60 @@ Vue.use(SwipeCell);
 
 ```html
 <van-swipe-cell>
-  <template slot="left">
+  <template #left>
     <van-button square type="primary" text="Select" />
   </template>
-
   <van-cell :border="false" title="Cell" value="Cell Content" />
-
-  <template slot="right">
+  <template #right>
     <van-button square type="danger" text="Delete" />
     <van-button square type="primary" text="Collect"/>
   </template>
 </van-swipe-cell>
 ```
 
-### Async close
+### Custom Content
 
 ```html
-<van-swipe-cell :on-close="onClose">
-  <template slot="left">
+<van-swipe-cell>
+  <van-card
+    num="2"
+    price="2.00"
+    desc="Description"
+    title="Title"
+    class="goods-card"
+    thumb="https://img.yzcdn.cn/vant/cat.jpeg"
+  />
+  <template #right>
+    <van-button
+      square
+      text="Delete"
+      type="danger"
+      class="delete-button"
+    />
+  </template>
+</van-swipe-cell>
+
+<style>
+.goods-card {
+  margin: 0;
+  background-color: @white;
+}
+
+.delete-button {
+  height: 100%;
+}
+</style>
+```
+
+### Before Close
+
+```html
+<van-swipe-cell :before-close="beforeClose">
+  <template #left>
     <van-button square type="primary" text="Select" />
   </template>
-
   <van-cell :border="false" title="Cell" value="Cell Content" />
-
-  <template slot="right">
+  <template #right>
     <van-button square type="danger" text="Delete" />
   </template>
 </van-swipe-cell>
@@ -46,8 +77,8 @@ Vue.use(SwipeCell);
 ```js
 export default {
   methods: {
-    onClose(clickPosition, instance) {
-      switch (clickPosition) {
+    beforeClose({ position, instance }) {
+      switch (position) {
         case 'left':
         case 'cell':
         case 'outside':
@@ -72,12 +103,12 @@ export default {
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|
-| name | Identifier of SwipeCell | `string | number` | - |
-| on-close | Callback function before close | `Function` | - |
-| disabled | Whether to disabled swipe | `boolean` | `false` |
-| left-width | Width of the left swipe area | `number` | `auto` |
-| right-width | Width of the right swipe area | `number` | `auto` |
-| stop-propagation | Whether to stop touchmove event propagation | `boolean` | `false` |
+| name `v2.0.4` | Identifier of SwipeCell | *number \| string* | - |
+| left-width | Width of the left swipe area | *number \| string* | `auto` |
+| right-width | Width of the right swipe area | *number \| string* | `auto` |
+| before-close `v2.3.0` | Callback function before close | *Function* | - |
+| disabled | Whether to disabled swipe | *boolean* | `false` |
+| stop-propagation `v2.1.0` | Whether to stop touchmove event propagation | *boolean* | `false` |
 
 ### Slots
 
@@ -92,20 +123,22 @@ export default {
 | Event | Description | Arguments |
 |------|------|------|
 | click | Triggered when clicked | Click positon (`left` `right` `cell` `outside`) |
+| open | Triggered when opened | { position: 'left' \| 'right' , name: string } |
+| close | Triggered when closed | { position: string , name: string } |
 
-### onClose Params
+### beforeClose Params
 
 | Attribute | Description | Type |
 |------|------|------|
-| clickPosition | Click positon (`left` `right` `cell` `outside`) | `string` |
-| instance | SwipeCell instance | `object` |
-| detail | Detail info | `object` |
+| name | Name | *string* |
+| position | Click positon (`left` `right` `cell` `outside`) | *string* |
+| instance | SwipeCell instance | *SwipeCell* |
 
 ### Methods
 
-Use ref to get SwipeCell instance and call instance methods
+Use [ref](https://vuejs.org/v2/api/#ref) to get SwipeCell instance and call instance methods
 
-| Name | Attribute | Return value | Description |
+| Name | Description | Attribute | Return value |
 |------|------|------|------|
-| open | position: `left | right` | - | open SwipeCell |
-| close | - | - | close SwipeCell |
+| open | open SwipeCell | position: `left | right` | - |
+| close | close SwipeCell | - | - |

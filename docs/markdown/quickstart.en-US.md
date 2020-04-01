@@ -2,7 +2,7 @@
 
 ### Starter kit
 
-We recomment to use [Vue Cli 3](https://cli.vuejs.org/zh/) to create a project.
+We recomment to use [Vue Cli](https://cli.vuejs.org/zh/) to create a project.
 
 ```bash
 # Install Vue Cli
@@ -93,23 +93,25 @@ Vue.use(Vant);
 
 ### 4. CDN
 
+The easiest way to use Vant is to include a CDN link in the html file, after which you can access all components via the global variable `vant`.
+
 ```html
 <!-- import style -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.0/lib/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.5/lib/index.css">
 
 <!-- import script -->
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vant@2.0/lib/vant.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@2.5/lib/vant.min.js"></script>
 
 <script>
-var Vue = window.Vue;
-var vant = window.vant;
+  // Render the Button component
+  new Vue({
+    el: '#app',
+    template: `<van-button>Button</van-button>`
+  });
 
-// Register components
-Vue.use(vant);
-
-// Call function components
-vant.Toast('message');
+  // Call function component
+  vant.Toast('Message');
 </script>
 ```
 
@@ -122,13 +124,15 @@ Vant use `px` as size units by default，you can use tools such as `postcss-pxto
 - [postcss-pxtorem](https://github.com/cuth/postcss-pxtorem)
 - [lib-flexible](https://github.com/amfe/lib-flexible)
 
+#### PostCSS Config
+
 postcss config example:
 
 ```js
 module.exports = {
   plugins: {
     'autoprefixer': {
-      browsers: ['Android >= 4.0', 'iOS >= 7']
+      browsers: ['Android >= 4.0', 'iOS >= 8']
     },
     'postcss-pxtorem': {
       rootValue: 37.5,

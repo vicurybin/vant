@@ -2,7 +2,8 @@
 
 ### Install
 
-``` javascript
+```js
+import Vue from 'vue';
 import { CountDown } from 'vant';
 
 Vue.use(CountDown);
@@ -29,20 +30,13 @@ export default {
 ### Custom Format
 
 ```html
-<van-count-down
-  :time="time"
-  format="DD Day, HH:mm:ss"
-/>
+<van-count-down :time="time" format="DD Day, HH:mm:ss" />
 ```
 
 ### Millisecond
 
 ```html
-<van-count-down
-  millisecond
-  :time="time"
-  format="HH:mm:ss:SSS"
-/>
+<van-count-down millisecond :time="time" format="HH:mm:ss:SS" />
 ```
 
 ### Custom Style
@@ -78,7 +72,7 @@ export default {
   :time="3000"
   :auto-start="false"
   format="ss:SSS"
-  @finish="finished"
+  @finish="finish"
 />
 <van-grid clickable :column-num="3">
   <van-grid-item text="Start" icon="play-circle-o" @click="start" />
@@ -88,6 +82,8 @@ export default {
 ```
 
 ```js
+import { Toast } from 'vant';
+
 export default {
   methods: {
     start() {
@@ -100,7 +96,7 @@ export default {
       this.$refs.countDown.reset();
     },
     finish() {
-      this.$toast('Finished');
+      Toast('Finished');
     }
   }
 }
@@ -111,40 +107,53 @@ export default {
 ### Props
 
 | Attribute | Description | Type | Default |
-|------|------|------|------|------|
-| time | Total time | `number` | - |
-| format | Time format，DD-day，HH-hour，mm-minute，ss-second，SSS-millisecond | `string` | `HH:mm:ss` |
-| auto-start | Whether to auto start count down | `boolean` | `true` |
-| millisecond | Whether to enable millisecond render | `boolean` | `false` |
+|------|------|------|------|
+| time | Total time | *number \| string* | `0` |
+| format | Time format | *string* | `HH:mm:ss` |
+| auto-start | Whether to auto start count down | *boolean* | `true` |
+| millisecond | Whether to enable millisecond render | *boolean* | `false` |
+
+### Available formats
+
+| Format | Description |
+|------|------|
+| DD | Day |
+| HH | Hour |
+| mm | Minute |
+| ss | Second |
+| S | Millisecond, 1-digit |
+| SS | Millisecond, 2-digits |
+| SSS | Millisecond, 3-digits |
 
 ### Events
 
 | Event | Description | Arguments |
 |------|------|------|
 | finish | Triggered when count down finished | - |
+| change `v2.4.4` | Triggered when count down changed | *timeData: TimeData* |
 
 ### Slots
 
 | Name | Description | SlotProps |
 |------|------|------|
-| default | Custom Content | timeData |
+| default | Custom Content | *timeData: TimeData* |
 
-### timeData Structure
+### TimeData Structure
 
 | Name | Description | Type |
 |------|------|------|
-| days | Remain days | `number` |
-| hours | Remain hours | `number` |
-| minutes | Remain minutes | `number` |
-| seconds | Remain seconds | `number` |
-| milliseconds | Remain milliseconds | `number` |
+| days | Remain days | *number* |
+| hours | Remain hours | *number* |
+| minutes | Remain minutes | *number* |
+| seconds | Remain seconds | *number* |
+| milliseconds | Remain milliseconds | *number* |
 
 ### Methods
 
-Use ref to get CountDown instance and call instance methods
+Use [ref](https://vuejs.org/v2/api/#ref) to get CountDown instance and call instance methods
 
-| Name | Attribute | Return value | Description |
+| Name | Description | Attribute | Return value |
 |------|------|------|------|
-| start | - | - | Start count down |
-| pause | - | - | Pause count down |
-| reset | - | - | Reset count down |
+| start | Start count down | - | - |
+| pause | Pause count down | - | - |
+| reset | Reset count down | - | - |

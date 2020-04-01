@@ -41,28 +41,28 @@ exports[`renders demo correctly 1`] = `
     </div>
   </div>
   <div>
-    <div class="van-cell van-cell--clickable">
+    <div role="button" tabindex="0" class="van-cell van-cell--clickable">
       <div class="van-cell__title"><span>单元格</span></div><i class="van-icon van-icon-arrow van-cell__right-icon">
         <!----></i>
     </div>
-    <div class="van-cell van-cell--clickable">
+    <div role="button" tabindex="0" class="van-cell van-cell--clickable">
       <div class="van-cell__title"><span>单元格</span></div>
       <div class="van-cell__value"><span>内容</span></div><i class="van-icon van-icon-arrow van-cell__right-icon">
         <!----></i>
     </div>
-    <div class="van-cell van-cell--clickable">
+    <div role="button" tabindex="0" class="van-cell van-cell--clickable">
       <div class="van-cell__title"><span>单元格</span></div>
       <div class="van-cell__value"><span>内容</span></div><i class="van-icon van-icon-arrow-down van-cell__right-icon">
         <!----></i>
     </div>
   </div>
   <div>
-    <div class="van-cell van-cell--clickable">
-      <div class="van-cell__title"><span>单元格</span></div><i class="van-icon van-icon-arrow van-cell__right-icon">
+    <div role="button" tabindex="0" class="van-cell van-cell--clickable">
+      <div class="van-cell__title"><span>URL 跳转</span></div><i class="van-icon van-icon-arrow van-cell__right-icon">
         <!----></i>
     </div>
-    <div class="van-cell van-cell--clickable">
-      <div class="van-cell__title"><span>单元格</span></div><i class="van-icon van-icon-arrow van-cell__right-icon">
+    <div role="button" tabindex="0" class="van-cell van-cell--clickable">
+      <div class="van-cell__title"><span>路由跳转</span></div><i class="van-icon van-icon-arrow van-cell__right-icon">
         <!----></i>
     </div>
   </div>
@@ -87,7 +87,7 @@ exports[`renders demo correctly 1`] = `
     </div>
   </div>
   <div>
-    <div class="van-cell van-cell--clickable">
+    <div role="button" tabindex="0" class="van-cell van-cell--clickable">
       <div class="van-cell__title"><span class="custom-title">单元格</span> <span class="van-tag van-tag--danger">标签</span></div>
       <div class="van-cell__value"><span>内容</span></div><i class="van-icon van-icon-arrow van-cell__right-icon">
         <!----></i>
@@ -96,6 +96,14 @@ exports[`renders demo correctly 1`] = `
         <!----></i>
       <div class="van-cell__title"><span>单元格</span></div><i class="van-icon van-icon-search" style="line-height: inherit;">
         <!----></i>
+    </div>
+  </div>
+  <div>
+    <div class="van-cell van-cell--center">
+      <div class="van-cell__title"><span>单元格</span>
+        <div class="van-cell__label">描述信息</div>
+      </div>
+      <div class="van-cell__value"><span>内容</span></div>
     </div>
   </div>
 </div>

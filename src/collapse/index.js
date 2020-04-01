@@ -1,5 +1,6 @@
 import { createNamespace } from '../utils';
 import { ParentMixin } from '../mixins/relation';
+import { BORDER_TOP_BOTTOM } from '../utils/constant';
 
 const [createComponent, bem] = createNamespace('collapse');
 
@@ -11,8 +12,8 @@ export default createComponent({
     value: [String, Number, Array],
     border: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   methods: {
@@ -24,14 +25,14 @@ export default createComponent({
       }
       this.$emit('change', name);
       this.$emit('input', name);
-    }
+    },
   },
 
   render() {
     return (
-      <div class={[bem(), { 'van-hairline--top-bottom': this.border }]}>
+      <div class={[bem(), { [BORDER_TOP_BOTTOM]: this.border }]}>
         {this.slots()}
       </div>
     );
-  }
+  },
 });

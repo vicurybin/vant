@@ -8,13 +8,15 @@
   color: @sidebar-text-color;
   font-size: @sidebar-font-size;
   line-height: @sidebar-line-height;
-  word-break: break-all;
+  word-wrap: break-word;
   background-color: @sidebar-background-color;
   border-left: 3px solid transparent;
+  cursor: pointer;
   user-select: none;
 
   &__text {
     position: relative;
+    display: inline-block;
   }
 
   &:active {
@@ -40,7 +42,12 @@
     }
   }
 
-  .van-info {
-    right: 4px;
+  &--disabled {
+    color: @sidebar-disabled-text-color;
+    cursor: not-allowed;
+
+    &:active {
+      background-color: @sidebar-background-color;
+    }
   }
 }

@@ -9,10 +9,10 @@ export default createComponent({
 
   props: {
     count: Number,
-    duration: Number,
+    duration: [Number, String],
     animated: Boolean,
     swipeable: Boolean,
-    currentIndex: Number
+    currentIndex: Number,
   },
 
   computed: {
@@ -20,7 +20,7 @@ export default createComponent({
       if (this.animated) {
         return {
           transform: `translate3d(${-1 * this.currentIndex * 100}%, 0, 0)`,
-          transitionDuration: `${this.duration}s`
+          transitionDuration: `${this.duration}s`,
         };
       }
     },
@@ -31,10 +31,10 @@ export default createComponent({
           touchstart: this.touchStart,
           touchmove: this.touchMove,
           touchend: this.onTouchEnd,
-          touchcancel: this.onTouchEnd
+          touchcancel: this.onTouchEnd,
         };
       }
-    }
+    },
   },
 
   methods: {
@@ -53,7 +53,7 @@ export default createComponent({
       }
     },
 
-    renderChildren() {
+    genChildren() {
       if (this.animated) {
         return (
           <div class={bem('track')} style={this.style}>
@@ -63,7 +63,7 @@ export default createComponent({
       }
 
       return this.slots();
-    }
+    },
   },
 
   render() {
@@ -72,8 +72,8 @@ export default createComponent({
         class={bem('content', { animated: this.animated })}
         {...{ on: this.listeners }}
       >
-        {this.renderChildren()}
+        {this.genChildren()}
       </div>
     );
-  }
+  },
 });

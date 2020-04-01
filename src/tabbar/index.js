@@ -1,5 +1,6 @@
 import { createNamespace } from '../utils';
 import { ParentMixin } from '../mixins/relation';
+import { BORDER_TOP_BOTTOM } from '../utils/constant';
 
 const [createComponent, bem] = createNamespace('tabbar');
 
@@ -8,35 +9,40 @@ export default createComponent({
 
   props: {
     route: Boolean,
+    zIndex: [Number, String],
     activeColor: String,
     inactiveColor: String,
-    safeAreaInsetBottom: Boolean,
     value: {
       type: [Number, String],
-      default: 0
+      default: 0,
     },
     border: {
       type: Boolean,
-      default: true
+      default: true,
     },
     fixed: {
       type: Boolean,
-      default: true
+      default: true,
     },
-    zIndex: {
-      type: Number,
-      default: 1
-    }
+    safeAreaInsetBottom: {
+      type: Boolean,
+      default: null,
+    },
+  },
+
+  computed: {
+    fit() {
+      if (this.safeAreaInsetBottom !== null) {
+        return this.safeAreaInsetBottom;
+      }
+      // enable safe-area-inset-bottom by default when fixed
+      return this.fixed;
+    },
   },
 
   watch: {
-    children() {
-      this.setActiveItem();
-    },
-
-    value() {
-      this.setActiveItem();
-    }
+    value: 'setActiveItem',
+    children: 'setActiveItem',
   },
 
   methods: {
@@ -51,7 +57,7 @@ export default createComponent({
         this.$emit('input', active);
         this.$emit('change', active);
       }
-    }
+    },
   },
 
   render() {
@@ -59,15 +65,15 @@ export default createComponent({
       <div
         style={{ zIndex: this.zIndex }}
         class={[
-          { 'van-hairline--top-bottom': this.border },
+          { [BORDER_TOP_BOTTOM]: this.border },
           bem({
+            unfit: !this.fit,
             fixed: this.fixed,
-            'safe-area-inset-bottom': this.safeAreaInsetBottom
-          })
+          }),
         ]}
       >
         {this.slots()}
       </div>
     );
-  }
+  },
 });

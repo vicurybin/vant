@@ -1,4 +1,7 @@
+// Utils
 import { createNamespace } from '../utils';
+
+// Components
 import Tab from '../tab';
 import Tabs from '../tabs';
 import Field from '../field';
@@ -10,7 +13,7 @@ const EMPTY_IMAGE = 'https://img.yzcdn.cn/vant/coupon-empty.png';
 
 export default createComponent({
   model: {
-    prop: 'code'
+    prop: 'code',
   },
 
   props: {
@@ -24,47 +27,51 @@ export default createComponent({
     exchangeButtonDisabled: Boolean,
     exchangeMinLength: {
       type: Number,
-      default: 1
+      default: 1,
     },
     chosenCoupon: {
       type: Number,
-      default: -1
+      default: -1,
     },
     coupons: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     disabledCoupons: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     displayedCouponIndex: {
       type: Number,
-      default: -1
+      default: -1,
     },
     showExchangeBar: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showCloseButton: {
       type: Boolean,
-      default: true
+      default: true,
+    },
+    showCount: {
+      type: Boolean,
+      default: true,
     },
     currency: {
       type: String,
-      default: '¥'
+      default: '¥',
     },
     emptyImage: {
       type: String,
-      default: EMPTY_IMAGE
-    }
+      default: EMPTY_IMAGE,
+    },
   },
 
   data() {
     return {
       tab: 0,
       winHeight: window.innerHeight,
-      currentCode: this.code || ''
+      currentCode: this.code || '',
     };
   },
 
@@ -80,9 +87,9 @@ export default createComponent({
 
     listStyle() {
       return {
-        height: this.winHeight - (this.showExchangeBar ? 140 : 94) + 'px'
+        height: this.winHeight - (this.showExchangeBar ? 140 : 94) + 'px',
       };
-    }
+    },
   },
 
   watch: {
@@ -94,9 +101,7 @@ export default createComponent({
       this.$emit('input', code);
     },
 
-    displayedCouponIndex(val) {
-      this.scrollToShowCoupon(val);
-    }
+    displayedCouponIndex: 'scrollToShowCoupon',
   },
 
   mounted() {
@@ -129,7 +134,7 @@ export default createComponent({
       });
     },
 
-    renderEmpty() {
+    genEmpty() {
       return (
         <div class={bem('empty')}>
           <img src={this.emptyImage} />
@@ -138,10 +143,10 @@ export default createComponent({
       );
     },
 
-    renderExchangeButton() {
+    genExchangeButton() {
       return (
         <Button
-          size="small"
+          plain
           type="danger"
           class={bem('exchange')}
           text={this.exchangeButtonText || t('exchange')}
@@ -150,35 +155,40 @@ export default createComponent({
           onClick={this.onClickExchangeButton}
         />
       );
-    }
+    },
   },
 
   render() {
     const { coupons, disabledCoupons } = this;
-    const title = `${this.enabledTitle || t('enable')} (${coupons.length})`;
-    const disabledTitle = `${this.disabledTitle || t('disabled')} (${
-      disabledCoupons.length
-    })`;
+
+    const count = this.showCount ? ` (${coupons.length})` : '';
+    const title = (this.enabledTitle || t('enable')) + count;
+
+    const disabledCount = this.showCount ? ` (${disabledCoupons.length})` : '';
+    const disabledTitle = (this.disabledTitle || t('disabled')) + disabledCount;
 
     const ExchangeBar = this.showExchangeBar && (
-      <Field
-        vModel={this.currentCode}
-        clearable
-        border={false}
-        class={bem('field')}
-        placeholder={this.inputPlaceholder || t('placeholder')}
-        maxlength="20"
-        scopedSlots={{
-          button: this.renderExchangeButton
-        }}
-      />
+      <div class={bem('exchange-bar')}>
+        <Field
+          vModel={this.currentCode}
+          clearable
+          border={false}
+          class={bem('field')}
+          placeholder={this.inputPlaceholder || t('placeholder')}
+          maxlength="20"
+        />
+        {this.genExchangeButton()}
+      </div>
     );
 
     const onChange = index => () => this.$emit('change', index);
 
     const CouponTab = (
       <Tab title={title}>
-        <div class={bem('list')} style={this.listStyle}>
+        <div
+          class={bem('list', { 'with-bottom': this.showCloseButton })}
+          style={this.listStyle}
+        >
           {coupons.map((coupon, index) => (
             <Coupon
               ref="card"
@@ -189,18 +199,26 @@ export default createComponent({
               nativeOnClick={onChange(index)}
             />
           ))}
-          {!coupons.length && this.renderEmpty()}
+          {!coupons.length && this.genEmpty()}
         </div>
       </Tab>
     );
 
     const DisabledCouponTab = (
       <Tab title={disabledTitle}>
-        <div class={bem('list')} style={this.listStyle}>
+        <div
+          class={bem('list', { 'with-bottom': this.showCloseButton })}
+          style={this.listStyle}
+        >
           {disabledCoupons.map(coupon => (
-            <Coupon disabled key={coupon.id} coupon={coupon} currency={this.currency} />
+            <Coupon
+              disabled
+              key={coupon.id}
+              coupon={coupon}
+              currency={this.currency}
+            />
           ))}
-          {!disabledCoupons.length && this.renderEmpty()}
+          {!disabledCoupons.length && this.genEmpty()}
         </div>
       </Tab>
     );
@@ -208,18 +226,22 @@ export default createComponent({
     return (
       <div class={bem()}>
         {ExchangeBar}
-        <Tabs vModel={this.tab} class={bem('tab')} line-width={120}>
+        <Tabs vModel={this.tab} class={bem('tab')} border={false}>
           {CouponTab}
           {DisabledCouponTab}
         </Tabs>
-        <Button
-          vShow={this.showCloseButton}
-          size="large"
-          class={bem('close')}
-          text={this.closeButtonText || t('close')}
-          onClick={onChange(-1)}
-        />
+        <div class={bem('bottom')}>
+          <Button
+            vShow={this.showCloseButton}
+            round
+            type="danger"
+            block
+            class={bem('close')}
+            text={this.closeButtonText || t('close')}
+            onClick={onChange(-1)}
+          />
+        </div>
       </div>
     );
-  }
+  },
 });

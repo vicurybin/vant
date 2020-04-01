@@ -1,15 +1,14 @@
-/* eslint-disable object-shorthand */
 import Search from '..';
-import { mount } from '../../../test/utils';
+import { mount } from '../../../test';
 
-test('listen input event', () => {
+test('input event', () => {
   const onInput = jest.fn();
   const wrapper = mount(Search, {
     context: {
       on: {
-        input: onInput
-      }
-    }
+        input: onInput,
+      },
+    },
   });
 
   const input = wrapper.find('input');
@@ -19,31 +18,31 @@ test('listen input event', () => {
   expect(onInput).toHaveBeenCalledWith('1');
 });
 
-test('cancel search', () => {
+test('cancel event', () => {
   const onInput = jest.fn();
   const onCancel = jest.fn();
 
   const wrapper = mount(Search, {
     propsData: {
       value: 'test',
-      showAction: true
+      showAction: true,
     },
     context: {
       on: {
         input: onInput,
-        cancel: onCancel
-      }
-    }
+        cancel: onCancel,
+      },
+    },
   });
 
-  const cancel = wrapper.find('.van-search__action div');
+  const cancel = wrapper.find('.van-search__action');
   cancel.trigger('click');
 
   expect(onInput).toHaveBeenCalledWith('');
   expect(onCancel).toHaveBeenCalled();
 });
 
-test('emit a search event', () => {
+test('search event', () => {
   const onSearch = jest.fn();
   const onKeypress = jest.fn();
 
@@ -51,9 +50,9 @@ test('emit a search event', () => {
     context: {
       on: {
         search: onSearch,
-        keypress: onKeypress
-      }
-    }
+        keypress: onKeypress,
+      },
+    },
   });
 
   const input = wrapper.find('input');
@@ -64,13 +63,21 @@ test('emit a search event', () => {
   expect(onKeypress).toHaveBeenCalled();
 });
 
-test('render label slot', () => {
+test('label slot', () => {
   const wrapper = mount(Search, {
     scopedSlots: {
-      label() {
-        return 'Custom Label';
-      }
-    }
+      label: () => 'Custom Label',
+    },
+  });
+
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('left slot', () => {
+  const wrapper = mount(Search, {
+    scopedSlots: {
+      left: () => 'Custom Left Content',
+    },
   });
 
   expect(wrapper).toMatchSnapshot();
@@ -79,8 +86,8 @@ test('render label slot', () => {
 test('left-icon prop', () => {
   const wrapper = mount(Search, {
     propsData: {
-      leftIcon: 'setting-o'
-    }
+      leftIcon: 'setting-o',
+    },
   });
 
   expect(wrapper).toMatchSnapshot();
@@ -89,8 +96,8 @@ test('left-icon prop', () => {
 test('right-icon prop', () => {
   const wrapper = mount(Search, {
     propsData: {
-      rightIcon: 'setting-o'
-    }
+      rightIcon: 'setting-o',
+    },
   });
 
   expect(wrapper).toMatchSnapshot();
@@ -99,10 +106,19 @@ test('right-icon prop', () => {
 test('right-icon slot', () => {
   const wrapper = mount(Search, {
     scopedSlots: {
-      'right-icon'() {
-        return 'Custom Right Icon';
-      }
-    }
+      'right-icon': () => 'Custom Right Icon',
+    },
+  });
+
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('action-text prop', () => {
+  const wrapper = mount(Search, {
+    propsData: {
+      actionText: 'Custom Text',
+      showAction: true,
+    },
   });
 
   expect(wrapper).toMatchSnapshot();

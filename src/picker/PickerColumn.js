@@ -1,5 +1,5 @@
 import { deepClone } from '../utils/deep-clone';
-import { createNamespace, isObj } from '../utils';
+import { createNamespace, isObject } from '../utils';
 import { range } from '../utils/format/number';
 import { preventDefault } from '../utils/dom/event';
 import { TouchMixin } from '../mixins/touch';
@@ -8,8 +8,7 @@ const DEFAULT_DURATION = 200;
 
 // 惯性滑动思路:
 // 在手指离开屏幕时，如果和上一次 move 时的间隔小于 `MOMENTUM_LIMIT_TIME` 且 move
-// 距离大于 `MOMENTUM_LIMIT_DISTANCE` 时，执行惯性滑动，持续 `MOMENTUM_DURATION`
-const MOMENTUM_DURATION = 1000;
+// 距离大于 `MOMENTUM_LIMIT_DISTANCE` 时，执行惯性滑动
 const MOMENTUM_LIMIT_TIME = 300;
 const MOMENTUM_LIMIT_DISTANCE = 15;
 
@@ -24,7 +23,7 @@ function getElementTranslateY(element) {
 }
 
 function isOptionDisabled(option) {
-  return isObj(option) && option.disabled;
+  return isObject(option) && option.disabled;
 }
 
 export default createComponent({
@@ -32,14 +31,16 @@ export default createComponent({
 
   props: {
     valueKey: String,
+    allowHtml: Boolean,
     className: String,
-    itemHeight: Number,
+    itemHeight: [Number, String],
     defaultIndex: Number,
-    visibleItemCount: Number,
+    swipeDuration: [Number, String],
+    visibleItemCount: [Number, String],
     initialOptions: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
 
   data() {
@@ -47,7 +48,7 @@ export default createComponent({
       offset: 0,
       duration: 0,
       options: deepClone(this.initialOptions),
-      currentIndex: this.defaultIndex
+      currentIndex: this.defaultIndex,
     };
   },
 
@@ -59,6 +60,10 @@ export default createComponent({
     this.setIndex(this.currentIndex);
   },
 
+  mounted() {
+    this.bindTouchEvent(this.$el);
+  },
+
   destroyed() {
     const { children } = this.$parent;
 
@@ -68,39 +73,56 @@ export default createComponent({
   },
 
   watch: {
-    defaultIndex() {
-      this.setIndex(this.defaultIndex);
-    }
+    initialOptions: 'setOptions',
+
+    defaultIndex(val) {
+      this.setIndex(val);
+    },
   },
 
   computed: {
     count() {
       return this.options.length;
-    }
+    },
+
+    baseOffset() {
+      return (this.itemHeight * (this.visibleItemCount - 1)) / 2;
+    },
   },
 
   methods: {
+    setOptions(options) {
+      if (JSON.stringify(options) !== JSON.stringify(this.options)) {
+        this.options = deepClone(options);
+        this.setIndex(this.defaultIndex);
+      }
+    },
+
     onTouchStart(event) {
       this.touchStart(event);
 
       if (this.moving) {
         const translateY = getElementTranslateY(this.$refs.wrapper);
-        this.startOffset = Math.min(0, translateY);
+        this.offset = Math.min(0, translateY - this.baseOffset);
+        this.startOffset = this.offset;
       } else {
         this.startOffset = this.offset;
       }
 
       this.duration = 0;
-      this.moving = false;
       this.transitionEndTrigger = null;
       this.touchStartTime = Date.now();
       this.momentumOffset = this.startOffset;
     },
 
     onTouchMove(event) {
-      preventDefault(event);
-      this.moving = true;
       this.touchMove(event);
+
+      if (this.direction === 'vertical') {
+        this.moving = true;
+        preventDefault(event, true);
+      }
+
       this.offset = range(
         this.startOffset + this.deltaY,
         -(this.count * this.itemHeight),
@@ -118,18 +140,23 @@ export default createComponent({
       const distance = this.offset - this.momentumOffset;
       const duration = Date.now() - this.touchStartTime;
       const allowMomentum =
-        duration < MOMENTUM_LIMIT_TIME && Math.abs(distance) > MOMENTUM_LIMIT_DISTANCE;
+        duration < MOMENTUM_LIMIT_TIME &&
+        Math.abs(distance) > MOMENTUM_LIMIT_DISTANCE;
 
       if (allowMomentum) {
         this.momentum(distance, duration);
         return;
       }
 
-      if (this.offset !== this.startOffset) {
-        this.duration = DEFAULT_DURATION;
-        const index = this.getIndexByOffset(this.offset);
-        this.setIndex(index, true);
-      }
+      const index = this.getIndexByOffset(this.offset);
+      this.duration = DEFAULT_DURATION;
+      this.setIndex(index, true);
+
+      // compatible with desktop scenario
+      // use setTimeout to skip the click event triggered after touchstart
+      setTimeout(() => {
+        this.moving = false;
+      }, 0);
     },
 
     onTransitionEnd() {
@@ -137,6 +164,10 @@ export default createComponent({
     },
 
     onClickItem(index) {
+      if (this.moving) {
+        return;
+      }
+
       this.duration = DEFAULT_DURATION;
       this.setIndex(index, true);
     },
@@ -154,30 +185,35 @@ export default createComponent({
     },
 
     getOptionText(option) {
-      return isObj(option) && this.valueKey in option ? option[this.valueKey] : option;
+      if (isObject(option) && this.valueKey in option) {
+        return option[this.valueKey];
+      }
+      return option;
     },
 
-    setIndex(index, userAction) {
+    setIndex(index, emitChange) {
       index = this.adjustIndex(index) || 0;
-      this.offset = -index * this.itemHeight;
+
+      const offset = -index * this.itemHeight;
 
       const trigger = () => {
         if (index !== this.currentIndex) {
           this.currentIndex = index;
 
-          if (userAction) {
+          if (emitChange) {
             this.$emit('change', index);
           }
         }
       };
 
-      // 若有触发过 `touchmove` 事件，那应该
-      // 在 `transitionend` 后再触发 `change` 事件
-      if (this.moving) {
+      // trigger the change event after transitionend when moving
+      if (this.moving && offset !== this.offset) {
         this.transitionEndTrigger = trigger;
       } else {
         trigger();
       }
+
+      this.offset = offset;
     },
 
     setValue(value) {
@@ -200,11 +236,11 @@ export default createComponent({
     momentum(distance, duration) {
       const speed = Math.abs(distance / duration);
 
-      distance = this.offset + (speed / 0.002) * (distance < 0 ? -1 : 1);
+      distance = this.offset + (speed / 0.003) * (distance < 0 ? -1 : 1);
 
       const index = this.getIndexByOffset(distance);
 
-      this.duration = MOMENTUM_DURATION;
+      this.duration = +this.swipeDuration;
       this.setIndex(index, true);
     },
 
@@ -216,57 +252,67 @@ export default createComponent({
         this.transitionEndTrigger();
         this.transitionEndTrigger = null;
       }
-    }
+    },
+
+    genOptions() {
+      const optionStyle = {
+        height: `${this.itemHeight}px`,
+      };
+
+      return this.options.map((option, index) => {
+        const text = this.getOptionText(option);
+        const disabled = isOptionDisabled(option);
+
+        const data = {
+          style: optionStyle,
+          attrs: {
+            role: 'button',
+            tabindex: disabled ? -1 : 0,
+          },
+          class: [
+            'van-ellipsis',
+            bem('item', {
+              disabled,
+              selected: index === this.currentIndex,
+            }),
+          ],
+          on: {
+            click: () => {
+              this.onClickItem(index);
+            },
+          },
+        };
+
+        if (this.allowHtml) {
+          data.domProps = {
+            innerHTML: text,
+          };
+        }
+
+        return <li {...data}>{this.allowHtml ? '' : text}</li>;
+      });
+    },
   },
 
   render() {
-    const { itemHeight, visibleItemCount } = this;
-
-    const baseOffset = (itemHeight * (visibleItemCount - 1)) / 2;
-
     const wrapperStyle = {
-      transform: `translate3d(0, ${this.offset + baseOffset}px, 0)`,
+      transform: `translate3d(0, ${this.offset + this.baseOffset}px, 0)`,
       transitionDuration: `${this.duration}ms`,
       transitionProperty: this.duration ? 'all' : 'none',
-      lineHeight: `${itemHeight}px`
-    };
-
-    const optionStyle = {
-      height: `${itemHeight}px`
+      lineHeight: `${this.itemHeight}px`,
     };
 
     return (
-      <div
-        class={[bem(), this.className]}
-        onTouchstart={this.onTouchStart}
-        onTouchmove={this.onTouchMove}
-        onTouchend={this.onTouchEnd}
-        onTouchcancel={this.onTouchEnd}
-      >
+      <div class={[bem(), this.className]}>
         <ul
           ref="wrapper"
           style={wrapperStyle}
           class={bem('wrapper')}
           onTransitionend={this.onTransitionEnd}
         >
-          {this.options.map((option, index) => (
-            <li
-              style={optionStyle}
-              class={[
-                'van-ellipsis',
-                bem('item', {
-                  disabled: isOptionDisabled(option),
-                  selected: index === this.currentIndex
-                })
-              ]}
-              domPropsInnerHTML={this.getOptionText(option)}
-              onClick={() => {
-                this.onClickItem(index);
-              }}
-            />
-          ))}
+          {this.genOptions()}
         </ul>
       </div>
     );
-  }
+  },
 });

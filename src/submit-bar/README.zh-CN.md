@@ -2,7 +2,8 @@
 
 ### 引入
 
-``` javascript
+```js
+import Vue from 'vue';
 import { SubmitBar } from 'vant';
 
 Vue.use(SubmitBar);
@@ -59,9 +60,9 @@ Vue.use(SubmitBar);
   @submit="onSubmit"
 >
   <van-checkbox v-model="checked">全选</van-checkbox>
-  <span slot="tip">
-    你的收货地址不支持同城送, <span>修改地址</span>
-  </span>
+  <template #tip>
+    你的收货地址不支持同城送, <span @click="onClickEditAddress">修改地址</span>
+  </template>
 </van-submit-bar>
 ```
 
@@ -69,20 +70,21 @@ Vue.use(SubmitBar);
 
 ### Props
 
-| 参数 | 说明 | 类型 | 默认值 | 版本 |
-|------|------|------|------|------|
-| price | 价格（单位分） | `number` | - | - |
-| label | 价格左侧文案 | `string` | `合计：` | - |
-| suffix-label | 价格右侧文案 | `string` | - | 2.0.0 |
-| button-text | 按钮文字 | `string` | - | - |
-| button-type | 按钮类型 | `string` | `danger` | - |
-| tip | 提示文案 |  `string` | - | - |
-| tip-icon | 左侧图标名称或图片链接，可选值见 Icon 组件 |  `string` | - | - |
-| disabled | 是否禁用按钮 | `boolean` | `false` | - |
-| loading | 是否显示加载中的按钮 |  `boolean` | `false` | - |
-| currency | 货币符号 | `string` | `¥` | - |
-| decimal-length | 价格小数点后位数 | `number` | `2` | 1.6.15 | 
-| safe-area-inset-bottom | 是否开启 iPhone X 底部安全区适配，需要在 `viewport` meta 标签中设置 `viewport-fit=cover` | `boolean` | `false` | 1.6.15 |
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|------|
+| price | 价格（单位分） | *number* | - |
+| label | 价格左侧文案 | *string* | `合计：` |
+| suffix-label | 价格右侧文案 | *string* | - |
+| text-align `v2.3.0` | 价格文案对齐方向，可选值为 `left` | *string* | `right` |
+| button-text | 按钮文字 | *string* | - |
+| button-type | 按钮类型 | *string* | `danger` |
+| tip | 提示文案 |  *string* | - |
+| tip-icon | 左侧[图标名称](#/zh-CN/icon)或图片链接 |  *string* | - |
+| currency | 货币符号 | *string* | `¥` |
+| decimal-length | 价格小数点后位数 | *number \| string* | `2` |
+| disabled | 是否禁用按钮 | *boolean* | `false` |
+| loading | 是否显示加载中的按钮 |  *boolean* | `false` |
+| safe-area-inset-bottom | 是否开启[底部安全区适配](#/zh-CN/quickstart#di-bu-an-quan-qu-gua-pei) | *boolean* | `true` |
 
 ### Events
 

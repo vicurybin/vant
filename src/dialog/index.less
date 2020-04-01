@@ -26,20 +26,26 @@
   background-color: @dialog-background-color;
   transform: translate3d(-50%, -50%, 0);
   backface-visibility: hidden; // avoid blurry text after scale animation
+  transition: @dialog-transition;
+  transition-property: transform, opacity;
+
+  @media (max-width: 321px) {
+    width: @dialog-small-screen-width;
+  }
   @my-selector: van-dialog;
   &&--description {
     padding:0 20px 20px 20px;
     box-sizing: border-box;
+    background: #fff;
     .@{my-selector}__footer {
-      overflow: hidden;
       user-select: none;
       &--buttons{
         justify-content: space-between;
+        background: #ffffff;
       }
 
       .van-button {
         border-radius: 25px;
-        flex: unset;  
         // width: 46%;     
       }
     }
@@ -79,6 +85,7 @@
     max-height: @dialog-message-max-height;
     overflow-y: auto;
     text-align: center;
+    word-wrap: break-word;
     -webkit-overflow-scrolling: touch;
     background:@white;
     // allow newline charactor
@@ -126,6 +133,7 @@
 
   .van-button {
     border: 0;
+    border-radius: 0;
   }
 
   &__confirm {

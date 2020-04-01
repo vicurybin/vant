@@ -1,23 +1,38 @@
 import Rate from '..';
-import { mount, triggerDrag } from '../../../test/utils';
+import { mount, triggerDrag } from '../../../test';
+
+function mockGetBoundingClientRect(items) {
+  items.filter((icon, index) => {
+    icon.element.getBoundingClientRect = () => ({
+      left: index * 25,
+      width: 25,
+    });
+    return true;
+  });
+}
 
 test('change event', () => {
   const onInput = jest.fn();
   const onChange = jest.fn();
 
   const wrapper = mount(Rate, {
-    context: {
-      on: {
-        input: onInput,
-        change: onChange
-      }
-    }
+    listeners: {
+      input: value => {
+        onInput(value);
+        wrapper.setProps({ value });
+      },
+      change: onChange,
+    },
   });
   const item4 = wrapper.findAll('.van-rate__icon').at(3);
 
   item4.trigger('click');
+  item4.trigger('click');
+
   expect(onInput).toHaveBeenCalledWith(4);
+  expect(onInput).toHaveBeenCalledTimes(1);
   expect(onChange).toHaveBeenCalledWith(4);
+  expect(onChange).toHaveBeenCalledTimes(1);
 });
 
 test('allow half', () => {
@@ -26,14 +41,12 @@ test('allow half', () => {
 
   const wrapper = mount(Rate, {
     propsData: {
-      allowHalf: true
+      allowHalf: true,
     },
-    context: {
-      on: {
-        input: onInput,
-        change: onChange
-      }
-    }
+    listeners: {
+      input: onInput,
+      change: onChange,
+    },
   });
   const item4 = wrapper.findAll('.van-rate__icon--half').at(3);
 
@@ -48,52 +61,68 @@ test('disabled', () => {
 
   const wrapper = mount(Rate, {
     propsData: {
-      disabled: true
+      disabled: true,
     },
-    context: {
-      on: {
-        input: onInput,
-        change: onChange
-      }
-    }
+    listeners: {
+      input: onInput,
+      change: onChange,
+    },
   });
   const item4 = wrapper.findAll('.van-rate__item').at(3);
 
+  triggerDrag(wrapper, 100, 0);
   item4.trigger('click');
+
   expect(onInput).toHaveBeenCalledTimes(0);
   expect(onChange).toHaveBeenCalledTimes(0);
 });
 
-test('touchmove', () => {
+test('touchmove to select item', () => {
   const onChange = jest.fn();
   const wrapper = mount(Rate, {
-    context: {
-      on: {
-        change: onChange
-      }
-    }
+    listeners: {
+      change: onChange,
+    },
   });
+
+  const icons = wrapper.findAll('.van-rate__item');
+
+  mockGetBoundingClientRect(icons);
   triggerDrag(wrapper, 100, 0);
 
-  const icons = wrapper.findAll('.van-icon');
-  document.elementFromPoint = function (x) {
-    const index = Math.round(x / 20);
-    if (index < icons.length) {
-      return icons.at(index).element;
-    }
-  };
+  expect(onChange).toHaveBeenNthCalledWith(1, 1);
+  expect(onChange).toHaveBeenNthCalledWith(2, 2);
+  expect(onChange).toHaveBeenNthCalledWith(3, 2);
+  expect(onChange).toHaveBeenNthCalledWith(4, 4);
+});
 
+test('touchmove to select half item', () => {
+  const onChange = jest.fn();
+  const wrapper = mount(Rate, {
+    propsData: {
+      allowHalf: true,
+    },
+    listeners: {
+      change: onChange,
+    },
+  });
+
+  const icons = wrapper.findAll('.van-rate__item');
+
+  mockGetBoundingClientRect(icons);
   triggerDrag(wrapper, 100, 0);
-  expect(onChange).toHaveBeenNthCalledWith(1, 2);
-  expect(onChange).toHaveBeenNthCalledWith(2, 3);
-  expect(onChange).toHaveBeenNthCalledWith(3, 4);
+
+  expect(onChange).toHaveBeenNthCalledWith(1, 1);
+  expect(onChange).toHaveBeenNthCalledWith(2, 1.5);
+  expect(onChange).toHaveBeenNthCalledWith(3, 2);
+  expect(onChange).toHaveBeenNthCalledWith(4, 4);
 });
 
 test('gutter prop', () => {
   const wrapper = mount(Rate, {
     propsData: {
-      gutter: 10
-    }
+      gutter: 10,
+    },
   });
 
   expect(wrapper).toMatchSnapshot();
@@ -102,9 +131,24 @@ test('gutter prop', () => {
 test('size prop', () => {
   const wrapper = mount(Rate, {
     propsData: {
-      size: '2rem'
-    }
+      size: '2rem',
+    },
   });
 
   expect(wrapper).toMatchSnapshot();
+});
+
+test('untouchable', () => {
+  const onChange = jest.fn();
+  const wrapper = mount(Rate, {
+    propsData: {
+      touchable: false,
+    },
+    listeners: {
+      change: onChange,
+    },
+  });
+
+  triggerDrag(wrapper, 100, 0);
+  expect(onChange).toHaveBeenCalledTimes(0);
 });

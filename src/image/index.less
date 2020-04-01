@@ -7,6 +7,10 @@
   &--round {
     overflow: hidden;
     border-radius: 50%;
+
+    img {
+      border-radius: inherit;
+    }
   }
 
   &__img,
@@ -29,5 +33,13 @@
     color: @image-placeholder-text-color;
     font-size: @image-placeholder-font-size;
     background-color: @image-placeholder-background-color;
+  }
+
+  &__loading-icon {
+    font-size: @image-loading-icon-size;
+  }
+
+  &__error-icon {
+    font-size: @image-error-icon-size;
   }
 }

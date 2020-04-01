@@ -1,5 +1,6 @@
 import { createNamespace } from '../utils';
 import { ChildrenMixin } from '../mixins/relation';
+import { BORDER_BOTTOM } from '../utils/constant';
 
 const [createComponent, bem] = createNamespace('index-anchor');
 
@@ -7,13 +8,15 @@ export default createComponent({
   mixins: [ChildrenMixin('vanIndexBar', { indexKey: 'childrenIndex' })],
 
   props: {
-    index: [Number, String]
+    index: [Number, String],
   },
 
   data() {
     return {
       top: 0,
-      active: false
+      left: null,
+      width: null,
+      active: false,
     };
   },
 
@@ -25,12 +28,14 @@ export default createComponent({
     anchorStyle() {
       if (this.sticky) {
         return {
+          zIndex: `${this.parent.zIndex}`,
+          left: this.left ? `${this.left}px` : null,
+          width: this.width ? `${this.width}px` : null,
           transform: `translate3d(0, ${this.top}px, 0)`,
           color: this.parent.highlightColor,
-          zIndex: `${this.parent.zIndex}`
         };
       }
-    }
+    },
   },
 
   mounted() {
@@ -40,7 +45,7 @@ export default createComponent({
   methods: {
     scrollIntoView() {
       this.$el.scrollIntoView();
-    }
+    },
   },
 
   render() {
@@ -50,11 +55,11 @@ export default createComponent({
       <div style={{ height: sticky ? `${this.height}px` : null }}>
         <div
           style={this.anchorStyle}
-          class={[bem({ sticky }), { 'van-hairline--bottom': sticky }]}
+          class={[bem({ sticky }), { [BORDER_BOTTOM]: sticky }]}
         >
           {this.slots('default') || this.index}
         </div>
       </div>
     );
-  }
+  },
 });

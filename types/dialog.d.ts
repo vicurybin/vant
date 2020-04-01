@@ -1,13 +1,19 @@
+import { VanComponent } from './component';
+
 type DialogAction = 'confirm' | 'cancel';
 type DialogDone = (close?: boolean) => void;
 
 export type DialogOptions = {
   title?: string;
+  width?: string | number;
   message?: string;
   overlay?: boolean;
   className?: any;
   lockScroll?: boolean;
+  transition?: string;
   messageAlign?: string;
+  overlayClass?: string;
+  overlayStyle?: object;
   closeOnPopstate?: boolean;
   cancelButtonText?: string;
   cancelButtonColor?: string;
@@ -16,7 +22,7 @@ export type DialogOptions = {
   showConfirmButton?: boolean;
   showCancelButton?: boolean;
   closeOnClickOverlay?: boolean;
-  getContainer?: string | (() => HTMLElement);
+  getContainer?: string | (() => Element);
   beforeClose?: (action: DialogAction, done: DialogDone) => void;
 };
 
@@ -28,7 +34,7 @@ export interface Dialog {
   install(): void;
   setDefaultOptions(options: DialogOptions): void;
   resetDefaultOptions(): void;
-  Component: any;
+  Component: typeof VanComponent;
 }
 
 declare module 'vue/types/vue' {

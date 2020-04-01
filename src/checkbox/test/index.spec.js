@@ -1,6 +1,5 @@
 import Checkbox from '..';
-import CheckboxGroup from '../../checkbox-group';
-import { mount, later } from '../../../test/utils';
+import { mount, later } from '../../../test';
 
 test('switch checkbox', async () => {
   const wrapper = mount(Checkbox);
@@ -21,8 +20,8 @@ test('switch checkbox', async () => {
 test('disabled', () => {
   const wrapper = mount(Checkbox, {
     propsData: {
-      disabled: true
-    }
+      disabled: true,
+    },
   });
 
   wrapper.find('.van-checkbox__icon').trigger('click');
@@ -32,11 +31,11 @@ test('disabled', () => {
 test('label disabled', () => {
   const wrapper = mount(Checkbox, {
     scopedSlots: {
-      default: () => 'Label'
+      default: () => 'Label',
     },
     propsData: {
-      labelDisabled: true
-    }
+      labelDisabled: true,
+    },
   });
 
   wrapper.find('.van-checkbox__label').trigger('click');
@@ -47,20 +46,17 @@ test('label disabled', () => {
 test('checkbox group', async () => {
   const wrapper = mount({
     template: `
-      <checkbox-group v-model="result" :max="2">
-        <checkbox v-for="item in list" :key="item" :name="item"></checkbox>
-      </checkbox-group>
+      <van-checkbox-group v-model="result" :max="2">
+        <van-checkbox name="a" />
+        <van-checkbox name="b" />
+        <van-checkbox name="c" />
+      </van-checkbox-group>
     `,
-    components: {
-      Checkbox,
-      CheckboxGroup
-    },
     data() {
       return {
         result: [],
-        list: ['a', 'b', 'c']
       };
-    }
+    },
   });
 
   const icons = wrapper.findAll('.van-checkbox__icon');
@@ -81,8 +77,8 @@ test('click event', () => {
   const onClick = jest.fn();
   const wrapper = mount(Checkbox, {
     listeners: {
-      click: onClick
-    }
+      click: onClick,
+    },
   });
 
   wrapper.trigger('click');
@@ -96,12 +92,96 @@ test('click event', () => {
 test('label-position prop', () => {
   const wrapper = mount(Checkbox, {
     scopedSlots: {
-      default: () => 'Label'
+      default: () => 'Label',
     },
     propsData: {
-      labelPosition: 'left'
-    }
+      labelPosition: 'left',
+    },
   });
 
   expect(wrapper).toMatchSnapshot();
+});
+
+test('icon-size prop', () => {
+  const wrapper = mount({
+    template: `
+      <van-checkbox-group icon-size="10rem">
+        <van-checkbox>label</van-checkbox>
+        <van-checkbox icon-size="5rem">label</van-checkbox>
+      </van-checkbox-group>
+    `,
+  });
+
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('checked-color prop', () => {
+  const wrapper = mount({
+    template: `
+      <van-checkbox-group :value="['a', 'b']" checked-color="black">
+        <van-checkbox name="a" :value="true">label</van-checkbox>
+        <van-checkbox name="b" :value="true" checked-color="white">label</van-checkbox>
+      </van-checkbox-group>
+    `,
+  });
+
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('bind-group prop', async () => {
+  const wrapper = mount({
+    template: `
+      <van-checkbox-group v-model="result">
+        <van-checkbox v-model="value" :bind-group="false" />
+        <van-checkbox v-for="item in list" :key="item" :name="item"></van-checkbox>
+      </van-checkbox-group>
+    `,
+    data() {
+      return {
+        value: false,
+        result: [],
+        list: ['a', 'b', 'c'],
+      };
+    },
+  });
+
+  const icons = wrapper.findAll('.van-checkbox__icon');
+  icons.at(0).trigger('click');
+  await later();
+  expect(wrapper.vm.result).toEqual([]);
+  expect(wrapper.vm.value).toBeTruthy();
+});
+
+test('toggleAll method', async () => {
+  const wrapper = mount({
+    template: `
+      <van-checkbox-group v-model="result" ref="group">
+        <van-checkbox name="a" />
+        <van-checkbox name="b" />
+        <van-checkbox name="c" />
+      </van-checkbox-group>
+    `,
+    data() {
+      return {
+        result: ['a'],
+      };
+    },
+    methods: {
+      toggleAll(checked) {
+        this.$refs.group.toggleAll(checked);
+      },
+    },
+  });
+
+  wrapper.vm.toggleAll();
+  await later();
+  expect(wrapper.vm.result).toEqual(['b', 'c']);
+
+  wrapper.vm.toggleAll(false);
+  await later();
+  expect(wrapper.vm.result).toEqual([]);
+
+  wrapper.vm.toggleAll(true);
+  await later();
+  expect(wrapper.vm.result).toEqual(['a', 'b', 'c']);
 });

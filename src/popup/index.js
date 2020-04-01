@@ -1,27 +1,38 @@
 import { createNamespace, isDef } from '../utils';
 import { PopupMixin } from '../mixins/popup';
+import Icon from '../icon';
 
 const [createComponent, bem] = createNamespace('popup');
 
 export default createComponent({
-  mixins: [PopupMixin],
+  mixins: [PopupMixin()],
 
   props: {
     round: Boolean,
-    duration: Number,
+    duration: [Number, String],
+    closeable: Boolean,
     transition: String,
+    safeAreaInsetBottom: Boolean,
+    closeIcon: {
+      type: String,
+      default: 'cross',
+    },
+    closeIconPosition: {
+      type: String,
+      default: 'top-right',
+    },
     position: {
       type: String,
-      default: 'center'
+      default: 'center',
     },
     overlay: {
       type: Boolean,
-      default: true
+      default: true,
     },
     closeOnClickOverlay: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   beforeCreate() {
@@ -38,14 +49,16 @@ export default createComponent({
     }
 
     const { round, position, duration } = this;
+    const isCenter = position === 'center';
 
     const transitionName =
       this.transition ||
-      (position === 'center' ? 'van-fade' : `van-popup-slide-${position}`);
+      (isCenter ? 'van-fade' : `van-popup-slide-${position}`);
 
     const style = {};
     if (isDef(duration)) {
-      style.transitionDuration = `${duration}s`;
+      const key = isCenter ? 'animationDuration' : 'transitionDuration';
+      style[key] = `${duration}s`;
     }
 
     return (
@@ -57,12 +70,25 @@ export default createComponent({
         <div
           vShow={this.value}
           style={style}
-          class={bem({ round, [position]: position })}
+          class={bem({
+            round,
+            [position]: position,
+            'safe-area-inset-bottom': this.safeAreaInsetBottom,
+          })}
           onClick={this.onClick}
         >
           {this.slots()}
+          {this.closeable && (
+            <Icon
+              role="button"
+              tabindex="0"
+              name={this.closeIcon}
+              class={bem('close-icon', this.closeIconPosition)}
+              onClick={this.close}
+            />
+          )}
         </div>
       </transition>
     );
-  }
+  },
 });

@@ -2,7 +2,8 @@
 
 ### Install
 
-``` javascript
+```js
+import Vue from 'vue';
 import { Image } from 'vant';
 
 Vue.use(Image);
@@ -56,6 +57,7 @@ Show round image, it may not works at `fit=contain` and `fit=scale-down`
 ```
 
 ```js
+import Vue from 'vue';
 import { Lazyload } from 'vant';
 
 Vue.use(Lazyload);
@@ -67,15 +69,18 @@ Vue.use(Lazyload);
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|
-| src | Src | `string` | - | - |
-| fit | Fit mode | `string` | `fill` | - |
-| alt | Alt | `string` | - | - |
-| width | Width | `string | number` | - | - |
-| height | Height | `string | number` | - | - |
-| round | Whether to be round | `boolean` | `false` | - |
-| lazy-load | Whether to enable lazy load，should register [Lazyload](#/en-US/lazyload) component | `boolean` | `false` | - |
-| show-error | Whether to show error placeholder | `boolean` | `true` |
-| show-loading | Whether to show loading placeholder | `boolean` | `true` |
+| src | Src | *string* | - |
+| fit | Fit mode | *string* | `fill` |
+| alt | Alt | *string* | - |
+| width | Width | *number \| string* | - |
+| height | Height | *number \| string* | - |
+| radius `v2.1.6` | Border Radius | *number \| string* | `0` |
+| round | Whether to be round | *boolean* | `false` |
+| lazy-load | Whether to enable lazy load，should register [Lazyload](#/en-US/lazyload) component | *boolean* | `false` |
+| show-error `v2.0.9` | Whether to show error placeholder | *boolean* | `true` |
+| show-loading `v2.0.9` | Whether to show loading placeholder | *boolean* | `true` |
+| error-icon `v2.4.2` | Error icon | *string* | `warning-o` |
+| loading-icon `v2.4.2` | Loading icon | *string* | `photo-o` |
 
 ### fit optional value
 
@@ -91,7 +96,7 @@ Vue.use(Lazyload);
 
 | Event | Description | Arguments |
 |------|------|------|
-| click | Triggered when click image | event: Event |
+| click | Triggered when click image | *event: Event* |
 | load | Triggered when image loaded | - |
 | error | Triggered when image load failed | - |
 

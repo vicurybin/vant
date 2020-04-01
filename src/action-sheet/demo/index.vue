@@ -1,144 +1,137 @@
 <template>
   <demo-section>
-    <demo-block :title="$t('basicUsage')">
-      <van-button
-        type="primary"
-        @click="show1 = true"
-      >
-        {{ $t('buttonText') }}
-      </van-button>
-      <van-action-sheet
-        v-model="show1"
-        :actions="simpleActions"
-        safe-area-inset-bottom
-        @select="onSelect"
+    <demo-block :title="t('basicUsage')">
+      <van-cell is-link :title="t('basicUsage')" @click="show.basic = true" />
+      <van-cell is-link :title="t('showCancel')" @click="show.cancel = true" />
+      <van-cell
+        is-link
+        :title="t('showDescription')"
+        @click="show.description = true"
       />
     </demo-block>
 
-    <demo-block :title="$t('status')">
-      <van-button
-        type="primary"
-        @click="show2 = true"
-      >
-        {{ $t('buttonText') }}
-      </van-button>
-      <van-action-sheet
-        v-model="show2"
-        :actions="statusActions"
-        safe-area-inset-bottom
-        @select="onSelect"
+    <demo-block :title="t('optionStatus')">
+      <van-cell
+        is-link
+        :title="t('optionStatus')"
+        @click="show.status = true"
       />
     </demo-block>
 
-    <demo-block :title="$t('title2')">
-      <van-button
-        type="primary"
-        @click="show3 = true"
-      >
-        {{ $t('buttonText') }}
-      </van-button>
-      <van-action-sheet
-        v-model="show3"
-        :actions="simpleActions"
-        :cancel-text="$t('cancel')"
-        safe-area-inset-bottom
-        @cancel="onCancel"
-        @select="onSelect"
-      />
+    <demo-block :title="t('customPanel')">
+      <van-cell is-link :title="t('customPanel')" @click="show.title = true" />
     </demo-block>
 
-    <demo-block :title="$t('title3')">
-      <van-button
-        type="primary"
-        @click="show4 = true"
-      >
-        {{ $t('buttonText') }}
-      </van-button>
-      <van-action-sheet
-        v-model="show4"
-        :title="$t('title')"
-        safe-area-inset-bottom
-      >
-        <p>{{ $t('content') }}</p>
-      </van-action-sheet>
-    </demo-block>
+    <van-action-sheet
+      v-model="show.basic"
+      :actions="simpleActions"
+      @select="onSelect"
+    />
+
+    <van-action-sheet
+      v-model="show.status"
+      close-on-click-action
+      :actions="statusActions"
+      :cancel-text="t('cancel')"
+    />
+
+    <van-action-sheet
+      v-model="show.cancel"
+      :actions="simpleActions"
+      close-on-click-action
+      :cancel-text="t('cancel')"
+      @cancel="onCancel"
+    />
+
+    <van-action-sheet
+      v-model="show.description"
+      :actions="simpleActions"
+      close-on-click-action
+      :description="t('description')"
+    />
+
+    <van-action-sheet v-model="show.title" :title="t('title')">
+      <div class="demo-action-sheet-content">{{ t('content') }}</div>
+    </van-action-sheet>
   </demo-section>
 </template>
 
 <script>
+import { GREEN } from '../../utils/constant';
+
 export default {
   i18n: {
     'zh-CN': {
+      subname: '副文本',
+      showCancel: '展示取消按钮',
       buttonText: '弹出菜单',
-      title2: '展示取消按钮',
-      title3: '展示标题栏',
-      status: '选项状态',
-      description: '描述信息',
-      disabledOption: '禁用选项'
+      customPanel: '自定义面板',
+      description: '这是一段描述信息',
+      optionStatus: '选项状态',
+      disabledOption: '禁用选项',
+      showDescription: '展示描述信息',
     },
     'en-US': {
+      subname: 'Subname',
+      showCancel: 'Show Cancel Button',
       buttonText: 'Show ActionSheet',
-      title2: 'ActionSheet with cancel button',
-      title3: 'ActionSheet with title',
-      status: 'Status',
+      customPanel: 'Custom Panel',
       description: 'Description',
-      disabledOption: 'Disabled Option'
-    }
+      optionStatus: 'Option Status',
+      disabledOption: 'Disabled Option',
+      showDescription: 'Show Description',
+    },
   },
 
   data() {
     return {
-      show1: false,
-      show2: false,
-      show3: false,
-      show4: false
+      show: {
+        basic: false,
+        cancel: false,
+        title: false,
+        status: false,
+        description: false,
+      },
     };
   },
 
   computed: {
     simpleActions() {
       return [
-        { name: this.$t('option') },
-        { name: this.$t('option') },
-        { name: this.$t('option'), subname: this.$t('description') }
+        { name: this.t('option') },
+        { name: this.t('option') },
+        { name: this.t('option'), subname: this.t('subname') },
       ];
     },
 
     statusActions() {
       return [
-        { name: this.$t('option') },
+        { name: this.t('option'), color: GREEN },
         { loading: true },
-        { name: this.$t('disabledOption'), disabled: true }
+        { name: this.t('disabledOption'), disabled: true },
       ];
-    }
+    },
   },
 
   methods: {
     onSelect(item) {
-      this.show1 = false;
-      this.show2 = false;
+      this.show.basic = false;
       this.$toast(item.name);
     },
 
     onCancel() {
       this.$toast('cancel');
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="less">
-@import "../../style/var";
+@import '../../style/var';
 
 .demo-action-sheet {
-  background-color: @white;
-
-  .van-button {
-    margin-left: @padding-md;
-  }
-
-  p {
-    padding: 20px;
+  &-content {
+    padding: @padding-md @padding-md @padding-md * 10;
   }
 }
 </style>

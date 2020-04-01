@@ -2,10 +2,12 @@
 
 ### Install
 
-``` javascript
+```js
+import Vue from 'vue';
 import { Grid, GridItem } from 'vant';
 
-Vue.use(Grid).use(GridItem);
+Vue.use(Grid);
+Vue.use(GridItem);
 ```
 
 ## Usage
@@ -14,12 +16,10 @@ Vue.use(Grid).use(GridItem);
 
 ```html
 <van-grid>
-  <van-grid-item
-    v-for="value in 4"
-    :key="value"
-    icon="photo-o"
-    text="Text"
-  />
+  <van-grid-item icon="photo-o" text="Text" />
+  <van-grid-item icon="photo-o" text="Text" />
+  <van-grid-item icon="photo-o" text="Text" />
+  <van-grid-item icon="photo-o" text="Text" />
 </van-grid>
 ```
 
@@ -82,16 +82,17 @@ Vue.use(Grid).use(GridItem);
 
 ```html
 <van-grid clickable :column-num="2">
-  <van-grid-item
-    icon="home-o"
-    text="Vue Router"
-    to="/"
-  />
-  <van-grid-item
-    icon="search"
-    text="URL"
-    url="https://www.baidu.com"
-  />
+  <van-grid-item icon="home-o" text="Vue Router" to="/" />
+  <van-grid-item icon="search" text="URL" url="/vant/mobile.html" />
+</van-grid>
+```
+
+### Show Badge
+
+```html
+<van-grid :column-num="2">
+  <van-grid-item icon="home-o" text="Text" dot />
+  <van-grid-item icon="search" text="Text" badge="99+" />
 </van-grid>
 ```
 
@@ -100,29 +101,33 @@ Vue.use(Grid).use(GridItem);
 ### Grid Props
 
 | Attribute | Description | Type | Default |
-|------|------|------|------|------|
-| column-num | Column Num | `number` | `4` |
-| gutter | Gutter | `string | number` | `0` |
-| border | Whether to show border | `boolean` | `true` |
-| center | Whether to center content | `boolean` | `true` |
-| square | Whether to be square shape | `boolean` | `false` |
-| clickable | Whether to show click feedback when clicked | `boolean` | `false` |
+|------|------|------|------|
+| column-num `v2.0.4` | Column Num | *number \| string* | `4` |
+| icon-size `v2.2.6` | Icon size | *number \| string* | `28px` |
+| gutter | Gutter | *number \| string* | `0` |
+| border | Whether to show border | *boolean* | `true` |
+| center | Whether to center content | *boolean* | `true` |
+| square | Whether to be square shape | *boolean* | `false` |
+| clickable | Whether to show click feedback when clicked | *boolean* | `false` |
 
 ### GridItem Props
 
 | Attribute | Description | Type | Default |
-|------|------|------|------|------|
-| text | Text | `string` | - |
-| icon | Icon name or URL | `string` | - |
-| url | Link URL | `string` | - |
-| to | Target route of the link, same as to of vue-router | `string | object` | - |
-| replace | If true, the navigation will not leave a history record | `boolean` | `false` |
+|------|------|------|------|
+| text | Text | *string* | - |
+| icon | Icon name or URL | *string* | - |
+| icon-prefix `v2.5.3` | Icon className prefix | *string* | `van-icon` |
+| dot `v2.2.1` | Whether to show red dot | *boolean* | `false` |
+| badge `v2.5.6` | Content of the badge | *number \| string* | - |
+| url | Link URL | *string* | - |
+| to | Target route of the link, same as to of vue-router | *string \| object* | - |
+| replace | If true, the navigation will not leave a history record | *boolean* | `false` |
 
 ### GridItem Events
 
 | Event | Description | Arguments |
 |------|------|------|
-| click | Triggered when clicked | event: Event |
+| click | Triggered when clicked | *event: Event* |
 
 ### GridItem Slots
 

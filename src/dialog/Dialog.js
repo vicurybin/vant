@@ -1,15 +1,16 @@
-import { createNamespace } from '../utils';
+import { createNamespace, addUnit } from '../utils';
+import { BORDER_TOP, BORDER_LEFT } from '../utils/constant';
 import { PopupMixin } from '../mixins/popup';
-import { CloseOnPopstateMixin } from '../mixins/close-on-popstate';
 import Button from '../button';
 
 const [createComponent, bem, t] = createNamespace('dialog');
 
 export default createComponent({
-  mixins: [PopupMixin, CloseOnPopstateMixin],
+  mixins: [PopupMixin()],
 
   props: {
     title: String,
+    width: [Number, String],
     message: String,
     className: null,
     callback: Function,
@@ -22,26 +23,30 @@ export default createComponent({
     confirmButtonColor: String,
     showCancelButton: Boolean,
     isDescriptionType: Boolean,
+    transition: {
+      type: String,
+      default: 'van-dialog-bounce',
+    },
     showConfirmButton: {
       type: Boolean,
-      default: true
+      default: true,
     },
     overlay: {
       type: Boolean,
-      default: true
+      default: true,
     },
     closeOnClickOverlay: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   data() {
     return {
       loading: {
         confirm: false,
-        cancel: false
-      }
+        cancel: false,
+      },
     };
   },
 
@@ -53,13 +58,20 @@ export default createComponent({
     handleAction(action) {
       this.$emit(action);
 
+      // show not trigger close event when hidden
+      if (!this.value) {
+        return;
+      }
+
       if (this.beforeClose) {
         this.loading[action] = true;
         this.beforeClose(action, state => {
-          if (state !== false) {
+          if (state !== false && this.loading[action]) {
             this.onClose(action);
           }
-          this.loading[action] = false;
+
+          this.loading.confirm = false;
+          this.loading.cancel = false;
         });
       } else {
         this.onClose(action);
@@ -72,7 +84,48 @@ export default createComponent({
       if (this.callback) {
         this.callback(action);
       }
-    }
+    },
+
+    onOpened() {
+      this.$emit('opened');
+    },
+
+    onClosed() {
+      this.$emit('closed');
+    },
+
+    genButtons() {
+      const multiple = this.showCancelButton && this.showConfirmButton;
+
+      return (
+        <div class={[BORDER_TOP, bem('footer', { buttons: multiple })]}>
+          {this.showCancelButton && (
+            <Button
+              size="large"
+              class={bem('cancel')}
+              loading={this.loading.cancel}
+              text={this.cancelButtonText || t('cancel')}
+              style={{ color: this.cancelButtonColor }}
+              onClick={() => {
+                this.handleAction('cancel');
+              }}
+            />
+          )}
+          {this.showConfirmButton && (
+            <Button
+              size="large"
+              class={[bem('confirm'), { [BORDER_LEFT]: multiple }]}
+              loading={this.loading.confirm}
+              text={this.confirmButtonText || t('confirm')}
+              style={{ color: this.confirmButtonColor }}
+              onClick={() => {
+                this.handleAction('confirm');
+              }}
+            />
+          )}
+        </div>
+      );
+    },
   },
 
   render() {
@@ -85,7 +138,9 @@ export default createComponent({
     const title = this.slots('title') || this.title;
 
     const Title = title && (
-      <div class={bem('header', { isolated: !message && !messageSlot, [titleAlign]: titleAlign })}>{title}</div>
+      <div class={bem('header', { isolated: !message && !messageSlot,[titleAlign]: titleAlign })}>
+        {title}
+      </div>
     );
 
     const Content = (messageSlot || message) && (
@@ -93,55 +148,33 @@ export default createComponent({
         {messageSlot || (
           <div
             domPropsInnerHTML={message}
-            class={bem('message', { 'has-title': title, [messageAlign]: messageAlign })}
-          />
-        )}
-      </div>
-    );
-
-    const hasButtons = this.showCancelButton && this.showConfirmButton;
-    const ButtonGroup = (
-      <div class={['van-hairline--top', bem('footer', { buttons: hasButtons })]}>
-        {this.showCancelButton && (
-          <Button
-            size="large"
-            class={bem('cancel')}
-            loading={this.loading.cancel}
-            text={this.cancelButtonText || t('cancel')}
-            style={{ color: this.cancelButtonColor }}
-            onClick={() => {
-              this.handleAction('cancel');
-            }}
-          />
-        )}
-        {this.showConfirmButton && (
-          <Button
-            size="large"
-            class={[bem('confirm'), { 'van-hairline--left': hasButtons }]}
-            loading={this.loading.confirm}
-            text={this.confirmButtonText || t('confirm')}
-            style={{ color: this.confirmButtonColor }}
-            onClick={() => {
-              this.handleAction('confirm');
-            }}
+            class={bem('message', {
+              'has-title': title,
+              [messageAlign]: messageAlign,
+            })}
           />
         )}
       </div>
     );
 
     return (
-      <transition name="van-dialog-bounce">
+      <transition
+        name={this.transition}
+        onAfterEnter={this.onOpened}
+        onAfterLeave={this.onClosed}
+      >
         <div
           vShow={this.value}
           role="dialog"
           aria-labelledby={this.title || message}
           class={[bem({ description: this.isDescriptionType }), this.className]}
+          style={{ width: addUnit(this.width) }}
         >
           {Title}
           {Content}
-          {ButtonGroup}
+          {this.genButtons()}
         </div>
       </transition>
     );
-  }
+  },
 });

@@ -1,20 +1,24 @@
 import { createNamespace } from '../utils';
+import { TouchMixin } from '../mixins/touch';
+import { BORDER } from '../utils/constant';
 
 const [createComponent, bem] = createNamespace('key');
 
 export default createComponent({
+  mixins: [TouchMixin],
+
   props: {
     type: String,
     text: [Number, String],
     theme: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
 
   data() {
     return {
-      active: false
+      active: false,
     };
   },
 
@@ -31,38 +35,43 @@ export default createComponent({
       }
 
       return bem(classNames);
-    }
+    },
+  },
+
+  mounted() {
+    this.bindTouchEvent(this.$el);
   },
 
   methods: {
-    onFocus() {
+    onTouchStart(event) {
+      // compatible with Vue 2.6 event bubble bug
+      event.stopPropagation();
+
+      this.touchStart(event);
       this.active = true;
     },
 
-    onBlur() {
-      this.active = false;
+    onTouchMove(event) {
+      this.touchMove(event);
+
+      if (this.direction) {
+        this.active = false;
+      }
     },
 
-    onClick() {
-      this.$emit('press', this.text, this.type);
-    }
+    onTouchEnd() {
+      if (this.active) {
+        this.active = false;
+        this.$emit('press', this.text, this.type);
+      }
+    },
   },
 
   render() {
-    const { onBlur } = this;
     return (
-      <i
-        role="button"
-        tabindex="0"
-        class={['van-hairline', this.className]}
-        onClick={this.onClick}
-        onTouchstart={this.onFocus}
-        onTouchmove={onBlur}
-        onTouchend={onBlur}
-        onTouchcancel={onBlur}
-      >
+      <i role="button" tabindex="0" class={[BORDER, this.className]}>
         {this.slots('default') || this.text}
       </i>
     );
-  }
+  },
 });

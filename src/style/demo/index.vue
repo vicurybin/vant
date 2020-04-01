@@ -1,34 +1,19 @@
 <template>
   <demo-section>
-    <demo-block :title="$t('ellipsis')">
-      <div class="van-ellipsis">{{ $t('text') }}</div>
+    <demo-block :title="t('ellipsis')">
+      <div class="van-ellipsis">{{ t('text1') }}</div>
+      <div class="van-multi-ellipsis--l2">{{ t('text2') }}</div>
     </demo-block>
 
-    <demo-block :title="$t('hairline')">
+    <demo-block :title="t('hairline')">
       <div class="van-hairline--top" />
     </demo-block>
 
-    <demo-block :title="$t('animation')">
-      <van-cell
-        is-link
-        title="Fade"
-        @click="animate('van-fade')"
-      />
-      <van-cell
-        is-link
-        title="Slide Up"
-        @click="animate('van-slide-up')"
-      />
-      <van-cell
-        is-link
-        title="Slide Down"
-        @click="animate('van-slide-down')"
-      />
-      <van-cell
-        is-link
-        title="Slide Left"
-        @click="animate('van-slide-left')"
-      />
+    <demo-block :title="t('animation')">
+      <van-cell is-link title="Fade" @click="animate('van-fade')" />
+      <van-cell is-link title="Slide Up" @click="animate('van-slide-up')" />
+      <van-cell is-link title="Slide Down" @click="animate('van-slide-down')" />
+      <van-cell is-link title="Slide Left" @click="animate('van-slide-left')" />
       <van-cell
         is-link
         title="Slide Right"
@@ -37,10 +22,7 @@
     </demo-block>
 
     <transition :name="transitionName">
-      <div
-        v-show="show"
-        class="demo-animate-block"
-      />
+      <div v-show="show" class="demo-animate-block" />
     </transition>
   </demo-section>
 </template>
@@ -53,21 +35,26 @@ export default {
       ellipsis: '文字省略',
       animation: '动画',
       toggle: '切换动画',
-      text: '这是一段宽度限制 250px 的文字，后面的内容会省略'
+      text1: '这是一段最多显示一行的文字，后面的内容会省略',
+      text2:
+        '这是一段最多显示两行的文字，后面的内容会省略。这是一段最多显示两行的文字，后面的内容会省略',
     },
     'en-US': {
       hairline: 'Hairline',
       ellipsis: 'Text Ellipsis',
       animation: 'Animation',
       toggle: 'Switch animation',
-      text: 'This is a paragraph of 250px width limit, the back will be omitted.'
-    }
+      text1:
+        'This is a paragraph that displays up to one line of text, and the rest of the text will be omitted.',
+      text2:
+        'This is a paragraph that displays up to two lines of text, and the rest of the text will be omitted.',
+    },
   },
 
   data() {
     return {
       show: false,
-      transitionName: ''
+      transitionName: '',
     };
   },
 
@@ -79,8 +66,8 @@ export default {
       setTimeout(() => {
         this.show = false;
       }, 500);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -88,10 +75,16 @@ export default {
 @import '../../style/var';
 
 .demo-style {
-  .van-ellipsis {
-    max-width: 250px;
+  .van-ellipsis,
+  .van-multi-ellipsis--l2 {
+    max-width: 300px;
     margin-left: @padding-md;
-    font-size: 13px;
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .van-ellipsis {
+    margin-bottom: @padding-md;
   }
 
   .van-hairline--top {

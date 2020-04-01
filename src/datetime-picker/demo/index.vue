@@ -1,6 +1,6 @@
 <template>
   <demo-section>
-    <demo-block :title="$t('title1')">
+    <demo-block :title="t('title1')">
       <van-datetime-picker
         v-model="currentDate1"
         type="datetime"
@@ -9,24 +9,26 @@
       />
     </demo-block>
 
-    <demo-block :title="$t('title2')">
+    <demo-block :title="t('title2')">
       <van-datetime-picker
         v-model="currentDate2"
         type="date"
         :min-date="minDate"
+        :max-date="maxDate"
       />
     </demo-block>
 
-    <demo-block :title="$t('title3')">
+    <demo-block :title="t('title3')">
       <van-datetime-picker
         v-model="currentDate3"
         type="year-month"
         :min-date="minDate"
+        :max-date="maxDate"
         :formatter="formatter"
       />
     </demo-block>
 
-    <demo-block :title="$t('title4')">
+    <demo-block :title="t('title4')">
       <van-datetime-picker
         v-model="currentTime1"
         type="time"
@@ -35,7 +37,7 @@
       />
     </demo-block>
 
-    <demo-block :title="$t('optionFilter')">
+    <demo-block :title="t('optionFilter')">
       <van-datetime-picker
         v-model="currentTime2"
         type="time"
@@ -55,7 +57,7 @@ export default {
       title4: '选择时间',
       year: '年',
       month: '月',
-      optionFilter: '选项过滤器'
+      optionFilter: '选项过滤器',
     },
     'en-US': {
       title1: 'Choose DateTime',
@@ -64,17 +66,17 @@ export default {
       title4: 'Choose Time',
       year: ' Year',
       month: ' Month',
-      optionFilter: 'Option Filter'
-    }
+      optionFilter: 'Option Filter',
+    },
   },
 
   data() {
     return {
-      minDate: new Date(2018, 0, 1),
-      maxDate: new Date(2019, 10, 1),
-      currentDate1: new Date(2018, 0, 1),
+      minDate: new Date(2020, 0, 1),
+      maxDate: new Date(2025, 10, 1),
+      currentDate1: new Date(2020, 0, 1),
       currentDate2: null,
-      currentDate3: new Date(2018, 0, 1),
+      currentDate3: new Date(2020, 0, 1),
       currentTime1: '12:00',
       currentTime2: '12:00',
     };
@@ -83,10 +85,10 @@ export default {
   methods: {
     formatter(type, value) {
       if (type === 'year') {
-        return value + this.$t('year');
+        return value + this.t('year');
       }
       if (type === 'month') {
-        return value + this.$t('month');
+        return value + this.t('month');
       }
       return value;
     },
@@ -97,7 +99,7 @@ export default {
       }
 
       return values;
-    }
-  }
+    },
+  },
 };
 </script>

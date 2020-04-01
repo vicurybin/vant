@@ -1,6 +1,9 @@
+// Utils
 import { createNamespace } from '../utils';
 import { inherit, emit } from '../utils/functional';
 import { preventDefault } from '../utils/dom/event';
+
+// Components
 import Field from '../field';
 
 // Types
@@ -10,17 +13,19 @@ import { DefaultSlots, ScopedSlot } from '../utils/types';
 const [createComponent, bem, t] = createNamespace('search');
 
 export type SearchProps = {
-  shape: string;
+  shape: 'sqaure' | 'round';
   value?: string;
   label?: string;
   leftIcon: string;
   rightIcon?: string;
   clearable: boolean;
   background: string;
+  actionText?: string;
   showAction?: boolean;
 };
 
 export type SearchSlots = DefaultSlots & {
+  left?: ScopedSlot;
   label?: ScopedSlot;
   action?: ScopedSlot;
   'left-icon'?: ScopedSlot;
@@ -42,7 +47,11 @@ function Search(
 ) {
   function Label() {
     if (slots.label || props.label) {
-      return <div class={bem('label')}>{slots.label ? slots.label() : props.label}</div>;
+      return (
+        <div class={bem('label')}>
+          {slots.label ? slots.label() : props.label}
+        </div>
+      );
     }
   }
 
@@ -52,13 +61,17 @@ function Search(
     }
 
     function onCancel() {
+      if (slots.action) {
+        return;
+      }
+
       emit(ctx, 'input', '');
       emit(ctx, 'cancel');
     }
 
     return (
-      <div class={bem('action')}>
-        {slots.action ? slots.action() : <div onClick={onCancel}>{t('cancel')}</div>}
+      <div class={bem('action')} role="button" tabindex="0" onClick={onCancel}>
+        {slots.action ? slots.action() : props.actionText || t('cancel')}
       </div>
     );
   }
@@ -67,9 +80,6 @@ function Search(
     attrs: ctx.data.attrs,
     on: {
       ...ctx.listeners,
-      input(value: string) {
-        emit(ctx, 'input', value);
-      },
       keypress(event: KeyboardEvent) {
         // press enter
         if (event.keyCode === 13) {
@@ -77,12 +87,12 @@ function Search(
           emit(ctx, 'search', props.value);
         }
         emit(ctx, 'keypress', event);
-      }
-    }
+      },
+    },
   };
 
   const inheritData = inherit(ctx);
-  delete inheritData.attrs;
+  inheritData.attrs = undefined;
 
   return (
     <div
@@ -90,6 +100,7 @@ function Search(
       style={{ background: props.background }}
       {...inheritData}
     >
+      {slots.left?.()}
       <div class={bem('content', props.shape)}>
         {Label()}
         <Field
@@ -101,7 +112,7 @@ function Search(
           clearable={props.clearable}
           scopedSlots={{
             'left-icon': slots['left-icon'],
-            'right-icon': slots['right-icon']
+            'right-icon': slots['right-icon'],
           }}
           {...fieldData}
         />
@@ -115,23 +126,21 @@ Search.props = {
   value: String,
   label: String,
   rightIcon: String,
+  actionText: String,
   showAction: Boolean,
+  background: String,
   shape: {
     type: String,
-    default: 'square'
+    default: 'square',
   },
   clearable: {
     type: Boolean,
-    default: true
-  },
-  background: {
-    type: String,
-    default: '#fff'
+    default: true,
   },
   leftIcon: {
     type: String,
-    default: 'search'
-  }
+    default: 'search',
+  },
 };
 
 export default createComponent<SearchProps, SearchEvents, SearchSlots>(Search);

@@ -1,88 +1,96 @@
+// Utils
 import { createNamespace } from '../utils';
 import { range } from '../utils/format/number';
-import { preventDefault } from '../utils/dom/event';
+import { on, preventDefault } from '../utils/dom/event';
+
+// Mixins
 import { PopupMixin } from '../mixins/popup';
 import { TouchMixin } from '../mixins/touch';
-import { CloseOnPopstateMixin } from '../mixins/close-on-popstate';
+
+// Components
+import Image from '../image';
 import Swipe from '../swipe';
+import Loading from '../loading';
 import SwipeItem from '../swipe-item';
+import Icon from '../icon';
 
 const [createComponent, bem] = createNamespace('image-preview');
 
 function getDistance(touches) {
   return Math.sqrt(
-    Math.abs(
-      (touches[0].clientX - touches[1].clientX) *
-        (touches[0].clientY - touches[1].clientY)
-    )
+    (touches[0].clientX - touches[1].clientX) ** 2 +
+      (touches[0].clientY - touches[1].clientY) ** 2
   );
 }
 
 export default createComponent({
   mixins: [
-    PopupMixin,
+    PopupMixin({
+      skipToggleEvent: true,
+    }),
     TouchMixin,
-    CloseOnPopstateMixin
   ],
 
   props: {
     className: null,
-    lazyLoad: Boolean,
     asyncClose: Boolean,
     showIndicators: Boolean,
     images: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     loop: {
       type: Boolean,
-      default: true
+      default: true,
     },
     swipeDuration: {
-      type: Number,
-      default: 500
+      type: [Number, String],
+      default: 500,
     },
     overlay: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showIndex: {
       type: Boolean,
-      default: true
+      default: true,
     },
     startPosition: {
-      type: Number,
-      default: 0
+      type: [Number, String],
+      default: 0,
     },
     minZoom: {
-      type: Number,
-      default: 1 / 3
+      type: [Number, String],
+      default: 1 / 3,
     },
     maxZoom: {
-      type: Number,
-      default: 3
+      type: [Number, String],
+      default: 3,
     },
     overlayClass: {
       type: String,
-      default: bem('overlay')
+      default: bem('overlay'),
     },
-    closeOnClickOverlay: {
-      type: Boolean,
-      default: true
-    }
+    closeable: Boolean,
+    closeIcon: {
+      type: String,
+      default: 'clear',
+    },
+    closeIconPosition: {
+      type: String,
+      default: 'top-right',
+    },
   },
 
   data() {
-    this.bindStatus = false;
-
     return {
       scale: 1,
       moveX: 0,
       moveY: 0,
+      active: 0,
       moving: false,
       zooming: false,
-      active: 0,
-      doubleClickTimer: null
+      doubleClickTimer: null,
     };
   },
 
@@ -90,29 +98,58 @@ export default createComponent({
     imageStyle() {
       const { scale } = this;
       const style = {
-        transition: this.zooming || this.moving ? '' : '.3s all'
+        transitionDuration: this.zooming || this.moving ? '0s' : '.3s',
       };
 
       if (scale !== 1) {
-        style.transform = `scale3d(${scale}, ${scale}, 1) translate(${this.moveX /
-          scale}px, ${this.moveY / scale}px)`;
+        style.transform = `scale3d(${scale}, ${scale}, 1) translate(${this
+          .moveX / scale}px, ${this.moveY / scale}px)`;
       }
 
       return style;
-    }
+    },
   },
 
   watch: {
-    value() {
-      this.active = this.startPosition;
+    startPosition: 'setActive',
+
+    value(val) {
+      if (val) {
+        this.setActive(+this.startPosition);
+        this.$nextTick(() => {
+          this.$refs.swipe.swipeTo(+this.startPosition, { immediate: true });
+        });
+      } else {
+        this.$emit('close', {
+          index: this.active,
+          url: this.images[this.active],
+        });
+      }
     },
 
-    startPosition(active) {
-      this.active = active;
-    }
+    shouldRender: {
+      handler(val) {
+        if (val) {
+          this.$nextTick(() => {
+            const swipe = this.$refs.swipe.$el;
+            on(swipe, 'touchstart', this.onWrapperTouchStart);
+            on(swipe, 'touchmove', preventDefault);
+            on(swipe, 'touchend', this.onWrapperTouchEnd);
+            on(swipe, 'touchcancel', this.onWrapperTouchEnd);
+          });
+        }
+      },
+      immediate: true,
+    },
   },
 
   methods: {
+    emitClose() {
+      if (!this.asyncClose) {
+        this.$emit('input', false);
+      }
+    },
+
     onWrapperTouchStart() {
       this.touchStartTime = new Date();
     },
@@ -127,17 +164,7 @@ export default createComponent({
       if (deltaTime < 300 && offsetX < 10 && offsetY < 10) {
         if (!this.doubleClickTimer) {
           this.doubleClickTimer = setTimeout(() => {
-            const index = this.active;
-
-            this.resetScale();
-            this.$emit('close', {
-              index,
-              url: this.images[index]
-            });
-
-            if (!this.asyncClose) {
-              this.$emit('input', false);
-            }
+            this.emitClose();
 
             this.doubleClickTimer = null;
           }, 300);
@@ -198,7 +225,8 @@ export default createComponent({
       if (this.zooming && touches.length === 2) {
         const distance = getDistance(touches);
         const scale = (this.startScale * distance) / this.startDistance;
-        this.scale = range(scale, this.minZoom, this.maxZoom);
+
+        this.setScale(scale);
       }
     },
 
@@ -233,14 +261,24 @@ export default createComponent({
       }
     },
 
-    onSwipeChange(active) {
+    setActive(active) {
       this.resetScale();
-      this.active = active;
-      this.$emit('change', active);
+
+      if (active !== this.active) {
+        this.active = active;
+        this.$emit('change', active);
+      }
+    },
+
+    setScale(scale) {
+      const value = range(scale, +this.minZoom, +this.maxZoom);
+
+      this.scale = value;
+      this.$emit('scale', { index: this.active, scale: value });
     },
 
     resetScale() {
-      this.scale = 1;
+      this.setScale(1);
       this.moveX = 0;
       this.moveY = 0;
     },
@@ -248,72 +286,98 @@ export default createComponent({
     toggleScale() {
       const scale = this.scale > 1 ? 1 : 2;
 
-      this.scale = scale;
+      this.setScale(scale);
       this.moveX = 0;
       this.moveY = 0;
-    }
+    },
+
+    genIndex() {
+      if (this.showIndex) {
+        return (
+          <div class={bem('index')}>
+            {this.slots('index') ||
+              `${this.active + 1} / ${this.images.length}`}
+          </div>
+        );
+      }
+    },
+
+    genCover() {
+      const cover = this.slots('cover');
+
+      if (cover) {
+        return <div class={bem('cover')}>{cover}</div>;
+      }
+    },
+
+    genImages() {
+      const imageSlots = {
+        loading: () => <Loading type="spinner" />,
+      };
+
+      return (
+        <Swipe
+          ref="swipe"
+          lazyRender
+          loop={this.loop}
+          class={bem('swipe')}
+          indicatorColor="white"
+          duration={this.swipeDuration}
+          initialSwipe={this.startPosition}
+          showIndicators={this.showIndicators}
+          onChange={this.setActive}
+        >
+          {this.images.map((image, index) => (
+            <SwipeItem>
+              <Image
+                src={image}
+                fit="contain"
+                class={bem('image')}
+                scopedSlots={imageSlots}
+                style={index === this.active ? this.imageStyle : null}
+                nativeOnTouchstart={this.onImageTouchStart}
+                nativeOnTouchmove={this.onImageTouchMove}
+                nativeOnTouchend={this.onImageTouchEnd}
+                nativeOnTouchcancel={this.onImageTouchEnd}
+              />
+            </SwipeItem>
+          ))}
+        </Swipe>
+      );
+    },
+
+    genClose() {
+      if (this.closeable) {
+        return (
+          <Icon
+            role="button"
+            name={this.closeIcon}
+            class={bem('close-icon', this.closeIconPosition)}
+            onClick={this.emitClose}
+          />
+        );
+      }
+    },
+
+    onClosed() {
+      this.$emit('closed');
+    },
   },
 
   render() {
-    if (!this.value) {
+    if (!this.shouldRender) {
       return;
     }
 
-    const { active, images } = this;
-
-    const Index = this.showIndex && (
-      <div class={bem('index')}>
-        {this.slots('index') || `${active + 1}/${images.length}`}
-      </div>
-    );
-
-    const Images = (
-      <Swipe
-        ref="swipe"
-        loop={this.loop}
-        duration={this.swipeDuration}
-        indicatorColor="white"
-        initialSwipe={this.startPosition}
-        showIndicators={this.showIndicators}
-        onChange={this.onSwipeChange}
-      >
-        {images.map((image, index) => {
-          const props = {
-            class: bem('image'),
-            style: index === active ? this.imageStyle : null,
-            on: {
-              touchstart: this.onImageTouchStart,
-              touchmove: this.onImageTouchMove,
-              touchend: this.onImageTouchEnd,
-              touchcancel: this.onImageTouchEnd
-            }
-          };
-          return (
-            <SwipeItem>
-              {this.lazyLoad ? (
-                <img vLazy={image} {...props} />
-              ) : (
-                <img src={image} {...props} />
-              )}
-            </SwipeItem>
-          );
-        })}
-      </Swipe>
-    );
-
     return (
-      <transition name="van-fade">
-        <div
-          class={[bem(), this.className]}
-          onTouchstart={this.onWrapperTouchStart}
-          onTouchMove={preventDefault}
-          onTouchend={this.onWrapperTouchEnd}
-          onTouchcancel={this.onWrapperTouchEnd}
-        >
-          {Images}
-          {Index}
+      <transition name="van-fade" onAfterLeave={this.onClosed}>
+        <div vShow={this.value} class={[bem(), this.className]}>
+          {this.genClose()}
+          {this.genImages()}
+          {this.genIndex()}
+          {this.genCover()}
         </div>
       </transition>
     );
-  }
+  },
 });

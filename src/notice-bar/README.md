@@ -2,7 +2,8 @@
 
 ### Install
 
-``` javascript
+```js
+import Vue from 'vue';
 import { NoticeBar } from 'vant';
 
 Vue.use(NoticeBar);
@@ -13,10 +14,7 @@ Vue.use(NoticeBar);
 ### Basic Usage
 
 ```html
-<van-notice-bar
-  text="Notice Content"
-  left-icon="volume-o"
-/>
+<van-notice-bar text="Notice Content" left-icon="volume-o" />
 ```
 
 ### Disable scroll
@@ -65,22 +63,22 @@ Vue.use(NoticeBar);
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|
-| mode | Mode, can be set to `closeable` `link` | `string` | `''` |
-| text | Notice text content | `string` | `''` | - |
-| delay | Animation delay (s) | `number` | `1` |
-| speed | Scroll speed (px/s) | `number` | `50` |
-| scrollable | Whether to scroll content | `boolean` | `true` |
-| wrapable | Whether to enable text wrap | `boolean` | `false` | - |
-| left-icon | Left Icon | `string` | - |
-| color | Text color | `string` | `#f60` |
-| background | Background color | `string` | `#fff7cc` |
+| mode | Mode, can be set to `closeable` `link` | *string* | `''` |
+| text | Notice text content | *string* | `''` | - |
+| color | Text color | *string* | `#f60` |
+| background | Background color | *string* | `#fff7cc` |
+| left-icon | Left Icon | *string* | - |
+| delay | Animation delay (s) | *number \| string* | `1` |
+| speed | Scroll speed (px/s) | *number \| string* | `50` |
+| scrollable | Whether to scroll content | *boolean* | `true` |
+| wrapable | Whether to enable text wrap | *boolean* | `false` | - |
 
 ### Events
 
 | Event | Description | Arguments |
 |------|------|------|
-| click | Triggered when click NoticeBar | event: Event |
-| close | Triggered when closed | event: Event |
+| click | Triggered when click NoticeBar | *event: Event* |
+| close | Triggered when closed | *event: Event* |
 
 ### Slots
 

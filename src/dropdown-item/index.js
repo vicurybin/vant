@@ -1,13 +1,20 @@
+// Utils
 import { createNamespace } from '../utils';
+import { on, off } from '../utils/dom/event';
+
+// Mixins
+import { PortalMixin } from '../mixins/portal';
+import { ChildrenMixin } from '../mixins/relation';
+
+// Components
 import Cell from '../cell';
 import Icon from '../icon';
 import Popup from '../popup';
-import { ChildrenMixin } from '../mixins/relation';
 
 const [createComponent, bem] = createNamespace('dropdown-item');
 
 export default createComponent({
-  mixins: [ChildrenMixin('vanDropdownMenu')],
+  mixins: [PortalMixin({ ref: 'wrapper' }), ChildrenMixin('vanDropdownMenu')],
 
   props: {
     value: null,
@@ -16,15 +23,15 @@ export default createComponent({
     titleClass: String,
     options: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
 
   data() {
     return {
       transition: true,
       showPopup: false,
-      showWrapper: false
+      showWrapper: false,
     };
   },
 
@@ -36,10 +43,25 @@ export default createComponent({
 
       const match = this.options.filter(option => option.value === this.value);
       return match.length ? match[0].text : '';
-    }
+    },
+  },
+
+  watch: {
+    showPopup(val) {
+      this.bindScroll(val);
+    },
+  },
+
+  beforeCreate() {
+    const createEmitter = eventName => () => this.$emit(eventName);
+
+    this.onOpen = createEmitter('open');
+    this.onClose = createEmitter('close');
+    this.onOpened = createEmitter('opened');
   },
 
   methods: {
+    // @exposed-api
     toggle(show = !this.showPopup, options = {}) {
       if (show === this.showPopup) {
         return;
@@ -52,15 +74,24 @@ export default createComponent({
         this.parent.updateOffset();
         this.showWrapper = true;
       }
-    }
-  },
+    },
 
-  beforeCreate() {
-    const createEmitter = eventName => () => this.$emit(eventName);
+    bindScroll(bind) {
+      const { scroller } = this.parent;
+      const action = bind ? on : off;
+      action(scroller, 'scroll', this.onScroll, true);
+    },
 
-    this.onOpen = createEmitter('open');
-    this.onClose = createEmitter('close');
-    this.onOpened = createEmitter('opened');
+    onScroll() {
+      this.parent.updateOffset();
+    },
+
+    onClickWrapper(event) {
+      // prevent being identified as clicking outside and closed when use get-contaienr
+      if (this.getContainer) {
+        event.stopPropagation();
+      }
+    },
   },
 
   render() {
@@ -71,7 +102,7 @@ export default createComponent({
       duration,
       direction,
       activeColor,
-      closeOnClickOverlay
+      closeOnClickOverlay,
     } = this.parent;
 
     const Options = this.options.map(option => {
@@ -82,6 +113,7 @@ export default createComponent({
           key={option.value}
           icon={option.icon}
           title={option.text}
+          class={bem('option', { active })}
           style={{ color: active ? activeColor : '' }}
           onClick={() => {
             this.showPopup = false;
@@ -92,7 +124,9 @@ export default createComponent({
             }
           }}
         >
-          {active && <Icon class={bem('icon')} color={activeColor} name="success" />}
+          {active && (
+            <Icon class={bem('icon')} color={activeColor} name="success" />
+          )}
         </Cell>
       );
     });
@@ -105,27 +139,35 @@ export default createComponent({
     }
 
     return (
-      <div vShow={this.showWrapper} style={style} class={bem([direction])}>
-        <Popup
-          vModel={this.showPopup}
-          overlay={overlay}
-          class={bem('content')}
-          position={direction === 'down' ? 'top' : 'bottom'}
-          duration={this.transition ? duration : 0}
-          closeOnClickOverlay={closeOnClickOverlay}
-          overlayStyle={{ position: 'absolute' }}
-          onOpen={this.onOpen}
-          onClose={this.onClose}
-          onOpened={this.onOpened}
-          onClosed={() => {
-            this.showWrapper = false;
-            this.$emit('closed');
-          }}
+      <div>
+        <div
+          vShow={this.showWrapper}
+          ref="wrapper"
+          style={style}
+          class={bem([direction])}
+          onClick={this.onClickWrapper}
         >
-          {Options}
-          {this.slots('default')}
-        </Popup>
+          <Popup
+            vModel={this.showPopup}
+            overlay={overlay}
+            class={bem('content')}
+            position={direction === 'down' ? 'top' : 'bottom'}
+            duration={this.transition ? duration : 0}
+            closeOnClickOverlay={closeOnClickOverlay}
+            overlayStyle={{ position: 'absolute' }}
+            onOpen={this.onOpen}
+            onClose={this.onClose}
+            onOpened={this.onOpened}
+            onClosed={() => {
+              this.showWrapper = false;
+              this.$emit('closed');
+            }}
+          >
+            {Options}
+            {this.slots('default')}
+          </Popup>
+        </div>
       </div>
     );
-  }
+  },
 });

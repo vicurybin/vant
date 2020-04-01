@@ -55,7 +55,7 @@ exports[`renders demo correctly 1`] = `
       <div class="van-grid-item" style="flex-basis: 33.333333333333336%;">
         <div class="van-grid-item__content van-grid-item__content--center">
           <div class="van-image"><img src="https://img.yzcdn.cn/vant/apple-1.jpg" class="van-image__img" style="object-fit: contain;">
-            <div class="van-image__loading"><i class="van-icon van-icon-photo-o" style="font-size: 22px;">
+            <div class="van-image__loading"><i class="van-icon van-icon-photo-o van-image__loading-icon">
                 <!----></i></div>
           </div>
         </div>
@@ -63,7 +63,7 @@ exports[`renders demo correctly 1`] = `
       <div class="van-grid-item" style="flex-basis: 33.333333333333336%;">
         <div class="van-grid-item__content van-grid-item__content--center">
           <div class="van-image"><img src="https://img.yzcdn.cn/vant/apple-2.jpg" class="van-image__img" style="object-fit: contain;">
-            <div class="van-image__loading"><i class="van-icon van-icon-photo-o" style="font-size: 22px;">
+            <div class="van-image__loading"><i class="van-icon van-icon-photo-o van-image__loading-icon">
                 <!----></i></div>
           </div>
         </div>
@@ -71,7 +71,7 @@ exports[`renders demo correctly 1`] = `
       <div class="van-grid-item" style="flex-basis: 33.333333333333336%;">
         <div class="van-grid-item__content van-grid-item__content--center">
           <div class="van-image"><img src="https://img.yzcdn.cn/vant/apple-3.jpg" class="van-image__img" style="object-fit: contain;">
-            <div class="van-image__loading"><i class="van-icon van-icon-photo-o" style="font-size: 22px;">
+            <div class="van-image__loading"><i class="van-icon van-icon-photo-o van-image__loading-icon">
                 <!----></i></div>
           </div>
         </div>
@@ -153,12 +153,26 @@ exports[`renders demo correctly 1`] = `
   <div>
     <div class="van-grid van-hairline--top">
       <div class="van-grid-item" style="flex-basis: 50%;">
-        <div class="van-grid-item__content van-grid-item__content--center van-grid-item__content--clickable van-hairline"><i class="van-icon van-icon-home-o van-grid-item__icon">
+        <div role="button" tabindex="0" class="van-grid-item__content van-grid-item__content--center van-grid-item__content--clickable van-hairline"><i class="van-icon van-icon-home-o van-grid-item__icon">
             <!----></i><span class="van-grid-item__text">路由跳转</span></div>
       </div>
       <div class="van-grid-item" style="flex-basis: 50%;">
-        <div class="van-grid-item__content van-grid-item__content--center van-grid-item__content--clickable van-hairline"><i class="van-icon van-icon-search van-grid-item__icon">
+        <div role="button" tabindex="0" class="van-grid-item__content van-grid-item__content--center van-grid-item__content--clickable van-hairline"><i class="van-icon van-icon-search van-grid-item__icon">
             <!----></i><span class="van-grid-item__text">URL 跳转</span></div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="van-grid van-hairline--top">
+      <div class="van-grid-item" style="flex-basis: 50%;">
+        <div class="van-grid-item__content van-grid-item__content--center van-hairline"><i class="van-icon van-icon-home-o van-grid-item__icon">
+            <div class="van-info van-info--dot"></div>
+          </i><span class="van-grid-item__text">文字</span></div>
+      </div>
+      <div class="van-grid-item" style="flex-basis: 50%;">
+        <div class="van-grid-item__content van-grid-item__content--center van-hairline"><i class="van-icon van-icon-search van-grid-item__icon">
+            <div class="van-info">99+</div>
+          </i><span class="van-grid-item__text">文字</span></div>
       </div>
     </div>
   </div>

@@ -1,49 +1,45 @@
+// Utils
 import { createNamespace } from '../../utils';
-import Cell from '../../cell';
-import CellGroup from '../../cell-group';
-import Field from '../../field';
 import { isEmail } from '../../utils/validate/email';
-import { isNumber } from '../../utils/validate/number';
+import { isNumeric } from '../../utils/validate/number';
+
+// Components
+import Cell from '../../cell';
+import Field from '../../field';
+import CellGroup from '../../cell-group';
 import SkuImgUploader from './SkuImgUploader';
 
-const [createComponent, bem] = createNamespace('sku-messages');
-
-const PLACEHOLDER = {
-  id_no: '输入身份证号码',
-  text: '输入文本',
-  tel: '输入数字',
-  email: '输入邮箱',
-  date: '点击选择日期',
-  time: '点击选择时间',
-  textarea: '点击填写段落文本',
-  mobile: '输入手机号码'
-};
+const [createComponent, bem, t] = createNamespace('sku-messages');
 
 export default createComponent({
   props: {
     messages: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     messageConfig: Object,
-    goodsId: [Number, String]
+    goodsId: [Number, String],
   },
 
   data() {
     return {
-      messageValues: this.resetMessageValues(this.messages)
+      messageValues: this.resetMessageValues(this.messages),
     };
   },
 
   watch: {
     messages(val) {
       this.messageValues = this.resetMessageValues(val);
-    }
+    },
   },
 
   methods: {
     resetMessageValues(messages) {
-      return (messages || []).map(() => ({ value: '' }));
+      const { messageConfig } = this;
+      const { initialMessages = {} } = messageConfig;
+      return (messages || []).map(message => ({
+        value: initialMessages[message.name] || '',
+      }));
     },
 
     getType(message) {
@@ -88,7 +84,7 @@ export default createComponent({
     getPlaceholder(message) {
       const type = +message.multiple === 1 ? 'textarea' : message.type;
       const map = this.messageConfig.placeholderMap || {};
-      return message.placeholder || map[type] || PLACEHOLDER[type];
+      return message.placeholder || map[type] || t(`placeholder.${type}`);
     },
 
     validateMessages() {
@@ -100,60 +96,69 @@ export default createComponent({
 
         if (value === '') {
           // 必填字段的校验
-          if (String(message.required) === '1') { // eslint-disable-line
-            const textType = message.type === 'image'
-              ? '请上传'
-              : '请填写';
+          if (String(message.required) === '1') {
+            const textType = t(message.type === 'image' ? 'upload' : 'fill');
             return textType + message.name;
           }
         } else {
-          if (message.type === 'tel' && !isNumber(value)) {
-            return '请填写正确的数字格式留言';
+          if (message.type === 'tel' && !isNumeric(value)) {
+            return t('invalid.tel');
           }
           if (message.type === 'mobile' && !/^\d{6,20}$/.test(value)) {
-            return '手机号长度为6-20位数字';
+            return t('invalid.mobile');
           }
           if (message.type === 'email' && !isEmail(value)) {
-            return '请填写正确的邮箱';
+            return t('invalid.email');
           }
-          if (message.type === 'id_no' && (value.length < 15 || value.length > 18)) {
-            return '请填写正确的身份证号码';
+          if (
+            message.type === 'id_no' &&
+            (value.length < 15 || value.length > 18)
+          ) {
+            return t('invalid.id_no');
           }
         }
       }
-    }
+    },
+
+    genMessage(message, index) {
+      if (message.type === 'image') {
+        return (
+          <Cell
+            key={`${this.goodsId}-${index}`}
+            title={message.name}
+            label={t('imageLabel')}
+            class={bem('image-cell')}
+            required={String(message.required) === '1'}
+            valueClass={bem('image-cell-value')}
+          >
+            <SkuImgUploader
+              vModel={this.messageValues[index].value}
+              maxSize={this.messageConfig.uploadMaxSize}
+              uploadImg={this.messageConfig.uploadImg}
+            />
+          </Cell>
+        );
+      }
+
+      return (
+        <Field
+          vModel={this.messageValues[index].value}
+          maxlength="200"
+          label={message.name}
+          key={`${this.goodsId}-${index}`}
+          required={String(message.required) === '1'}
+          placeholder={this.getPlaceholder(message)}
+          type={this.getType(message)}
+        />
+      );
+    },
   },
 
   render() {
     return (
-      <CellGroup class={bem()}>
-        {this.messages.map((message, index) => (message.type === 'image' ? (
-          <Cell
-            class={bem('image-cell')}
-            value-class={bem('image-cell-value')}
-            label="仅限一张"
-            title={message.name}
-            key={`${this.goodsId}-${index}`}
-            required={String(message.required) === '1'}
-          >
-            <SkuImgUploader
-              vModel={this.messageValues[index].value}
-              uploadImg={this.messageConfig.uploadImg}
-              maxSize={this.messageConfig.uploadMaxSize}
-            />
-          </Cell>
-        ) : (
-          <Field
-            vModel={this.messageValues[index].value}
-            maxlength="200"
-            label={message.name}
-            key={`${this.goodsId}-${index}`}
-            required={String(message.required) === '1'}
-            placeholder={this.getPlaceholder(message)}
-            type={this.getType(message)}
-          />
-        )))}
+      <CellGroup class={bem()} border={this.messages.length > 0}>
+        {this.messages.map(this.genMessage)}
       </CellGroup>
     );
-  }
+  },
 });

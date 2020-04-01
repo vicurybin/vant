@@ -1,9 +1,12 @@
+// Utils
 import { createNamespace } from '../../utils';
+
+// Components
 import Icon from '../../icon';
 import Loading from '../../loading';
 import Uploader from '../../uploader';
 
-const [createComponent, bem] = createNamespace('sku-img-uploader');
+const [createComponent, bem, t] = createNamespace('sku-img-uploader');
 
 export default createComponent({
   props: {
@@ -11,15 +14,15 @@ export default createComponent({
     uploadImg: Function,
     maxSize: {
       type: Number,
-      default: 6
-    }
+      default: 6,
+    },
   },
 
   data() {
     return {
       // 正在上传的图片 base64
       paddingImg: '',
-      uploadFail: false
+      uploadFail: false,
     };
   },
 
@@ -41,10 +44,10 @@ export default createComponent({
     },
 
     onOversize() {
-      this.$toast(`最大可上传图片为${this.maxSize}MB，请尝试压缩图片尺寸`);
+      this.$toast(t('oversize', this.maxSize));
     },
 
-    renderUploader(content, disabled = false) {
+    genUploader(content, disabled = false) {
       return (
         <Uploader
           class={bem('uploader')}
@@ -53,61 +56,59 @@ export default createComponent({
           maxSize={this.maxSize * 1024 * 1024}
           onOversize={this.onOversize}
         >
-          <div class={bem('img')}>
-            {content}
-          </div>
+          <div class={bem('img')}>{content}</div>
         </Uploader>
       );
     },
 
-    renderMask() {
+    genMask() {
       return (
         <div class={bem('mask')}>
-          {this.uploadFail
-            ? (
-              [
-                <Icon name="warning-o" size="20px" />,
-                <div class={bem('warn-text')}>上传失败<br />重新上传</div>
-              ]
-            ) : (
-              <Loading type="spinner" size="20px" color="white" />
-            )}
+          {this.uploadFail ? (
+            [
+              <Icon name="warning-o" size="20px" />,
+              <div class={bem('warn-text')} domPropsInnerHTML={t('fail')} />,
+            ]
+          ) : (
+            <Loading type="spinner" size="20px" color="white" />
+          )}
         </div>
       );
-    }
+    },
   },
 
   render() {
     return (
       <div class={bem()}>
-        {this.value && this.renderUploader(
-          [
-            <img src={this.value} />,
-            <Icon
-              name="clear"
-              class={bem('delete')}
-              onClick={() => {
-                this.$emit('input', '');
-              }}
-            />
-          ],
-          true
-        )}
+        {this.value &&
+          this.genUploader(
+            [
+              <img src={this.value} />,
+              <Icon
+                name="clear"
+                class={bem('delete')}
+                onClick={() => {
+                  this.$emit('input', '');
+                }}
+              />,
+            ],
+            true
+          )}
 
-        {this.paddingImg && this.renderUploader(
-          [
-            <img src={this.paddingImg} />,
-            this.renderMask()
-          ],
-          !this.uploadFail
-        )}
+        {this.paddingImg &&
+          this.genUploader(
+            [<img src={this.paddingImg} />, this.genMask()],
+            !this.uploadFail
+          )}
 
-        {!this.value && !this.paddingImg && this.renderUploader(
-          <div class={bem('trigger')}>
-            <Icon name="photograph" size="22px" />
-          </div>
-        )}
+        {!this.value &&
+          !this.paddingImg &&
+          this.genUploader(
+            <div class={bem('trigger')}>
+              <Icon name="photograph" size="22px" />
+            </div>
+          )}
       </div>
     );
-  }
+  },
 });

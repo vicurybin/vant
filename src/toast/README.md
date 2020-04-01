@@ -2,7 +2,8 @@
 
 ### Install
 
-```javascript
+```js
+import Vue from 'vue';
 import { Toast } from 'vant';
 
 Vue.use(Toast);
@@ -12,22 +13,28 @@ Vue.use(Toast);
 
 ### Text
 
-```javascript
+```js
 Toast('Some messages');
 ```
 
 ### Loading
 
-```javascript
+```js
 Toast.loading({
-  mask: true,
-  message: 'Loading...'
+  message: 'Loading...',
+  forbidClick: true
+});
+
+Toast.loading({
+  message: 'Loading...',
+  forbidClick: true,
+  loadingType: 'spinner'
 });
 ```
 
 ### Success/Fail
 
-```javascript
+```js
 Toast.success('Success');
 Toast.fail('Fail');
 ```
@@ -46,12 +53,12 @@ Toast({
 });
 ```
 
-### Advanced Usage
+### Update Message
 
-```javascript
+```js
 const toast = Toast.loading({
-  duration: 0,       // continuous display toast
-  forbidClick: true, // forbid click background
+  duration: 0, // continuous display toast
+  forbidClick: true,
   loadingType: 'spinner',
   message: '3 seconds'
 });
@@ -94,6 +101,24 @@ toast1.clear();
 toast2.clear();
 ```
 
+### Set Default Options
+
+The Toast default configuration can be globally modified with the `Toast.setDefaultOptions` function.
+
+```js
+// Set the duration of all Toast to 2000 ms
+Toast.setDefaultOptions({ duration: 2000 });
+
+// Set all loading types Toast to background unclickable
+Toast.setDefaultOptions('loading', { forbidClick: true });
+
+// Reset default options of all Toast
+Toast.resetDefaultOptions();
+
+// Reset default options of all loading Toast
+Toast.resetDefaultOptions('loading');
+```
+
 ## API
 
 ### Methods
@@ -106,23 +131,26 @@ toast2.clear();
 | Toast.fail | `options | message` | toast instance | Show fail toast |
 | Toast.clear | `clearAll: boolean` | `void` | Close toast |
 | Toast.allowMultiple | - | `void` | Allow multlple toast at the same time |
-| Toast.setDefaultOptions | `options` | `void` | Set default options of all toasts |
-| Toast.resetDefaultOptions | - | `void` | Reset default options of all toasts |
+| Toast.setDefaultOptions | `type | options` | `void` | Set default options of all toasts |
+| Toast.resetDefaultOptions | `type` | `void` | Reset default options of all toasts |
 
 ### Options
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|
-| type | Can be set to `loading` `success` `fail` `html` | `string` | `text` |
-| position | Can be set to `top` `middle` `bottom` | `string` | `middle` |
-| message | Message | `string` | `''` |
-| icon | Custom icon | `string` | - |
-| iconPrefix | Icon className prefix | `string` | `van-icon` |
-| mask | Whether to show mask | `boolean` | `false` |
-| forbidClick | Whether to forbid click background | `boolean` | `false` |
-| loadingType | Loading icon type, can be set to `spinner` | `string` | `circular` |
-| duration | Toast duration(ms), won't disappear if value is 0 | `number` | `3000` |
-| className | Custom className | `any` | - |
-| onOpened | Callback function after opened | `Function` | - |
-| onClose | Callback function after close | `Function` | - |
-| getContainer | Return the mount node for Toast | `string | () => HTMLElement` | `body` |
+| type | Can be set to `loading` `success` `fail` `html` | *string* | `text` |
+| position | Can be set to `top` `middle` `bottom` | *string* | `middle` |
+| message | Message | *string* | `''` |
+| icon `v2.0.1` | Custom icon | *string* | - |
+| iconPrefix `v2.0.9` | Icon className prefix | *string* | `van-icon` |
+| overlay `v2.2.13` | Whether to show overlay | *boolean* | `false` |
+| forbidClick | Whether to forbid click background | *boolean* | `false` |
+| closeOnClick `v2.1.5` | Whether to close after clicked | *boolean* | `false` |
+| closeOnClickOverlay `v2.2.13` | Whether to close when click overlay | *boolean* | `false` |
+| loadingType | Loading icon type, can be set to `spinner` | *string* | `circular` |
+| duration | Toast duration(ms), won't disappear if value is 0 | *number* | `2000` |
+| className | Custom className | *any* | - |
+| onOpened | Callback function after opened | *Function* | - |
+| onClose | Callback function after close | *Function* | - |
+| transition `v2.2.6` | Transition, equivalent to `name` prop of [transtion](https://vuejs.org/v2/api/#transition) | *string* | `van-fade` |
+| getContainer | Return the mount node for Toast | *string \| () => Element* | `body` |

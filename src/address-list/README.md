@@ -1,7 +1,9 @@
 # AddressList
 
 ### Install
-``` javascript
+
+```js
+import Vue from 'vue';
 import { AddressList } from 'vant';
 
 Vue.use(AddressList);
@@ -17,12 +19,15 @@ Vue.use(AddressList);
   :list="list"
   :disabled-list="disabledList"
   disabled-text="The following address is out of range"
+  default-tag-text="Default"
   @add="onAdd"
   @edit="onEdit"
 />
 ```
 
-```javascript
+```js
+import { Toast } from 'vant';
+
 export default {
   data() {
     return {
@@ -51,7 +56,6 @@ export default {
       ]
     }
   },
-
   methods: {
     onAdd() {
       Toast('Add');
@@ -69,12 +73,13 @@ export default {
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|
-| v-model | Id of chosen address | `string` | - |
-| list | Address list | `Address[]` | `[]` |
-| disabled-list | Disabled address list | `Address[]` | `[]` |
-| disabled-text | Disabled text | `string` | - |
-| switchable | Whether to allow switch address | `boolean` | `true` |
-| add-button-text | Add button text | `string` | `Add new address` |
+| v-model | Id of chosen address | *string* | - |
+| list | Address list | *Address[]* | `[]` |
+| disabled-list | Disabled address list | *Address[]* | `[]` |
+| disabled-text | Disabled text | *string* | - |
+| switchable | Whether to allow switch address | *boolean* | `true` |
+| add-button-text | Add button text | *string* | `Add new address` |
+| default-tag-text `v2.3.0` | Default tag text | *string* | - |
 
 ### Events
 
@@ -91,14 +96,16 @@ export default {
 
 | Key | Description | Type |
 |------|------|------|
-| id | Id | `string | number` |
-| name | Name | `string` |
-| tel | Phone | `string | number` |
-| address | Address | `string` |
+| id | Id | *number \| string* |
+| name | Name | *string* |
+| tel | Phone | *number \| string* |
+| address | Address | *string* |
+| isDefault | Is default address | *boolean* |
 
 ### Slots
 
-| Name | Description |
-|------|------|
-| default | Custom content after list |
-| top | Custom content before list |
+| Name | Description | SlotProps |
+|------|------|------|
+| default | Custom content after list | - |
+| top | Custom content before list | - |
+| item-bottom `v2.5.0` | Custom content after list item | item |

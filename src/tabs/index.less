@@ -12,17 +12,18 @@
   text-align: center;
   cursor: pointer;
 
-  span {
-    display: block;
-  }
-
   &--active {
     color: @tab-active-text-color;
-    font-weight: 500;
+    font-weight: @font-weight-bold;
   }
 
   &--disabled {
     color: @tab-disabled-text-color;
+    cursor: not-allowed;
+  }
+
+  &__text {
+    position: relative;
   }
 }
 
@@ -78,13 +79,13 @@
       box-sizing: border-box;
       height: @tabs-card-height;
       margin: 0 @padding-md;
-      border: 1px solid @tabs-default-color;
-      border-radius: 2px;
+      border: @border-width-base solid @tabs-default-color;
+      border-radius: @border-radius-sm;
 
       .van-tab {
         color: @tabs-default-color;
         line-height: @tabs-card-height - 2px;
-        border-right: 1px solid @tabs-default-color;
+        border-right: @border-width-base solid @tabs-default-color;
 
         &:last-child {
           border-right: none;
@@ -133,8 +134,6 @@
   }
 
   &--card {
-    padding-top: @tabs-card-height;
-
     > .van-tabs__wrap {
       height: @tabs-card-height;
     }

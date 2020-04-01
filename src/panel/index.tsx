@@ -1,7 +1,11 @@
+// Utils
 import { createNamespace } from '../utils';
+import { inherit } from '../utils/functional';
+import { BORDER_TOP } from '../utils/constant';
+
+// Components
 import Cell from '../cell';
 import CellGroup from '../cell-group';
-import { inherit } from '../utils/functional';
 
 // Types
 import { CreateElement, RenderContext } from 'vue/types';
@@ -42,8 +46,8 @@ function Panel(
     ),
     <div class={bem('content')}>{slots.default && slots.default()}</div>,
     slots.footer && (
-      <div class={[bem('footer'), 'van-hairline--top']}>{slots.footer()}</div>
-    )
+      <div class={[bem('footer'), BORDER_TOP]}>{slots.footer()}</div>
+    ),
   ];
 
   return (
@@ -59,7 +63,7 @@ Panel.props = {
   icon: String,
   desc: String,
   title: String,
-  status: String
+  status: String,
 };
 
 export default createComponent<PanelProps>(Panel);

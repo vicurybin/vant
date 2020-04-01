@@ -9,18 +9,18 @@ export const sharedProps = {
   filter: Function,
   showToolbar: {
     type: Boolean,
-    default: true
+    default: true,
   },
   formatter: {
     type: Function,
-    default: (type, value) => value
-  }
+    default: (type, value) => value,
+  },
 };
 
 export const TimePickerMixin = {
   data() {
     return {
-      innerValue: this.formatValue(this.value)
+      innerValue: this.formatValue(this.value),
     };
   },
 
@@ -38,40 +38,47 @@ export const TimePickerMixin = {
 
         return {
           type,
-          values
+          values,
         };
       });
     },
 
     columns() {
       return this.originColumns.map(column => ({
-        values: column.values.map(value => this.formatter(column.type, value))
+        values: column.values.map(value => this.formatter(column.type, value)),
       }));
-    }
+    },
   },
 
   watch: {
+    columns: 'updateColumnValue',
+
     innerValue(val) {
       this.$emit('input', val);
     },
-
-    columns() {
-      this.updateColumnValue(this.innerValue);
-    }
   },
 
   mounted() {
-    this.updateColumnValue(this.innerValue);
+    this.updateColumnValue();
+
+    this.$nextTick(() => {
+      this.updateInnerValue();
+    });
   },
 
   methods: {
+    // @exposed-api
+    getPicker() {
+      return this.$refs.picker;
+    },
+
     onConfirm() {
       this.$emit('confirm', this.innerValue);
     },
 
     onCancel() {
       this.$emit('cancel');
-    }
+    },
   },
 
   render() {
@@ -90,5 +97,5 @@ export const TimePickerMixin = {
         {...{ props }}
       />
     );
-  }
+  },
 };

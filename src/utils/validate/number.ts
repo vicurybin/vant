@@ -1,13 +1,12 @@
-/* eslint-disable no-self-compare */
-
-export function isNumber(value: string): boolean {
-  return /^\d+(\.\d+)?$/.test(value);
+export function isNumeric(val: string): boolean {
+  return /^\d+(\.\d+)?$/.test(val);
 }
 
-export function isNaN(value: any): boolean {
+export function isNaN(val: number): val is typeof NaN {
   if (Number.isNaN) {
-    return Number.isNaN(value);
+    return Number.isNaN(val);
   }
 
-  return value !== value;
+  // eslint-disable-next-line no-self-compare
+  return val !== val;
 }

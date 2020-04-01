@@ -1,5 +1,5 @@
+// Utils
 import { createNamespace, addUnit } from '../utils';
-import { GRAY } from '../utils/color';
 import { inherit } from '../utils/functional';
 
 // Types
@@ -34,10 +34,14 @@ function LoadingIcon(h: CreateElement, props: LoadingProps) {
   );
 }
 
-function LoadingText(h: CreateElement, props: LoadingProps, slots: DefaultSlots) {
+function LoadingText(
+  h: CreateElement,
+  props: LoadingProps,
+  slots: DefaultSlots
+) {
   if (slots.default) {
     const style = props.textSize && {
-      fontSize: addUnit(props.textSize)
+      fontSize: addUnit(props.textSize),
     };
 
     return (
@@ -64,7 +68,10 @@ function Loading(
   }
 
   return (
-    <div class={bem([type, { vertical: props.vertical }])} {...inherit(ctx, true)}>
+    <div
+      class={bem([type, { vertical: props.vertical }])}
+      {...inherit(ctx, true)}
+    >
       <span class={bem('spinner', type)} style={style}>
         {LoadingIcon(h, props)}
       </span>
@@ -74,17 +81,14 @@ function Loading(
 }
 
 Loading.props = {
+  color: String,
   size: [Number, String],
   vertical: Boolean,
   textSize: [Number, String],
   type: {
     type: String,
-    default: 'circular'
+    default: 'circular',
   },
-  color: {
-    type: String,
-    default: GRAY
-  }
 };
 
 export default createComponent<LoadingProps>(Loading);

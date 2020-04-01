@@ -2,7 +2,8 @@
 
 ### Install
 
-``` javascript
+```js
+import Vue from 'vue';
 import { Notify } from 'vant';
 
 Vue.use(Notify);
@@ -16,13 +17,27 @@ Vue.use(Notify);
 Notify('Notify Message');
 ```
 
-### Custom Config
+### Notify Type
+
+```js
+Notify({ type: 'primary', message: 'Notify Message' });
+Notify({ type: 'success', message: 'Notify Message' });
+Notify({ type: 'danger', message: 'Notify Message' });
+Notify({ type: 'warning', message: 'Notify Message' });
+```
+
+### Custom Notify
 
 ```js
 Notify({
-  message: 'Notify Message',
-  duration: 1000,
-  background: '#1989fa'
+  message: 'Custom Color',
+  color: '#ad0000',
+  background: '#ffe1e1'
+});
+
+Notify({
+  message: 'Custom Duration',
+  duration: 1000
 });
 ```
 
@@ -49,15 +64,16 @@ export default {
 | Notify.setDefaultOptions | `options` | `void` | Set default options of all notifies |
 | Notify.resetDefaultOptions | - | `void` | Reset default options of all notifies |
 
-### Props
+### Options
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|
-| message | Message | `string` | - |
-| duration | Duration(ms), won't disappear if value is 0 | `number` | `3000` |
-| color | Message color | `string` | `#fff` | |
-| background | Background color | `string` | `#f44` |
-| className | Custom className | `any` | - |
-| onClick | Callback function after click | `Function` | - |
-| onOpened | Callback function after opened | `Function` | - |
-| onClose | Callback function after close | `Function` | - |
+| type `v2.1.6` | Can be set to `primary` `success` `warning` | *string* | `danger` |
+| message | Message | *string* | - |
+| duration | Duration(ms), won't disappear if value is 0 | *number \| string* | `3000` |
+| color | Message color | *string* | `white` | |
+| background | Background color | *string* | - |
+| className | Custom className | *any* | - |
+| onClick | Callback function after click | *Function* | - |
+| onOpened | Callback function after opened | *Function* | - |
+| onClose | Callback function after close | *Function* | - |

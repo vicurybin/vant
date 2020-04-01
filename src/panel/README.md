@@ -2,7 +2,8 @@
 
 ### Install
 
-``` javascript
+```js
+import Vue from 'vue';
 import { Panel } from 'vant';
 
 Vue.use(Panel);
@@ -23,10 +24,10 @@ Vue.use(Panel);
 ```html
 <van-panel title="Title" desc="Description" status="Status">
   <div>Content</div>
-  <div slot="footer">
+  <template #footer>
     <van-button size="small">Button</van-button>
     <van-button size="small" type="danger">Button</van-button>
-  </div>
+  </template>
 </van-panel>
 ```
 
@@ -36,10 +37,10 @@ Vue.use(Panel);
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|
-| icon | Left Icon | `string` | - |
-| title | Title | `string` | - |
-| desc | Description | `string` | - |
-| status | Status | `string` | - |
+| icon | Left Icon | *string* | - |
+| title | Title | *string* | - |
+| desc | Description | *string* | - |
+| status | Status | *string* | - |
 
 ### Slots
 

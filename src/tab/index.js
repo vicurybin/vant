@@ -1,6 +1,6 @@
-/* eslint-disable object-shorthand */
-import { createNamespace } from '../utils';
+import { isDef, createNamespace } from '../utils';
 import { ChildrenMixin } from '../mixins/relation';
+import { routeProps } from '../utils/router';
 
 const [createComponent, bem] = createNamespace('tab');
 
@@ -8,53 +8,58 @@ export default createComponent({
   mixins: [ChildrenMixin('vanTabs')],
 
   props: {
+    ...routeProps,
+    dot: Boolean,
     name: [Number, String],
+    info: [Number, String],
+    badge: [Number, String],
     title: String,
-    disabled: Boolean
+    titleStyle: null,
+    disabled: Boolean,
   },
 
   data() {
     return {
-      inited: false
+      inited: false,
     };
   },
 
   computed: {
     computedName() {
-      return this.name || this.index;
+      return isDef(this.name) ? this.name : this.index;
     },
 
     isActive() {
       return this.computedName === this.parent.currentName;
-    }
+    },
   },
 
   watch: {
+    // eslint-disable-next-line object-shorthand
     'parent.currentIndex'() {
       this.inited = this.inited || this.isActive;
     },
 
     title() {
       this.parent.setLine();
-    }
-  },
+    },
 
-  mounted() {
-    if (this.slots('title')) {
-      this.parent.renderTitle(this.$refs.title, this.index);
-    }
+    inited(val) {
+      if (this.parent.lazyRender && val) {
+        this.$nextTick(() => {
+          this.parent.$emit('rendered', this.computedName, this.title);
+        });
+      }
+    },
   },
 
   render(h) {
-    const { slots, isActive } = this;
-    const shouldRender = this.inited || !this.parent.lazyRender;
-    const Content = [shouldRender ? slots() : h()];
+    const { slots, parent, isActive } = this;
+    const shouldRender = this.inited || parent.scrollspy || !parent.lazyRender;
+    const show = parent.scrollspy || isActive;
+    const Content = shouldRender ? slots() : h();
 
-    if (slots('title')) {
-      Content.push(<div ref="title">{slots('title')}</div>);
-    }
-
-    if (this.parent.animated) {
+    if (parent.animated) {
       return (
         <div
           role="tabpanel"
@@ -67,9 +72,9 @@ export default createComponent({
     }
 
     return (
-      <div vShow={isActive} role="tabpanel" class={bem('pane')}>
+      <div vShow={show} role="tabpanel" class={bem('pane')}>
         {Content}
       </div>
     );
-  }
+  },
 });

@@ -6,7 +6,8 @@ The Picker component is usually used with [Popup](#/en-US/popup) Component.
 
 ### Install
 
-``` javascript
+```js
+import Vue from 'vue';
 import { Area } from 'vant';
 
 Vue.use(Area);
@@ -39,21 +40,36 @@ Set `columns-num` with 2, you'll have a 2 level picker.
 <van-area :area-list="areaList" :columns-num="2" title="Title" />
 ```
 
+### Columns Placeholder
+
+`columns-placeholder` property is used to config placeholder of columns.
+
+```html
+<van-area
+  :area-list="areaList"
+  :columns-placeholder="['Choose', 'Choose', 'Choose']"
+  title="Title"
+/>
+```
+
 ## API
 
 ### Props
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|
-| value | the `code` of selected area | `string` | - |
-| title | Toolbar title | `string` | - |
-| area-list | Area data | `object` | - |
-| columns-num | level of picker | `string | number` | `3` |
-| item-height | Option height | `number` | `44` |
-| loading | Whether to show loading prompt | `boolean` | `false` |
-| visible-item-count | Count of visible columns | `number` | `5` |
-| confirm-button-text | Text of confirm button | `string` | `Confirm` |
-| cancel-button-text | Text of cancel button | `string` | `Cancel` |
+| value | the `code` of selected area | *string* | - |
+| title | Toolbar title | *string* | - |
+| confirm-button-text | Text of confirm button | *string* | `Confirm` |
+| cancel-button-text | Text of cancel button | *string* | `Cancel` |
+| area-list | Area list data | *object* | - |
+| columns-placeholder `v2.2.5` | Placeholder of columns | *string[]* | `[]` |
+| loading | Whether to show loading prompt | *boolean* | `false` |
+| item-height | Option height | *number \| string* | `44` |
+| columns-num | Level of picker | *number \| string* | `3` |
+| visible-item-count | Count of visible columns | *number \| string* | `5` |
+| swipe-duration `v2.2.13` | Duration of the momentum animation，unit `ms` | *number \| string*  | `1000` |
+| is-oversea-code `v2.1.4` | The method to validate oversea code | *() => boolean* | - |
 
 ### Events
 
@@ -63,13 +79,21 @@ Set `columns-num` with 2, you'll have a 2 level picker.
 | cancel | triggers when clicking the cancel button | - |
 | change | Triggered when current option changed | Picker instance, current values，column index |
 
+### Slots
+
+| Name | Description |
+|------|------|
+| title `v2.5.3` | Custom title |
+| columns-top `v2.5.3` | Custom content above columns |
+| columns-bottom `v2.5.3` | Custom content below columns |
+
 ### Methods
 
-Use ref to get area instance and call instance methods
+Use [ref](https://vuejs.org/v2/api/#ref) to get Area instance and call instance methods
 
-| Name | Attribute | Return value | Description |
+| Name | Description | Attribute | Return value |
 |------|------|------|------|
-| reset | code: string | - | Reset all options by code |
+| reset | Reset all options by code | code?: string | - |
 
 ### areaList Data Structure
 
@@ -78,7 +102,7 @@ Each property is a simple key-value object, key is a 6-bit code of the area of w
 
 Example of `AreaList`
 
-```javascript
+```js
 {
   province_list: {
     110000: 'Beijing',
@@ -107,7 +131,7 @@ All code of China: [Area.json](https://github.com/youzan/vant/blob/dev/src/area/
 An array contains selected area objects.
 
 `code` - code of selected area, `name` - name of selected area
-```javascript
+```js
 [{
   code: '330000',
   name: 'Zhejiang Province'

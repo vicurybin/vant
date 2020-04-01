@@ -1,5 +1,5 @@
 @import '../style/var';
-@import "../style/mixins/hairline";
+@import '../style/mixins/hairline';
 
 .van-cell {
   position: relative;
@@ -39,6 +39,7 @@
     color: @cell-value-color;
     text-align: right;
     vertical-align: middle;
+    word-wrap: break-word;
 
     &--alone {
       color: @text-color;
@@ -64,6 +65,8 @@
   }
 
   &--clickable {
+    cursor: pointer;
+
     &:active {
       background-color: @cell-active-color;
     }

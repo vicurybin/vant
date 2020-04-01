@@ -18,7 +18,7 @@ It's welcomed to pull request, And there are some tips about that:
 
 - When in doubt, keep your pull requests small. To give a PR the best chance of getting accepted, don't bundle more than one feature or bug fix per pull request. It's always best to create two smaller PRs than one big one.
 
-- When adding new features or modifying existing, please attempt to include tests to confirm the new behaviour. 
+- When adding new features or modifying existing, please attempt to include tests to confirm the new behaviour.
 
 - Rebase before creating a PR to keep commit history clear.
 
@@ -37,3 +37,13 @@ npm run dev
 
 # open http://localhost:8080
 ```
+
+## Contribute online with a single click
+
+You can use Gitpod (A free online VS Code-like IDE) for contributing, With a single click it will launch a workspace and automatically:
+
+- clone the vant repo.
+- run `npm run bootstrap`.
+- run `npm run dev`. 
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/youzan/vant)

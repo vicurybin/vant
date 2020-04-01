@@ -3,7 +3,7 @@
  */
 
 export type SharedSwitchProps = {
-  size: string;
+  size?: string | number;
   value?: any;
   loading?: boolean;
   disabled?: boolean;
@@ -14,6 +14,7 @@ export type SharedSwitchProps = {
 };
 
 export const switchProps = {
+  size: [Number, String],
   value: null as any,
   loading: Boolean,
   disabled: Boolean,
@@ -21,14 +22,10 @@ export const switchProps = {
   inactiveColor: String,
   activeValue: {
     type: null as any,
-    default: true
+    default: true,
   },
   inactiveValue: {
     type: null as any,
-    default: false
+    default: false,
   },
-  size: {
-    type: String,
-    default: '30px'
-  }
 };

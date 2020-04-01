@@ -14,69 +14,79 @@ export default createComponent({
     ...sharedProps,
     type: {
       type: String,
-      default: 'datetime'
+      default: 'datetime',
     },
     minDate: {
       type: Date,
       default: () => new Date(currentYear - 10, 0, 1),
-      validator: isDate
+      validator: isDate,
     },
     maxDate: {
       type: Date,
       default: () => new Date(currentYear + 10, 11, 31),
-      validator: isDate
-    }
+      validator: isDate,
+    },
   },
 
   watch: {
+    filter: 'updateInnerValue',
+    minDate: 'updateInnerValue',
+    maxDate: 'updateInnerValue',
+
     value(val) {
       val = this.formatValue(val);
 
       if (val.valueOf() !== this.innerValue.valueOf()) {
         this.innerValue = val;
       }
-    }
+    },
   },
 
   computed: {
     ranges() {
-      const { maxYear, maxDate, maxMonth, maxHour, maxMinute } = this.getBoundary(
-        'max',
-        this.innerValue
-      );
+      const {
+        maxYear,
+        maxDate,
+        maxMonth,
+        maxHour,
+        maxMinute,
+      } = this.getBoundary('max', this.innerValue);
 
-      const { minYear, minDate, minMonth, minHour, minMinute } = this.getBoundary(
-        'min',
-        this.innerValue
-      );
+      const {
+        minYear,
+        minDate,
+        minMonth,
+        minHour,
+        minMinute,
+      } = this.getBoundary('min', this.innerValue);
 
       const result = [
         {
           type: 'year',
-          range: [minYear, maxYear]
+          range: [minYear, maxYear],
         },
         {
           type: 'month',
-          range: [minMonth, maxMonth]
+          range: [minMonth, maxMonth],
         },
         {
           type: 'day',
-          range: [minDate, maxDate]
+          range: [minDate, maxDate],
         },
         {
           type: 'hour',
-          range: [minHour, maxHour]
+          range: [minHour, maxHour],
         },
         {
           type: 'minute',
-          range: [minMinute, maxMinute]
-        }
+          range: [minMinute, maxMinute],
+        },
       ];
 
       if (this.type === 'date') result.splice(3, 2);
       if (this.type === 'year-month') result.splice(2, 3);
       return result;
-    }
+    },
   },
 
   methods: {
@@ -124,19 +134,27 @@ export default createComponent({
         [`${type}Month`]: month,
         [`${type}Date`]: date,
         [`${type}Hour`]: hour,
-        [`${type}Minute`]: minute
+        [`${type}Minute`]: minute,
       };
     },
 
-    onChange(picker) {
-      const values = picker.getValues();
-      const year = getTrueValue(values[0]);
-      const month = getTrueValue(values[1]);
+    updateInnerValue() {
+      const indexes = this.getPicker().getIndexes();
+
+      const getValue = index => {
+        const { values } = this.originColumns[index];
+        return getTrueValue(values[indexes[index]]);
+      };
+
+      const year = getValue(0);
+      const month = getValue(1);
       const maxDate = getMonthEndDay(year, month);
 
-      let date = getTrueValue(values[2]);
+      let date;
       if (this.type === 'year-month') {
         date = 1;
+      } else {
+        date = getValue(2);
       }
 
       date = date > maxDate ? maxDate : date;
@@ -145,13 +163,17 @@ export default createComponent({
       let minute = 0;
 
       if (this.type === 'datetime') {
-        hour = getTrueValue(values[3]);
-        minute = getTrueValue(values[4]);
+        hour = getValue(3);
+        minute = getValue(4);
       }
 
       const value = new Date(year, month - 1, date, hour, minute);
 
       this.innerValue = this.formatValue(value);
+    },
+
+    onChange(picker) {
+      this.updateInnerValue();
 
       this.$nextTick(() => {
         this.$nextTick(() => {
@@ -160,12 +182,14 @@ export default createComponent({
       });
     },
 
-    updateColumnValue(value) {
+    updateColumnValue() {
+      const value = this.innerValue;
       const { formatter } = this;
+
       let values = [
         formatter('year', `${value.getFullYear()}`),
         formatter('month', padZero(value.getMonth() + 1)),
-        formatter('day', padZero(value.getDate()))
+        formatter('day', padZero(value.getDate())),
       ];
 
       if (this.type === 'datetime') {
@@ -180,8 +204,8 @@ export default createComponent({
       }
 
       this.$nextTick(() => {
-        this.$refs.picker.setValues(values);
+        this.getPicker().setValues(values);
       });
-    }
-  }
+    },
+  },
 });

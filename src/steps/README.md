@@ -2,10 +2,12 @@
 
 ### Install
 
-``` javascript
+```js
+import Vue from 'vue';
 import { Step, Steps } from 'vant';
 
-Vue.use(Step).use(Steps);
+Vue.use(Step);
+Vue.use(Steps);
 ```
 
 ## Usage
@@ -21,7 +23,7 @@ Vue.use(Step).use(Steps);
 </van-steps>
 ```
 
-```javascript
+```js
 export default {
   data() {
     return {
@@ -71,12 +73,11 @@ export default {
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|
-| active | Active step | `number` | 0 |
-| description | Description | `string` | - |
-| direction | Can be set to `vertical` | `string` | `horizontal` |
-| active-color | Active step color | `string` | `#07c160` |
-| active-icon | Active icon name | `string` | `checked` |
-| inactive-icon | Active icon name | `string` | - |
+| active | Active step | *number \| string* | `0` |
+| direction | Can be set to `vertical` | *string* | `horizontal` |
+| active-color | Active step color | *string* | `#07c160` |
+| active-icon | Active icon name | *string* | `checked` |
+| inactive-icon | Active icon name | *string* | - |
 
 ### Step Slots
 
@@ -84,3 +85,9 @@ export default {
 |------|------|
 | active-icon | Custom active icon |
 | inactive-icon | Custom inactive icon |
+
+### Steps Events
+
+| Event | Description | Arguments |
+|------|------|------|
+| click-step `v2.5.9` | Triggered when a step's title or icon is clicked | *index: number* |

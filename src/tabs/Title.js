@@ -1,10 +1,13 @@
 import { createNamespace } from '../utils';
+import Info from '../info';
 
-const bem = createNamespace('tab')[1];
+const [createComponent, bem] = createNamespace('tab');
 
-export default {
+export default createComponent({
   props: {
+    dot: Boolean,
     type: String,
+    info: [Number, String],
     color: String,
     title: String,
     isActive: Boolean,
@@ -13,7 +16,7 @@ export default {
     scrollable: Boolean,
     activeColor: String,
     inactiveColor: String,
-    swipeThreshold: Number
+    swipeThreshold: [Number, String],
   },
 
   computed: {
@@ -45,19 +48,13 @@ export default {
       }
 
       return style;
-    }
+    },
   },
 
   methods: {
     onClick() {
       this.$emit('click');
     },
-
-    renderTitle(el) {
-      const { title } = this.$refs;
-      title.innerHTML = '';
-      title.appendChild(el);
-    }
   },
 
   render() {
@@ -65,18 +62,24 @@ export default {
       <div
         role="tab"
         aria-selected={this.isActive}
-        class={bem({
-          active: this.isActive,
-          disabled: this.disabled,
-          complete: !this.ellipsis
-        })}
+        class={[
+          bem({
+            active: this.isActive,
+            disabled: this.disabled,
+            complete: !this.ellipsis,
+          }),
+          {
+            'van-ellipsis': this.ellipsis,
+          },
+        ]}
         style={this.style}
         onClick={this.onClick}
       >
-        <span ref="title" class={{ 'van-ellipsis': this.ellipsis }}>
-          {this.title}
+        <span class={bem('text')}>
+          {this.slots() || this.title}
+          <Info dot={this.dot} info={this.info} />
         </span>
       </div>
     );
-  }
-};
+  },
+});

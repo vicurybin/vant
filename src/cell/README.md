@@ -1,10 +1,13 @@
 # Cell
 
 ### Install
-``` javascript
+
+```js
+import Vue from 'vue';
 import { Cell, CellGroup } from 'vant';
 
-Vue.use(Cell).use(CellGroup);
+Vue.use(Cell);
+Vue.use(CellGroup);
 ```
 
 ## Usage
@@ -57,8 +60,8 @@ Vue.use(Cell).use(CellGroup);
 
 ```html
 <van-cell-group>
-  <van-cell title="Cell title" is-link url="//youzan.github.io/vant/mobile.html" />
-  <van-cell title="Cell title" is-link to="index" />
+  <van-cell title="URL" is-link url="/vant/mobile.html" />
+  <van-cell title="Vue Router" is-link to="index" />
 </van-cell-group>
 ```
 
@@ -73,23 +76,32 @@ Vue.use(Cell).use(CellGroup);
 </van-cell-group>
 ```
 
-### Advanced Usage
+### Use Slots
 
 ```html
-<van-cell value="Content" is-link>
-  <template slot="title">
-    <span class="custom-title">Cell title</span>
-    <van-tag type="danger">Tag</van-tag>
+<van-cell value="内容" is-link>
+  <!-- Use the title slot to customize the title -->
+  <template #title>
+    <span class="custom-title">单元格</span>
+    <van-tag type="danger">标签</van-tag>
   </template>
 </van-cell>
 
-<van-cell title="Cell title" icon="shop-o">
-  <van-icon
-    slot="right-icon"
-    name="search"
-    style="line-height: inherit;"
-  />
+<van-cell title="单元格" icon="shop-o">
+  <!-- Use the right-icon slot to customize the right icon -->
+  <template #right-icon>
+    <van-icon
+      name="search"
+      style="line-height: inherit;"
+    />
+  </template>
 </van-cell>
+```
+
+### Vertical Center
+
+```html
+<van-cell center title="Cell title" value="Content" label="Description" />
 ```
 
 ## API
@@ -98,43 +110,51 @@ Vue.use(Cell).use(CellGroup);
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|
-| title | Group title | `string` | - |
-| border | Whether to show outer border | `boolean` | `true` |
+| title | Group title | *string* | - |
+| border | Whether to show outer border | *boolean* | `true` |
 
 ### Cell Props
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|
-| icon | Left Icon | `string` | - |
-| title | Title | `string | number` | - |
-| value | Right text | `string | number` | - |
-| label | Description below the title | `string` | - |
-| size | Size，can be set to `large` | `string` | - |
-| border | Whether to show inner border | `boolean` | `true` |
-| center | Whether to center content vertically | `boolean` | `true` |
-| url | Link URL | `string` | - |
-| to | Target route of the link, same as to of vue-router | `string | object` | - |
-| replace | If true, the navigation will not leave a history record | `boolean` | `false` |
-| clickable | Whether to show click feedback when clicked | `boolean` | `false` |
-| is-link | Whether to show link icon | `boolean` | `false` |
-| required | Whether to show required mark | `boolean` | `false` |
-| arrow-direction | Can be set to `left` `up` `down` | `string` | - |
-| title-style | Title style | `any` | - |
-| title-class | Title className | `any` | - |
-| value-class | Value className | `any` | - |
-| label-class | Label className | `any` | - |
+| title | Title | *number \| string* | - |
+| value | Right text | *number \| string* | - |
+| label | Description below the title | *string* | - |
+| size | Size，can be set to `large` | *string* | - |
+| icon | Left Icon | *string* | - |
+| icon-prefix `v2.5.3` | Icon className prefix | *string* | `van-icon` |
+| border | Whether to show inner border | *boolean* | `true` |
+| center | Whether to center content vertically | *boolean* | `true` |
+| url | Link URL | *string* | - |
+| to | Target route of the link, same as to of vue-router | *string \| object* | - |
+| replace | If true, the navigation will not leave a history record | *boolean* | `false` |
+| clickable | Whether to show click feedback when clicked | *boolean* | `false` |
+| is-link | Whether to show link icon | *boolean* | `false` |
+| required | Whether to show required mark | *boolean* | `false` |
+| arrow-direction | Can be set to `left` `up` `down` | *string* | `right` |
+| title-style | Title style | *any* | - |
+| title-class | Title className | *any* | - |
+| value-class | Value className | *any* | - |
+| label-class | Label className | *any* | - |
 
 ### Cell Events
 
 | Event | Description | Arguments |
 |------|------|------|
-| click | Triggered when click cell | event: Event |
+| click | Triggered when click cell | *event: Event* |
+
+### CellGroup Slots
+
+| Name | Description |
+|------|------|
+| default | Default slot |
+| title | Custom title |
 
 ### Cell Slots
 
 | Name | Description |
 |------|------|
-| default | Default slot |
+| default | Custom value |
 | icon | Custom icon |
 | title | Custom title |
 | label | Custom label |

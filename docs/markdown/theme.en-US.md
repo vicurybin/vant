@@ -11,38 +11,26 @@ Vant use [Less](http://lesscss.org/) as css preprocessor，you can modify less v
 There are some basic variables below, all available variables could be found in [var.less](https://github.com/youzan/vant/blob/dev/src/style/var.less)。
 
 ```less
-// color variables
-@black: #000;
-@white: #fff;
-@red: #f44;
-@blue: #1989fa;
-@orange: #ff976a;
-@orange-dark: #ed6a0c;
-@orange-light: #fffbe8;
-@green: #07c160;
-@gray: #c9c9c9;
-@gray-light: #e5e5e5;
-@gray-darker: #7d7e80;
-@gray-dark: #969799;
-
-// default colors
+// Component Colors
 @text-color: #323233;
 @border-color: #ebedf0;
 @active-color: #f2f3f5;
-@background-color: #f8f8f8;
+@background-color: #f7f8fa;
 @background-color-light: #fafafa;
 ```
 
-### How to custom theme
+## How to custom theme
 
 
-#### Step 1: import less file
+### Step 1: import less file
 
 First you should import the less source file to your project. you can use babel-plugin-import to automatically import or just manually import less file.
 
+#### Automatically import style
+
+Configure babel plugin in babel.config.js, if you are using babel6, please manually import less file.
+
 ```js
-// configure babel plugin in babel.config.js
-// For users who use babel6, please manually import less file
 module.exports = {
   plugins: [
     [
@@ -59,14 +47,17 @@ module.exports = {
 };
 ```
 
-manually import less file：
+#### Manually import style
 
 ```js
-import Button from 'vant/lib/button';
+// import all styles
+import 'vant/lib/index.less';
+
+// import style of single component
 import 'vant/lib/button/style/less';
 ```
 
-#### Step 2: modify less variables
+### Step 2: modify less variables
 
 Use [modifyVars](http://lesscss.org/usage/#using-less-in-the-browser-modify-variables) provided by less.js to modify less variables，webpack config for reference:
 
@@ -82,15 +73,38 @@ module.exports = {
           loader: 'less-loader',
           options: {
             modifyVars: {
-              red: '#03a9f4',
-              blue: '#3eaf7c',
-              orange: '#f08d49',
-              'text-color': '#111'
-            }
-          }
-        }
-      ]
-    }
-  ]
+              // overide with less vars
+              'text-color': '#111',
+              'border-color': '#eee'
+              // or override with less file
+              'hack': `true; @import "your-less-file-path.less";`
+            },
+          },
+        },
+      ],
+    },
+  ],
 };
 ```
+
+If you build a project by vue-cli,it can be configured in `vue.config.js`:
+
+```js
+// vue.config.js
+module.exports = {
+  css: {
+    loaderOptions: {
+      less: {
+        modifyVars: {
+          // overide with less vars
+          'text-color': '#111',
+          'border-color': '#eee',
+          // or override with less file
+          hack: `true; @import "your-less-file-path.less";`,
+        },
+      },
+    },
+  },
+};
+```
+

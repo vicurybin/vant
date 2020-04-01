@@ -2,7 +2,8 @@
 
 ### Install
 
-``` javascript
+```js
+import Vue from 'vue';
 import { Pagination } from 'vant';
 
 Vue.use(Pagination);
@@ -20,7 +21,7 @@ Vue.use(Pagination);
 />
 ```
 
-```javascript
+```js
 export default {
   data() {
     return  {
@@ -57,15 +58,15 @@ export default {
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|
-| v-model | Current page number | `number` | - |
-| mode | Mode, can be set to `simple` `multi` | `string` | `multi` |
-| total-items | Total items | `number` | `0` |
-| items-per-page | Item number per page | `number` | `10` |
-| page-count | The total number of pages, if not set, will be calculated based on `total-items` and `items-per-page` | `number` | `-` |
-| prev-text | Previous text | `string` | `Previous` |
-| next-text | Next text | `string` | `Next` |
-| show-page-size | Count of page size to show | `number` | `5` |
-| force-ellipses | Whether to show ellipses | `boolean` | `false` |
+| v-model | Current page number | *number* | - |
+| mode | Mode, can be set to `simple` `multi` | *string* | `multi` |
+| prev-text | Previous text | *string* | `Previous` |
+| next-text | Next text | *string* | `Next` |
+| total-items | Total items | *number \| string* | `0` |
+| items-per-page | Item number per page | *number \| string* | `10` |
+| page-count | The total number of pages, if not set, will be calculated based on `total-items` and `items-per-page` | *number \| string* | `-` |
+| show-page-size | Count of page size to show | *number \| string* | `5` |
+| force-ellipses | Whether to show ellipses | *boolean* | `false` |
 
 ### Events
 

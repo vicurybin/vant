@@ -1,28 +1,33 @@
 import Vue from 'vue';
 import Toast from '..';
 import ToastVue from '../Toast';
-import { later } from '../../../test/utils';
+import { later } from '../../../test';
+import { lockClick } from '../lock-click';
 
 test('create a forbidClick toast', async () => {
   const toast = Toast({
     forbidClick: true,
-    type: 'success'
+    type: 'success',
   });
 
   await later();
   expect(toast.$el.outerHTML).toMatchSnapshot();
 
   await later();
-  expect(document.body.classList.contains('van-toast--unclickable')).toBeTruthy();
+  expect(
+    document.body.classList.contains('van-toast--unclickable')
+  ).toBeTruthy();
   toast.forbidClick = false;
 
   await later();
-  expect(document.body.classList.contains('van-toast--unclickable')).toBeFalsy();
+  expect(
+    document.body.classList.contains('van-toast--unclickable')
+  ).toBeFalsy();
 });
 
-it('toast disappeared after duration', async () => {
+test('toast disappeared after duration', async () => {
   const toast = Toast({
-    duration: 10
+    duration: 10,
   });
 
   await later(50);
@@ -31,7 +36,7 @@ it('toast disappeared after duration', async () => {
 
 test('show loading toast', async () => {
   const toast = Toast.loading({
-    message: 'Message'
+    message: 'Message',
   });
 
   await later();
@@ -41,7 +46,7 @@ test('show loading toast', async () => {
 test('show html toast', async () => {
   const toast = Toast({
     type: 'html',
-    message: '<div>Message</div>'
+    message: '<div>Message</div>',
   });
 
   await later();
@@ -51,7 +56,7 @@ test('show html toast', async () => {
 test('icon prop', async () => {
   const toast = Toast({
     message: 'Message',
-    icon: 'star-o'
+    icon: 'star-o',
   });
 
   await later();
@@ -62,7 +67,7 @@ test('icon-prefix prop', async () => {
   const toast = Toast({
     message: 'Message',
     icon: 'star-o',
-    iconPrefix: 'my-icon'
+    iconPrefix: 'my-icon',
   });
 
   await later();
@@ -121,11 +126,20 @@ test('set default options', () => {
   expect(Toast().className).toEqual('');
 });
 
+test('set default options by type', () => {
+  const className = 'my-toast';
+  Toast.setDefaultOptions('loading', { className });
+  expect(Toast.loading().className).toEqual(className);
+  expect(Toast.success().className).toEqual('');
+  Toast.resetDefaultOptions();
+  expect(Toast.loading().className).toEqual('');
+});
+
 test('toast duration 0', () => {
   Toast.allowMultiple();
   const toast = Toast({
     message: 'toast',
-    duration: 0
+    duration: 0,
   });
   expect(toast.timer).toBeFalsy();
   Toast.allowMultiple(false);
@@ -136,15 +150,47 @@ test('onClose callback', () => {
   const onClose = jest.fn();
   const toast = Toast({
     message: 'toast',
-    onClose
+    onClose,
   });
 
   toast.clear();
-  Toast.allowMultiple(false);
   expect(onClose).toHaveBeenCalledTimes(1);
+  Toast.allowMultiple(false);
+});
+
+test('closeOnClick option', async () => {
+  Toast.allowMultiple();
+  const toast = Toast({
+    message: 'toast',
+  });
+
+  await later();
+  toast.$el.click();
+  expect(toast.value).toBeTruthy();
+
+  toast.closeOnClick = true;
+  toast.$el.click();
+  expect(toast.value).toBeFalsy();
+
+  Toast.allowMultiple(false);
 });
 
 test('register component', () => {
   Vue.use(Toast);
   expect(Vue.component(ToastVue.name)).toBeTruthy();
+});
+
+test('lockClick function', () => {
+  const CLASSNAME = 'van-toast--unclickable';
+  expect(document.body.classList.contains(CLASSNAME)).toBeFalsy();
+
+  lockClick(true);
+  expect(document.body.classList.contains(CLASSNAME)).toBeTruthy();
+
+  lockClick(true);
+  lockClick(false);
+  expect(document.body.classList.contains(CLASSNAME)).toBeTruthy();
+
+  lockClick(false);
+  expect(document.body.classList.contains(CLASSNAME)).toBeFalsy();
 });

@@ -1,11 +1,21 @@
 import Notify from '..';
-import { later } from '../../../test/utils';
+import { later } from '../../../test';
 
 test('create a notify', async () => {
   // should not cause error when call clear before show notify
   Notify.clear();
 
   const notify = Notify('test');
+
+  await later();
+  expect(notify.$el.outerHTML).toMatchSnapshot();
+});
+
+test('type prop', async () => {
+  const notify = Notify({
+    message: 'test',
+    type: 'primary',
+  });
 
   await later();
   expect(notify.$el.outerHTML).toMatchSnapshot();
@@ -18,7 +28,7 @@ test('notify disappear', async () => {
     color: 'red',
     background: 'blue',
     duration: 10,
-    onClose
+    onClose,
   });
 
   await later();
@@ -30,7 +40,7 @@ test('notify disappear', async () => {
 
   Notify({
     message: 'text2',
-    duration: 0
+    duration: 0,
   });
 
   await later();
@@ -53,7 +63,7 @@ test('onClick prop', async () => {
   const onClick = jest.fn();
   const notify = Notify({
     message: 'test',
-    onClick
+    onClick,
   });
 
   notify.$el.click();

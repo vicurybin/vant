@@ -1,6 +1,10 @@
+// Utils
 import { createNamespace } from '../utils';
 import { emit, inherit } from '../utils/functional';
+import { BORDER_SURROUND, WHITE } from '../utils/constant';
 import { routeProps, RouteProps, functionalRoute } from '../utils/router';
+
+// Components
 import Icon from '../icon';
 import Loading, { LoadingType } from '../loading';
 
@@ -18,6 +22,7 @@ export type ButtonProps = RouteProps & {
   size: ButtonSize;
   text?: string;
   icon?: string;
+  color?: string;
   block?: boolean;
   plain?: boolean;
   round?: boolean;
@@ -26,6 +31,7 @@ export type ButtonProps = RouteProps & {
   hairline?: boolean;
   disabled?: boolean;
   nativeType?: string;
+  iconPrefix?: string;
   loadingSize: string;
   loadingType?: LoadingType;
   loadingText?: string;
@@ -43,7 +49,35 @@ function Button(
   slots: DefaultSlots,
   ctx: RenderContext<ButtonProps>
 ) {
-  const { tag, icon, type, disabled, loading, hairline, loadingText } = props;
+  const {
+    tag,
+    icon,
+    type,
+    color,
+    plain,
+    disabled,
+    loading,
+    hairline,
+    loadingText,
+  } = props;
+
+  const style: Record<string, string | number> = {};
+
+  if (color) {
+    style.color = plain ? color : WHITE;
+
+    if (!plain) {
+      // Use background instead of backgroundColor to make linear-gradient work
+      style.background = color;
+    }
+
+    // hide border when color is linear-gradient
+    if (color.indexOf('gradient') !== -1) {
+      style.border = 0;
+    } else {
+      style.borderColor = color;
+    }
+  }
 
   function onClick(event: Event) {
     if (!loading && !disabled) {
@@ -61,15 +95,16 @@ function Button(
       type,
       props.size,
       {
+        plain,
+        loading,
         disabled,
         hairline,
         block: props.block,
-        plain: props.plain,
         round: props.round,
-        square: props.square
-      }
+        square: props.square,
+      },
     ]),
-    { 'van-hairline--surround': hairline }
+    { [BORDER_SURROUND]: hairline },
   ];
 
   function Content() {
@@ -81,11 +116,13 @@ function Button(
           class={bem('loading')}
           size={props.loadingSize}
           type={props.loadingType}
-          color={type === 'default' ? undefined : ''}
+          color="currentColor"
         />
       );
     } else if (icon) {
-      content.push(<Icon name={icon} class={bem('icon')} />);
+      content.push(
+        <Icon name={icon} class={bem('icon')} classPrefix={props.iconPrefix} />
+      );
     }
 
     let text;
@@ -104,6 +141,7 @@ function Button(
 
   return (
     <tag
+      style={style}
       class={classes}
       type={props.nativeType}
       disabled={disabled}
@@ -120,6 +158,7 @@ Button.props = {
   ...routeProps,
   text: String,
   icon: String,
+  color: String,
   block: Boolean,
   plain: Boolean,
   round: Boolean,
@@ -127,25 +166,26 @@ Button.props = {
   loading: Boolean,
   hairline: Boolean,
   disabled: Boolean,
+  iconPrefix: String,
   nativeType: String,
   loadingText: String,
   loadingType: String,
   tag: {
     type: String,
-    default: 'button'
+    default: 'button',
   },
   type: {
     type: String,
-    default: 'default'
+    default: 'default',
   },
   size: {
     type: String,
-    default: 'normal'
+    default: 'normal',
   },
   loadingSize: {
     type: String,
-    default: '20px'
-  }
+    default: '20px',
+  },
 };
 
 export default createComponent<ButtonProps, ButtonEvents>(Button);
