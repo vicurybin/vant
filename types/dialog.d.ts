@@ -12,6 +12,7 @@ export type DialogOptions = {
   lockScroll?: boolean;
   transition?: string;
   messageAlign?: string;
+  titleAlign?:string;
   overlayClass?: string;
   overlayStyle?: object;
   closeOnPopstate?: boolean;
@@ -21,6 +22,7 @@ export type DialogOptions = {
   confirmButtonColor?: string;
   showConfirmButton?: boolean;
   showCancelButton?: boolean;
+  isDescriptionType?:boolean;
   closeOnClickOverlay?: boolean;
   getContainer?: string | (() => Element);
   beforeClose?: (action: DialogAction, done: DialogDone) => void;

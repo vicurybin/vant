@@ -1,19 +1,4 @@
 @import '../style/var';
-// .van-dialog,.van-dialog--desctiption {
-//     padding:0 20px 20px 20px;
-//     box-sizing: border-box;
-//     &__footer {
-//       overflow: hidden;
-//       user-select: none;
-
-//       &--buttons {
-//         border-radius: 25px;       
-//         .van-button {
-//           flex: 1;
-//         }
-//       }
-//     }
-// }
 .van-dialog {
   position: fixed;
   top: 45%;
@@ -37,6 +22,14 @@
     padding:0 20px 20px 20px;
     box-sizing: border-box;
     background: #fff;
+    .@{my-selector}__content {
+      .@{my-selector}__message{
+        text-align: left;
+        padding-left: 0;
+        padding-right: 0;
+      }
+      
+    }
     .@{my-selector}__footer {
       user-select: none;
       &--buttons{
@@ -46,24 +39,36 @@
 
       .van-button {
         border-radius: 25px;
-        // width: 46%;     
       }
     }
     .@{my-selector}__cancel{
       background: @white;
       color: @black-default;
-      border: 1px solid @black-default;
       margin-right: 15px;
+      &::before{
+        display: block;
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        right: -50%;
+        bottom: -50%;
+        width:unset;
+        height: unset;
+        border: 1px solid @black-default;
+        border-radius: 50px;
+        transform: scale(0.48);
+        background: transparent;
+        opacity: 1;
+        content: ' ';
+      }
     }
     
   }
   &__header {
-    padding-top: @dialog-header-padding-top;
+    padding: @dialog-header-padding-top @dialog-header-padding-top 0;
     font-weight: @dialog-header-font-weight;
     line-height: @dialog-header-line-height;
     text-align: center;
-    font-weight: @dialog-header-font-weight;
-    padding-top: @dialog-header-padding-top;
     background:@white;
     &--left {
       text-align: left;
@@ -92,8 +97,7 @@
     white-space: pre-wrap;
 
     &--has-title {
-      color: @dialog-has-title-message-text-color;
-      padding-top: @dialog-has-title-message-padding-top;
+      color: #7F7F7F;
     }
     &&--left,&&--right {
       padding: @dialog-message-padding 0;
@@ -109,10 +113,12 @@
   &__cancel {
     background:@gray-light;
     color:@black-default;
+    font-weight: 400;
   }
   &__confirm {
     background:@red;
     color:@white;
+    font-weight: 600;
   }
   &__footer::after{
     // border: 0 solid #fff;
@@ -125,15 +131,18 @@
     &--buttons {
       display: flex;
       background: @red;
-      .van-button {
-        // flex: 1;
-      }
     }
   }
 
   .van-button {
     border: 0;
     border-radius: 0;
+    height: 44px;
+    line-height: 44px;
+    font-size:15px;
+    &::before{
+      display: none;
+    }
   }
 
   &__confirm {
