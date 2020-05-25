@@ -8,7 +8,7 @@
   font-size: @dialog-font-size;
   transition: @dialog-transition;
   border-radius: @dialog-border-radius;
-  background-color: @dialog-background-color;
+  background-color: #ffffff;
   transform: translate3d(-50%, -50%, 0);
   backface-visibility: hidden; // avoid blurry text after scale animation
   transition: @dialog-transition;
@@ -19,9 +19,10 @@
   }
   @my-selector: van-dialog;
   &&--description {
-    padding:0 20px 20px 20px;
+    padding:0 25px 20px;
     box-sizing: border-box;
     background: #fff;
+    width:84%;
     .@{my-selector}__header {
       padding: @dialog-header-padding-top 0 0;
     }
@@ -41,7 +42,7 @@
       }
 
       .van-button {
-        border-radius: 25px;
+        border-radius: 5px;
       }
     }
     .@{my-selector}__cancel{
@@ -58,7 +59,7 @@
         width:unset;
         height: unset;
         border: 1px solid @black-default;
-        border-radius: 50px;
+        border-radius: 10px;
         transform: scale(0.48);
         background: transparent;
         opacity: 1;
