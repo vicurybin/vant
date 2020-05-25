@@ -70,6 +70,7 @@ export default {
       this.$dialog.alert({
         title: this.t('title'),
         message: this.t('content'),
+        isDescriptionType:true
       });
     },
 
