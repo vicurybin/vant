@@ -90,6 +90,7 @@
         :show-confirm="false"
         :min-date="tiledMinDate"
         :max-date="tiledMaxDate"
+        :default-date="tiledMinDate"
         :style="{ height: '500px' }"
       />
     </demo-block>
@@ -122,10 +123,10 @@ export default {
       out: '离店',
       today: '今天',
       laborDay: '劳动节',
-      youthDay: '五四青年节',
+      youthDay: '青年节',
       calendar: '日历',
       maxRange: '日期区间最大范围',
-      selectCount: count => `选择了 ${count} 个日期`,
+      selectCount: (count) => `选择了 ${count} 个日期`,
       selectSingle: '选择单个日期',
       selectMultiple: '选择多个日期',
       selectRange: '选择日期区间',
@@ -148,7 +149,7 @@ export default {
       youthDay: 'Youth Day',
       calendar: 'Calendar',
       maxRange: 'Max Range',
-      selectCount: count => `${count} dates selected`,
+      selectCount: (count) => `${count} dates selected`,
       selectSingle: 'Select Single Date',
       selectMultiple: 'Select Multiple Date',
       selectRange: 'Select Date Range',

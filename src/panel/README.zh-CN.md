@@ -1,5 +1,9 @@
 # Panel 面板
 
+### 废弃提示
+
+<b>由于使用场景有限，Panel 组件将在 3.0 版本中废弃</b>，请直接使用 Cell 和 Button 组件代替
+
 ### 引入
 
 ```js
@@ -39,17 +43,17 @@ Vue.use(Panel);
 
 ### Props
 
-| 参数 | 说明 | 类型 | 默认值 |
-|------|------|------|------|
-| title | 标题 | *string* | - |
-| desc | 描述 | *string* | - |
-| status | 状态 | *string* | - |
-| icon | 标题左侧[图标名称](#/zh-CN/icon)或图片链接 | *string* | - |
+| 参数   | 说明                                       | 类型     | 默认值 |
+| ------ | ------------------------------------------ | -------- | ------ |
+| title  | 标题                                       | _string_ | -      |
+| desc   | 描述                                       | _string_ | -      |
+| status | 状态                                       | _string_ | -      |
+| icon   | 标题左侧[图标名称](#/zh-CN/icon)或图片链接 | _string_ | -      |
 
 ### Slots
 
-| 名称 | 说明 |
-|------|------|
-| default | 自定义内容 |
-| header | 自定义 header |
-| footer | 自定义 footer |
+| 名称    | 说明          |
+| ------- | ------------- |
+| default | 自定义内容    |
+| header  | 自定义 header |
+| footer  | 自定义 footer |

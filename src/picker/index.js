@@ -1,8 +1,9 @@
 // Utils
-import { createNamespace } from '../utils';
+import { createNamespace, isDef, isObject } from '../utils';
 import { preventDefault } from '../utils/dom/event';
-import { BORDER_TOP_BOTTOM, BORDER_UNSET_TOP_BOTTOM } from '../utils/constant';
+import { BORDER_UNSET_TOP_BOTTOM } from '../utils/constant';
 import { pickerProps } from './shared';
+import { unitToPx } from '../utils/format/unit';
 
 // Components
 import Loading from '../loading';
@@ -39,6 +40,10 @@ export default createComponent({
   },
 
   computed: {
+    itemPxHeight() {
+      return unitToPx(this.itemHeight);
+    },
+
     dataType() {
       const { columns } = this;
       const firstColumn = columns[0] || {};
@@ -81,10 +86,12 @@ export default createComponent({
       let cursor = { children: this.columns };
 
       while (cursor && cursor.children) {
-        const defaultIndex = cursor.defaultIndex || +this.defaultIndex;
+        const defaultIndex = isDef(cursor.defaultIndex)
+          ? cursor.defaultIndex
+          : +this.defaultIndex;
 
         formatted.push({
-          values: cursor.children.map(item => item[this.valueKey]),
+          values: cursor.children.map((item) => item[this.valueKey]),
           className: cursor.className,
           defaultIndex,
         });
@@ -111,14 +118,9 @@ export default createComponent({
         cursor = cursor.children[indexes[i]];
       }
 
-      while (cursor.children) {
+      while (cursor && cursor.children) {
         columnIndex++;
-
-        this.setColumnValues(
-          columnIndex,
-          cursor.children.map(item => item[this.valueKey])
-        );
-
+        this.setColumnValues(columnIndex, cursor.children);
         cursor = cursor.children[cursor.defaultIndex || 0];
       }
     },
@@ -198,14 +200,21 @@ export default createComponent({
       const column = this.children[index];
 
       if (column) {
-        column.setOptions(options);
+        if (this.dataType === 'cascade') {
+          // map should be removed in next major version
+          column.setOptions(
+            options.map((item) => (isObject(item) ? item[this.valueKey] : item))
+          );
+        } else {
+          column.setOptions(options);
+        }
       }
     },
 
     // @exposed-api
     // get values of all columns
     getValues() {
-      return this.children.map(child => child.getValue());
+      return this.children.map((child) => child.getValue());
     },
 
     // @exposed-api
@@ -219,7 +228,7 @@ export default createComponent({
     // @exposed-api
     // get indexes of all columns
     getIndexes() {
-      return this.children.map(child => child.currentIndex);
+      return this.children.map((child) => child.currentIndex);
     },
 
     // @exposed-api
@@ -232,7 +241,7 @@ export default createComponent({
 
     // @exposed-api
     confirm() {
-      this.children.forEach(child => child.stopMomentum());
+      this.children.forEach((child) => child.stopMomentum());
       this.emit('confirm');
     },
 
@@ -255,7 +264,7 @@ export default createComponent({
     genToolbar() {
       if (this.showToolbar) {
         return (
-          <div class={[BORDER_TOP_BOTTOM, bem('toolbar')]}>
+          <div class={bem('toolbar')}>
             {this.slots() || [
               <button type="button" class={bem('cancel')} onClick={this.cancel}>
                 {this.cancelButtonText || t('cancel')}
@@ -275,12 +284,38 @@ export default createComponent({
     },
 
     genColumns() {
+      const { itemPxHeight } = this;
+      const wrapHeight = itemPxHeight * this.visibleItemCount;
+
+      const frameStyle = { height: `${itemPxHeight}px` };
+      const columnsStyle = { height: `${wrapHeight}px` };
+      const maskStyle = {
+        backgroundSize: `100% ${(wrapHeight - itemPxHeight) / 2}px`,
+      };
+
+      return (
+        <div
+          class={bem('columns')}
+          style={columnsStyle}
+          onTouchmove={preventDefault}
+        >
+          {this.genColumnItems()}
+          <div class={bem('mask')} style={maskStyle} />
+          <div
+            class={[BORDER_UNSET_TOP_BOTTOM, bem('frame')]}
+            style={frameStyle}
+          />
+        </div>
+      );
+    },
+
+    genColumnItems() {
       return this.formattedColumns.map((item, columnIndex) => (
         <PickerColumn
           valueKey={this.valueKey}
           allowHtml={this.allowHtml}
           className={item.className}
-          itemHeight={this.itemHeight}
+          itemHeight={this.itemPxHeight}
           defaultIndex={item.defaultIndex || +this.defaultIndex}
           swipeDuration={this.swipeDuration}
           visibleItemCount={this.visibleItemCount}
@@ -294,38 +329,12 @@ export default createComponent({
   },
 
   render(h) {
-    const itemHeight = +this.itemHeight;
-    const wrapHeight = itemHeight * this.visibleItemCount;
-
-    const frameStyle = {
-      height: `${itemHeight}px`,
-    };
-
-    const columnsStyle = {
-      height: `${wrapHeight}px`,
-    };
-
-    const maskStyle = {
-      backgroundSize: `100% ${(wrapHeight - itemHeight) / 2}px`,
-    };
-
     return (
       <div class={bem()}>
         {this.toolbarPosition === 'top' ? this.genToolbar() : h()}
         {this.loading ? <Loading class={bem('loading')} /> : h()}
         {this.slots('columns-top')}
-        <div
-          class={bem('columns')}
-          style={columnsStyle}
-          onTouchmove={preventDefault}
-        >
-          {this.genColumns()}
-          <div class={bem('mask')} style={maskStyle} />
-          <div
-            class={[BORDER_UNSET_TOP_BOTTOM, bem('frame')]}
-            style={frameStyle}
-          />
-        </div>
+        {this.genColumns()}
         {this.slots('columns-bottom')}
         {this.toolbarPosition === 'bottom' ? this.genToolbar() : h()}
       </div>

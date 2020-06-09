@@ -21,7 +21,7 @@ function initInstance() {
     },
   });
 
-  instance.$on('input', value => {
+  instance.$on('input', (value) => {
     instance.value = value;
   });
 }
@@ -75,7 +75,7 @@ Dialog.defaultOptions = {
 
 Dialog.alert = Dialog;
 
-Dialog.confirm = options =>
+Dialog.confirm = (options) =>
   Dialog({
     showCancelButton: true,
     ...options,
@@ -87,7 +87,7 @@ Dialog.close = () => {
   }
 };
 
-Dialog.setDefaultOptions = options => {
+Dialog.setDefaultOptions = (options) => {
   Object.assign(Dialog.currentOptions, options);
 };
 

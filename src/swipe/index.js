@@ -16,7 +16,7 @@ export default createComponent({
   mixins: [
     TouchMixin,
     ParentMixin('vanSwipe'),
-    BindEventMixin(function(bind, isBind) {
+    BindEventMixin(function (bind, isBind) {
       bind(window, 'resize', this.resize, true);
       bind(window, 'visibilitychange', this.onVisibilityChange);
 
@@ -149,33 +149,27 @@ export default createComponent({
   },
 
   mounted() {
-    this.initRect();
     this.bindTouchEvent(this.$refs.track);
   },
 
   methods: {
-    initRect() {
-      this.rect = this.$el.getBoundingClientRect();
-    },
-
     // initialize swipe position
     initialize(active = +this.initialSwipe) {
-      if (!this.rect) {
+      if (!this.$el || isHidden(this.$el)) {
         return;
       }
 
       clearTimeout(this.timer);
 
-      if (this.$el && !isHidden(this.$el)) {
-        const { rect } = this;
-        this.computedWidth = Math.round(+this.width || rect.width);
-        this.computedHeight = Math.round(+this.height || rect.height);
-      }
+      const rect = this.$el.getBoundingClientRect();
 
+      this.rect = rect;
       this.swiping = true;
       this.active = active;
+      this.computedWidth = Math.round(+this.width || rect.width);
+      this.computedHeight = Math.round(+this.height || rect.height);
       this.offset = this.getTargetOffset(active);
-      this.children.forEach(swipe => {
+      this.children.forEach((swipe) => {
         swipe.offset = 0;
       });
       this.autoPlay();
@@ -183,7 +177,6 @@ export default createComponent({
 
     // @exposed-api
     resize() {
-      this.initRect();
       this.initialize(this.activeIndicator);
     },
 
@@ -199,6 +192,7 @@ export default createComponent({
       if (!this.touchable) return;
 
       this.clear();
+      this.touchStartTime = Date.now();
       this.touchStart(event);
       this.correctPosition();
     },
@@ -217,23 +211,28 @@ export default createComponent({
     onTouchEnd() {
       if (!this.touchable || !this.swiping) return;
 
-      if (this.delta && this.isCorrectDirection) {
+      const { size, delta } = this;
+      const duration = Date.now() - this.touchStartTime;
+      const speed = delta / duration;
+      const shouldSwipe = Math.abs(speed) > 0.25 || Math.abs(delta) > size / 2;
+
+      if (shouldSwipe && this.isCorrectDirection) {
         const offset = this.vertical ? this.offsetY : this.offsetX;
 
         let pace = 0;
 
         if (this.loop) {
-          pace = offset > 0 ? (this.delta > 0 ? -1 : 1) : 0;
+          pace = offset > 0 ? (delta > 0 ? -1 : 1) : 0;
         } else {
-          pace = -Math[this.delta > 0 ? 'ceil' : 'floor'](
-            this.delta / this.size
-          );
+          pace = -Math[delta > 0 ? 'ceil' : 'floor'](delta / size);
         }
 
         this.move({
           pace,
           emitChange: true,
         });
+      } else if (delta) {
+        this.move({ pace: 0 });
       }
 
       this.swiping = false;
@@ -280,12 +279,12 @@ export default createComponent({
 
       // auto move first and last swipe in loop mode
       if (loop) {
-        if (children[0]) {
+        if (children[0] && targetOffset !== minOffset) {
           const outRightBound = targetOffset < minOffset;
           children[0].offset = outRightBound ? trackSize : 0;
         }
 
-        if (children[count - 1]) {
+        if (children[count - 1] && targetOffset !== 0) {
           const outLeftBound = targetOffset > 0;
           children[count - 1].offset = outLeftBound ? -trackSize : 0;
         }

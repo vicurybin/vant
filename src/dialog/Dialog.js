@@ -65,7 +65,7 @@ export default createComponent({
 
       if (this.beforeClose) {
         this.loading[action] = true;
-        this.beforeClose(action, state => {
+        this.beforeClose(action, (state) => {
           if (state !== false && this.loading[action]) {
             this.onClose(action);
           }

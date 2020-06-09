@@ -154,7 +154,7 @@ test('simulation finger swipe again before transitionend', () => {
   // mock getComputedStyle
   // see: https://github.com/jsdom/jsdom/issues/2588
   const originGetComputedStyle = window.getComputedStyle;
-  window.getComputedStyle = ele => {
+  window.getComputedStyle = (ele) => {
     const style = originGetComputedStyle(ele);
 
     return {
@@ -188,10 +188,7 @@ test('click column item', () => {
     },
   });
 
-  wrapper
-    .findAll('.van-picker-column__item')
-    .at(3)
-    .trigger('click');
+  wrapper.findAll('.van-picker-column__item').at(3).trigger('click');
   expect(wrapper.emitted('change')[0][1]).toEqual(columns[1]);
 });
 
@@ -263,4 +260,22 @@ test('should not reset index when columns unchanged', () => {
 
   wrapper.find('.van-picker__confirm').trigger('click');
   expect(wrapper.emitted('confirm')[0]).toEqual(['2', 1]);
+});
+
+test('set rem item-height', async () => {
+  const originGetComputedStyle = window.getComputedStyle;
+
+  window.getComputedStyle = () => ({ fontSize: '16px' });
+
+  const wrapper = mount(Picker, {
+    propsData: {
+      columns: simpleColumn.slice(0, 2),
+      itemHeight: '10rem',
+    },
+  });
+
+  await later();
+  expect(wrapper).toMatchSnapshot();
+
+  window.getComputedStyle = originGetComputedStyle;
 });
