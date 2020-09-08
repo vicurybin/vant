@@ -3,7 +3,7 @@ module.exports = {
   build: {
     skipInstall: ['lazyload'],
     site: {
-      publicPath: 'https://b.yzcdn.cn/vant/',
+      publicPath: process.env.PUBLIC_PATH || 'https://b.yzcdn.cn/vant/',
     },
     vetur: {
       tagPrefix: 'van-',
@@ -11,7 +11,10 @@ module.exports = {
   },
   site: {
     defaultLang: 'en-US',
-    versions: [{ label: '1.x', link: 'https://youzan.github.io/vant/1.x/' }],
+    versions: [
+      { label: '1.x', link: '/vant/1.x/' },
+      { label: '3.x', link: '/vant/next/' },
+    ],
     baiduAnalytics: {
       seed: 'ad6b5732c36321f2dafed737ac2da92f',
     },
@@ -35,6 +38,18 @@ module.exports = {
           apiKey: '90067aecdaa2c85220e2783cd305caac',
           indexName: 'vant',
           placeholder: '搜索文档...',
+          transformData(hits) {
+            if (location.hostname === 'vant-contrib.gitee.io') {
+              hits.forEach((hit) => {
+                if (hit.url) {
+                  hit.url = hit.url.replace(
+                    'youzan.github.io',
+                    'vant-contrib.gitee.io'
+                  );
+                }
+              });
+            }
+          },
         },
         nav: [
           {
@@ -104,6 +119,10 @@ module.exports = {
               {
                 path: 'style',
                 title: 'Style 内置样式',
+              },
+              {
+                path: 'toast',
+                title: 'Toast 轻提示',
               },
             ],
           },
@@ -211,10 +230,6 @@ module.exports = {
                 path: 'swipe-cell',
                 title: 'SwipeCell 滑动单元格',
               },
-              {
-                path: 'toast',
-                title: 'Toast 轻提示',
-              },
             ],
           },
           {
@@ -278,7 +293,7 @@ module.exports = {
               },
               {
                 path: 'tag',
-                title: 'Tag 标记',
+                title: 'Tag 标签',
               },
             ],
           },
@@ -452,6 +467,10 @@ module.exports = {
                 path: 'style',
                 title: 'Built-in style',
               },
+              {
+                path: 'toast',
+                title: 'Toast',
+              },
             ],
           },
           {
@@ -561,10 +580,6 @@ module.exports = {
               {
                 path: 'swipe-cell',
                 title: 'SwipeCell',
-              },
-              {
-                path: 'toast',
-                title: 'Toast',
               },
             ],
           },

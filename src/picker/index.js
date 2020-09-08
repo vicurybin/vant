@@ -1,8 +1,8 @@
 // Utils
-import { createNamespace, isDef, isObject } from '../utils';
+import { createNamespace } from '../utils';
 import { preventDefault } from '../utils/dom/event';
 import { BORDER_UNSET_TOP_BOTTOM } from '../utils/constant';
-import { pickerProps } from './shared';
+import { pickerProps, DEFAULT_ITEM_HEIGHT } from './shared';
 import { unitToPx } from '../utils/format/unit';
 
 // Components
@@ -41,7 +41,7 @@ export default createComponent({
 
   computed: {
     itemPxHeight() {
-      return unitToPx(this.itemHeight);
+      return this.itemHeight ? unitToPx(this.itemHeight) : DEFAULT_ITEM_HEIGHT;
     },
 
     dataType() {
@@ -86,12 +86,10 @@ export default createComponent({
       let cursor = { children: this.columns };
 
       while (cursor && cursor.children) {
-        const defaultIndex = isDef(cursor.defaultIndex)
-          ? cursor.defaultIndex
-          : +this.defaultIndex;
+        const defaultIndex = cursor.defaultIndex ?? +this.defaultIndex;
 
         formatted.push({
-          values: cursor.children.map((item) => item[this.valueKey]),
+          values: cursor.children,
           className: cursor.className,
           defaultIndex,
         });
@@ -106,7 +104,16 @@ export default createComponent({
       if (this.dataType === 'text') {
         this.$emit(event, this.getColumnValue(0), this.getColumnIndex(0));
       } else {
-        this.$emit(event, this.getValues(), this.getIndexes());
+        let values = this.getValues();
+
+        // compatible with old version of wrong parameters
+        // should be removed in next major version
+        // see: https://github.com/youzan/vant/issues/5905
+        if (this.dataType === 'cascade') {
+          values = values.map((item) => item[this.valueKey]);
+        }
+
+        this.$emit(event, values, this.getIndexes());
       }
     },
 
@@ -138,7 +145,16 @@ export default createComponent({
           this.getColumnIndex(0)
         );
       } else {
-        this.$emit('change', this, this.getValues(), columnIndex);
+        let values = this.getValues();
+
+        // compatible with old version of wrong parameters
+        // should be removed in next major version
+        // see: https://github.com/youzan/vant/issues/5905
+        if (this.dataType === 'cascade') {
+          values = values.map((item) => item[this.valueKey]);
+        }
+
+        this.$emit('change', this, values, columnIndex);
       }
     },
 
@@ -200,14 +216,7 @@ export default createComponent({
       const column = this.children[index];
 
       if (column) {
-        if (this.dataType === 'cascade') {
-          // map should be removed in next major version
-          column.setOptions(
-            options.map((item) => (isObject(item) ? item[this.valueKey] : item))
-          );
-        } else {
-          column.setOptions(options);
-        }
+        column.setOptions(options);
       }
     },
 
@@ -312,11 +321,12 @@ export default createComponent({
     genColumnItems() {
       return this.formattedColumns.map((item, columnIndex) => (
         <PickerColumn
+          readonly={this.readonly}
           valueKey={this.valueKey}
           allowHtml={this.allowHtml}
           className={item.className}
           itemHeight={this.itemPxHeight}
-          defaultIndex={item.defaultIndex || +this.defaultIndex}
+          defaultIndex={item.defaultIndex ?? +this.defaultIndex}
           swipeDuration={this.swipeDuration}
           visibleItemCount={this.visibleItemCount}
           initialOptions={item.values}

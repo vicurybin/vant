@@ -1,5 +1,5 @@
 // Utils
-import { createNamespace, isDef } from '../utils';
+import { createNamespace } from '../utils';
 import { raf, doubleRaf } from '../utils/dom/raf';
 
 // Mixins
@@ -35,7 +35,7 @@ export default createComponent({
 
   computed: {
     currentName() {
-      return isDef(this.name) ? this.name : this.index;
+      return this.name ?? this.index;
     },
 
     expanded() {
@@ -92,7 +92,7 @@ export default createComponent({
           const contentHeight = `${offsetHeight}px`;
           wrapper.style.height = expanded ? 0 : contentHeight;
 
-          // use double raf to ensure animation can start in mobile safari
+          // use double raf to ensure animation can start
           doubleRaf(() => {
             wrapper.style.height = expanded ? contentHeight : 0;
           });
@@ -125,7 +125,7 @@ export default createComponent({
     },
 
     genTitle() {
-      const { disabled, expanded } = this;
+      const { border, disabled, expanded } = this;
 
       const titleSlots = CELL_SLOTS.reduce((slots, name) => {
         if (this.slots(name)) {
@@ -142,7 +142,7 @@ export default createComponent({
       return (
         <Cell
           role="button"
-          class={bem('title', { disabled, expanded })}
+          class={bem('title', { disabled, expanded, borderless: !border })}
           onClick={this.onClick}
           scopedSlots={titleSlots}
           tabindex={disabled ? -1 : 0}
@@ -172,7 +172,7 @@ export default createComponent({
 
   render() {
     return (
-      <div class={[bem({ border: this.index })]}>
+      <div class={[bem({ border: this.index && this.border })]}>
         {this.genTitle()}
         {this.genContent()}
       </div>

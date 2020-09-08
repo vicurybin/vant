@@ -7,8 +7,10 @@ export type DialogOptions = {
   title?: string;
   width?: string | number;
   message?: string;
+  theme?: string;
   overlay?: boolean;
   className?: any;
+  allowHtml?: boolean;
   lockScroll?: boolean;
   transition?: string;
   messageAlign?: string;

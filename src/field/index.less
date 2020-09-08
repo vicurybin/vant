@@ -5,7 +5,10 @@
     flex: none;
     box-sizing: border-box;
     width: @field-label-width;
+    margin-right: @field-label-margin-right;
+    color: @field-label-color;
     text-align: left;
+    word-wrap: break-word;
 
     &--center {
       text-align: center;
@@ -14,6 +17,12 @@
     &--right {
       padding-right: @padding-md;
       text-align: right;
+    }
+  }
+
+  &--disabled {
+    .van-field__label {
+      color: @field-disabled-text-color;
     }
   }
 
@@ -114,7 +123,7 @@
   }
 
   &__left-icon {
-    margin-right: 5px;
+    margin-right: @padding-base;
   }
 
   &__right-icon {
@@ -145,12 +154,6 @@
     font-size: @field-word-limit-font-size;
     line-height: @field-word-limit-line-height;
     text-align: right;
-  }
-
-  &__word-num {
-    &--full {
-      color: @field-word-num-full-color;
-    }
   }
 
   &--error {

@@ -70,13 +70,13 @@ Vue.use(Lazyload);
 | alt | Alt | _string_ | - |
 | width | Width | _number \| string_ | - |
 | height | Height | _number \| string_ | - |
-| radius `v2.1.6` | Border Radius | _number \| string_ | `0` |
+| radius | Border Radius | _number \| string_ | `0` |
 | round | Whether to be round | _boolean_ | `false` |
 | lazy-load | Whether to enable lazy load，should register [Lazyload](#/en-US/lazyload) component | _boolean_ | `false` |
-| show-error `v2.0.9` | Whether to show error placeholder | _boolean_ | `true` |
-| show-loading `v2.0.9` | Whether to show loading placeholder | _boolean_ | `true` |
-| error-icon `v2.4.2` | Error icon | _string_ | `warning-o` |
-| loading-icon `v2.4.2` | Loading icon | _string_ | `photo-o` |
+| show-error | Whether to show error placeholder | _boolean_ | `true` |
+| show-loading | Whether to show loading placeholder | _boolean_ | `true` |
+| error-icon `v2.4.2` | Error icon | _string_ | `photo-fail` |
+| loading-icon `v2.4.2` | Loading icon | _string_ | `photo` |
 
 ### fit optional value
 
@@ -98,7 +98,8 @@ Vue.use(Lazyload);
 
 ### Slots
 
-| Name    | Description                |
-| ------- | -------------------------- |
-| loading | Custom loading placeholder |
-| error   | Custom error placeholder   |
+| Name             | Description                        |
+| ---------------- | ---------------------------------- |
+| default `v2.9.0` | Custom the content below the image |
+| loading          | Custom loading placeholder         |
+| error            | Custom error placeholder           |

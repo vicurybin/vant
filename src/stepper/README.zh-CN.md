@@ -140,20 +140,22 @@ export default {
 | max | 最大值 | _number \| string_ | - |
 | default-value | 初始值，当 v-model 为空时生效 | _number \| string_ | `1` |
 | step | 步长，每次点击时改变的值 | _number \| string_ | `1` |
-| name `v2.2.11` | 标识符，可以在`change`事件回调参数中获取 | _number \| string_ | - |
+| name | 标识符，可以在`change`事件回调参数中获取 | _number \| string_ | - |
 | input-width | 输入框宽度，默认单位为`px` | _number \| string_ | `32px` |
-| button-size `v2.0.5` | 按钮大小以及输入框高度，默认单位为`px` | _number \| string_ | `28px` |
-| decimal-length `v2.2.1` | 固定显示的小数位数 | _number \| string_ | - |
+| button-size | 按钮大小以及输入框高度，默认单位为`px` | _number \| string_ | `28px` |
+| decimal-length | 固定显示的小数位数 | _number \| string_ | - |
 | theme `v2.8.2` | 样式风格，可选值为 `round` | _string_ | - |
+| placeholder `v2.8.6` | 输入框占位提示文字 | _string_ | - |
 | integer | 是否只允许输入整数 | _boolean_ | `false` |
 | disabled | 是否禁用步进器 | _boolean_ | `false` |
-| disable-plus `v2.2.16` | 是否禁用增加按钮 | _boolean_ | `false` |
-| disable-minus `v2.2.16` | 是否禁用减少按钮 | _boolean_ | `false` |
+| disable-plus | 是否禁用增加按钮 | _boolean_ | `false` |
+| disable-minus | 是否禁用减少按钮 | _boolean_ | `false` |
 | disable-input | 是否禁用输入框 | _boolean_ | `false` |
 | async-change | 是否开启异步变更，开启后需要手动控制输入值 | _boolean_ | `false` |
-| show-plus `v2.1.2` | 是否显示增加按钮 | _boolean_ | `true` |
-| show-minus `v2.1.2` | 是否显示减少按钮 | _boolean_ | `true` |
+| show-plus | 是否显示增加按钮 | _boolean_ | `true` |
+| show-minus | 是否显示减少按钮 | _boolean_ | `true` |
 | long-press `v2.4.3` | 是否开启长按手势 | _boolean_ | `true` |
+| allow-empty `v2.9.1` | 是否允许输入的值为空 | _boolean_ | `false` |
 
 ### Events
 
@@ -165,3 +167,15 @@ export default {
 | minus | 点击减少按钮时触发 | - |
 | focus | 输入框聚焦时触发 | _event: Event_ |
 | blur | 输入框失焦时触发 | _event: Event_ |
+
+## 常见问题
+
+### 为什么 value 有时候会变成 string 类型？
+
+这是因为用户输入过程中可能出现小数点或空值，比如 `1.`，这种情况下组件会抛出字符串类型。
+
+如果希望 value 保持 number 类型，可以在 v-model 上添加 `number` 修饰符：
+
+```html
+<van-stepper v-model.number="value" />
+```

@@ -1,16 +1,20 @@
 export type SharedPickerProps = {
   title?: string;
   loading?: boolean;
-  itemHeight: number;
+  itemHeight?: number;
   showToolbar?: boolean;
   visibleItemCount: number | string;
   cancelButtonText?: string;
   confirmButtonText?: string;
 };
 
+export const DEFAULT_ITEM_HEIGHT = 44;
+
 export const pickerProps = {
   title: String,
   loading: Boolean,
+  readonly: Boolean,
+  itemHeight: [Number, String],
   showToolbar: Boolean,
   cancelButtonText: String,
   confirmButtonText: String,
@@ -20,11 +24,7 @@ export const pickerProps = {
   },
   visibleItemCount: {
     type: [Number, String],
-    default: 5,
-  },
-  itemHeight: {
-    type: [Number, String],
-    default: 44,
+    default: 6,
   },
   swipeDuration: {
     type: [Number, String],

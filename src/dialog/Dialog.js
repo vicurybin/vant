@@ -2,6 +2,8 @@ import { createNamespace, addUnit } from '../utils';
 import { BORDER_TOP, BORDER_LEFT } from '../utils/constant';
 import { PopupMixin } from '../mixins/popup';
 import Button from '../button';
+import GoodsAction from '../goods-action';
+import GoodsActionButton from '../goods-action-button';
 
 const [createComponent, bem, t] = createNamespace('dialog');
 
@@ -10,6 +12,7 @@ export default createComponent({
 
   props: {
     title: String,
+    theme: String,
     width: [Number, String],
     message: String,
     className: null,
@@ -21,6 +24,14 @@ export default createComponent({
     confirmButtonText: String,
     confirmButtonColor: String,
     showCancelButton: Boolean,
+    overlay: {
+      type: Boolean,
+      default: true,
+    },
+    allowHtml: {
+      type: Boolean,
+      default: true,
+    },
     transition: {
       type: String,
       default: 'van-dialog-bounce',
@@ -29,7 +40,7 @@ export default createComponent({
       type: Boolean,
       default: true,
     },
-    overlay: {
+    closeOnPopstate: {
       type: Boolean,
       default: true,
     },
@@ -92,11 +103,44 @@ export default createComponent({
       this.$emit('closed');
     },
 
+    genRoundButtons() {
+      return (
+        <GoodsAction class={bem('footer')}>
+          {this.showCancelButton && (
+            <GoodsActionButton
+              size="large"
+              type="warning"
+              text={this.cancelButtonText || t('cancel')}
+              class={bem('cancel')}
+              color={this.cancelButtonColor}
+              loading={this.loading.cancel}
+              onClick={() => {
+                this.handleAction('cancel');
+              }}
+            />
+          )}
+          {this.showConfirmButton && (
+            <GoodsActionButton
+              size="large"
+              type="danger"
+              text={this.confirmButtonText || t('confirm')}
+              class={bem('confirm')}
+              color={this.confirmButtonColor}
+              loading={this.loading.confirm}
+              onClick={() => {
+                this.handleAction('confirm');
+              }}
+            />
+          )}
+        </GoodsAction>
+      );
+    },
+
     genButtons() {
       const multiple = this.showCancelButton && this.showConfirmButton;
 
       return (
-        <div class={[BORDER_TOP, bem('footer', { buttons: multiple })]}>
+        <div class={[BORDER_TOP, bem('footer')]}>
           {this.showCancelButton && (
             <Button
               size="large"
@@ -124,6 +168,31 @@ export default createComponent({
         </div>
       );
     },
+
+    genContent(hasTitle, messageSlot) {
+      if (messageSlot) {
+        return <div class={bem('content')}>{messageSlot}</div>;
+      }
+
+      const { message, messageAlign } = this;
+      if (message) {
+        const data = {
+          class: bem('message', {
+            'has-title': hasTitle,
+            [messageAlign]: messageAlign,
+          }),
+          domProps: {
+            [this.allowHtml ? 'innerHTML' : 'textContent']: message,
+          },
+        };
+
+        return (
+          <div class={bem('content')}>
+            <div {...data} />
+          </div>
+        );
+      }
+    },
   },
 
   render() {
@@ -131,27 +200,12 @@ export default createComponent({
       return;
     }
 
-    const { message, messageAlign } = this;
+    const { message } = this;
     const messageSlot = this.slots();
     const title = this.slots('title') || this.title;
-
     const Title = title && (
       <div class={bem('header', { isolated: !message && !messageSlot })}>
         {title}
-      </div>
-    );
-
-    const Content = (messageSlot || message) && (
-      <div class={bem('content')}>
-        {messageSlot || (
-          <div
-            domPropsInnerHTML={message}
-            class={bem('message', {
-              'has-title': title,
-              [messageAlign]: messageAlign,
-            })}
-          />
-        )}
       </div>
     );
 
@@ -165,12 +219,14 @@ export default createComponent({
           vShow={this.value}
           role="dialog"
           aria-labelledby={this.title || message}
-          class={[bem(), this.className]}
+          class={[bem([this.theme]), this.className]}
           style={{ width: addUnit(this.width) }}
         >
           {Title}
-          {Content}
-          {this.genButtons()}
+          {this.genContent(title, messageSlot)}
+          {this.theme === 'round-button'
+            ? this.genRoundButtons()
+            : this.genButtons()}
         </div>
       </transition>
     );
