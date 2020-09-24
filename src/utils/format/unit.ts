@@ -1,4 +1,4 @@
-import { isDef } from '..';
+import { isDef, inBrowser } from '..';
 import { isNumeric } from '../validate/number';
 
 export function addUnit(value?: string | number): string | undefined {
@@ -10,13 +10,29 @@ export function addUnit(value?: string | number): string | undefined {
   return isNumeric(value) ? `${value}px` : value;
 }
 
+// cache
+let rootFontSize: number;
+
+function getRootFontSize() {
+  if (!rootFontSize) {
+    const doc = document.documentElement;
+    const fontSize =
+      doc.style.fontSize || window.getComputedStyle(doc).fontSize;
+
+    rootFontSize = parseFloat(fontSize);
+  }
+
+  return rootFontSize;
+}
+
 function convertRem(value: string) {
-  const rootStyle = window.getComputedStyle(document.documentElement);
-  const rootFontSize = parseFloat(rootStyle.fontSize);
-
   value = value.replace(/rem/g, '');
+  return +value * getRootFontSize();
+}
 
-  return +value * rootFontSize;
+function convertVw(value: string) {
+  value = value.replace(/vw/g, '');
+  return (+value * window.innerWidth) / 100;
 }
 
 export function unitToPx(value: string | number): number {
@@ -24,8 +40,14 @@ export function unitToPx(value: string | number): number {
     return value;
   }
 
-  if (value.indexOf('rem') !== -1) {
-    return convertRem(value);
+  if (inBrowser) {
+    if (value.indexOf('rem') !== -1) {
+      return convertRem(value);
+    }
+
+    if (value.indexOf('vw') !== -1) {
+      return convertVw(value);
+    }
   }
 
   return parseFloat(value);

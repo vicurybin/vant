@@ -1,21 +1,22 @@
 <p align="center">
     <img alt="logo" src="https://img.yzcdn.cn/vant/logo.png" width="120" style="margin-bottom: 10px;">
 </p>
-<h3 align="center" style="margin: 30px 0 35px;">轻量、可靠的移动端 Vue 组件库</h3>
+
+<h1 align="center">Vant</h1>
+
+<p align="center">轻量、可靠的移动端 Vue 组件库</p>
 
 <p align="center">
-    <img src="https://img.shields.io/npm/v/vant.svg?style=for-the-badge" alt="npm version" />
-    <img src="https://img.shields.io/github/workflow/status/youzan/vant/CI/dev?style=for-the-badge" alt="npm version" />
-    <img src="https://img.shields.io/codecov/c/github/youzan/vant/dev.svg?style=for-the-badge&color=#4fc08d" alt="Coverage Status" />
-    <img src="https://img.shields.io/npm/dm/vant.svg?style=for-the-badge&color=#4fc08d" alt="downloads" />
-    <img src="https://img.badgesize.io/https://unpkg.com/vant/lib/vant.min.js?compression=gzip&style=for-the-badge&label=gzip%20size&color=#4fc08d" alt="Gzip Size" />
+    <img src="https://img.shields.io/npm/v/vant.svg?style=flat-square" alt="npm version" />
+    <img src="https://img.shields.io/github/workflow/status/youzan/vant/CI/dev?style=flat-square" alt="npm version" />
+    <img src="https://img.shields.io/codecov/c/github/youzan/vant/dev.svg?style=flat-square&color=#4fc08d" alt="Coverage Status" />
+    <img src="https://img.shields.io/npm/dm/vant.svg?style=flat-square&color=#4fc08d" alt="downloads" />
+    <img src="https://img.shields.io/jsdelivr/npm/hm/vant?style=flat-square" alt="Jsdelivr Hits">
+    <img src="https://img.badgesize.io/https://unpkg.com/vant/lib/vant.min.js?compression=gzip&style=flat-square&label=gzip%20size&color=#4fc08d" alt="Gzip Size" />
 </p>
 
 <p align="center">
-  🔥 <a href="https://youzan.github.io/vant">文档网站</a>
-  &nbsp;
-  &nbsp;
-  💡 <a href="https://vant-contrib.gitee.io/vant">国内镜像文档</a>
+  🔥 <a href="https://vant-contrib.gitee.io/vant">文档网站</a>
   &nbsp;
   &nbsp;
   🚀 <a href="https://github.com/youzan/vant-weapp" target="_blank">小程序版</a>
@@ -44,6 +45,8 @@ npm i vant -S
 yarn add vant
 ```
 
+> Tips: Vue 3 项目请安装 Vant 3.0，参见 [issue#7035](https://github.com/youzan/vant/issues/7035)
+
 ## 快速上手
 
 ```js
@@ -54,11 +57,11 @@ import 'vant/lib/index.css';
 Vue.use(Button);
 ```
 
-vant 也支持按需引入、CDN 引入等方式，详细说明见 [快速上手](https://youzan.github.io/vant#/zh-CN/quickstart).
+vant 也支持按需引入、CDN 引入等方式，详细说明见 [快速上手](https://vant-contrib.gitee.io/vant#/zh-CN/quickstart).
 
 ## 贡献代码
 
-修改代码请阅读我们的 [开发指南](https://youzan.github.io/vant/#/zh-CN/contribution)。
+修改代码请阅读我们的 [开发指南](https://vant-contrib.gitee.io/vant/#/zh-CN/contribution)。
 
 使用过程中发现任何问题都可以提 [Issue](https://github.com/youzan/vant/issues) 给我们，当然，我们也非常欢迎你给我们发 [PR](https://github.com/youzan/vant/pulls)。
 
@@ -76,7 +79,7 @@ vant 也支持按需引入、CDN 引入等方式，详细说明见 [快速上手
 
 我们正在寻找更多优秀的小伙伴，一起拓展前端技术的边界，期待你的加入！
 
-- <a target="_blank" href="https://app.mokahr.com/apply/youzan/6252#/job/96f5d2c7-e657-4d31-9244-195edc443a7f?_k=jf2141">职位详情</a>（Base: 杭州/深圳）
+- <a target="_blank" href="https://app.mokahr.com/apply/youzan/3750#/jobs/?keyword=%E5%89%8D%E7%AB%AF&_k=tueqds">职位详情</a>（Base: 杭州/深圳）
 - <a target="_blank" href="https://tech.youzan.com/tag/front-end/">团队博客</a>
 - <a target="_blank" href="https://github.com/youzan">开源项目</a>
 
@@ -86,15 +89,15 @@ vant 也支持按需引入、CDN 引入等方式，详细说明见 [快速上手
 | --- | --- |
 | [vant-demo](https://github.com/youzan/vant-demo) | Vant 官方示例合集 |
 | [vant-weapp](https://github.com/youzan/vant-weapp) | 微信小程序组件库 |
+| [vant-react](https://github.com/mxdi9i7/vant-react) | Vant React 版（由社区维护） |
 | [vant-cli](https://github.com/youzan/vant/tree/dev/packages/vant-cli) | 开箱即用的组件库搭建工具 |
 | [vant-icons](https://github.com/youzan/vant/tree/dev/packages/vant-icons) | Vant 图标库 |
 | [vant-touch-emulator](https://github.com/youzan/vant/tree/dev/packages/vant-touch-emulator) | 在桌面端使用 Vant 的辅助库 |
 
 ## 链接
 
-- [详细文档](https://youzan.github.io/vant)
-- [更新日志](https://youzan.github.io/vant#/zh-CN/changelog)
-- [码云镜像](https://vant-contrib.gitee.io/vant)
+- [详细文档](https://vant-contrib.gitee.io/vant)
+- [更新日志](https://vant-contrib.gitee.io/vant#/zh-CN/changelog)
 - [Gitter 讨论组](https://gitter.im/vant-contrib/discuss?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
 
 ## 手机预览

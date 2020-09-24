@@ -184,7 +184,7 @@ test('maxlength', async () => {
   expect(wrapper.emitted('input')[0][0]).toEqual('123');
 });
 
-test('clearable', () => {
+test('clearable prop', () => {
   const wrapper = mount(Field, {
     propsData: {
       value: 'test',
@@ -200,6 +200,18 @@ test('clearable', () => {
   wrapper.find('.van-field__clear').trigger('touchstart');
   expect(wrapper.emitted('input')[0][0]).toEqual('');
   expect(wrapper.emitted('clear')[0][0]).toBeTruthy();
+});
+
+test('clear-trigger prop', () => {
+  const wrapper = mount(Field, {
+    propsData: {
+      value: 'test',
+      clearable: true,
+      clearTrigger: 'always',
+    },
+  });
+
+  expect(wrapper.contains('.van-field__clear')).toBeTruthy();
 });
 
 test('render input slot', () => {
@@ -297,6 +309,29 @@ test('formatter prop', () => {
   expect(wrapper.emitted('input')[1][0]).toEqual('efg');
 });
 
+test('format-trigger prop', () => {
+  const wrapper = mount(Field, {
+    propsData: {
+      value: 'abc123',
+      formatTrigger: 'onBlur',
+      formatter: (value) => value.replace(/\d/g, ''),
+    },
+  });
+
+  wrapper.vm.$on('input', (value) => {
+    wrapper.setProps({ value });
+  });
+
+  expect(wrapper.emitted('input')[0][0]).toEqual('abc');
+
+  const input = wrapper.find('input');
+  input.element.value = '123efg';
+  input.trigger('input');
+  expect(wrapper.emitted('input')[1][0]).toEqual('123efg');
+  input.trigger('blur');
+  expect(wrapper.emitted('input')[2][0]).toEqual('efg');
+});
+
 test('reach max word-limit', () => {
   const wrapper = mount(Field, {
     propsData: {
@@ -379,4 +414,15 @@ test('should blur search input on enter', () => {
   wrapper.find('input').element.focus();
   wrapper.find('input').trigger('keypress.enter');
   expect(wrapper.emitted('blur')).toBeTruthy();
+});
+
+test('value is null', () => {
+  const wrapper = mount(Field, {
+    propsData: {
+      value: null,
+    },
+  });
+
+  expect(wrapper.find('input').element.value).toEqual('');
+  expect(wrapper.emitted('input')[0][0]).toEqual('');
 });

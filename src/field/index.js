@@ -69,11 +69,20 @@ export default createComponent({
       type: Boolean,
       default: null,
     },
+    clearTrigger: {
+      type: String,
+      default: 'focus',
+    },
+    formatTrigger: {
+      type: String,
+      default: 'onChange',
+    },
   },
 
   data() {
     return {
       focused: false,
+      validateFailed: false,
       validateMessage: '',
     };
   },
@@ -88,7 +97,7 @@ export default createComponent({
   },
 
   mounted() {
-    this.updateValue(this.value);
+    this.updateValue(this.value, this.formatTrigger);
     this.$nextTick(this.adjustSize);
 
     if (this.vanForm) {
@@ -104,20 +113,21 @@ export default createComponent({
 
   computed: {
     showClear() {
-      return (
-        this.clearable &&
-        this.focused &&
-        this.value !== '' &&
-        isDef(this.value) &&
-        !this.readonly
-      );
+      if (this.clearable && !this.readonly) {
+        const hasValue = isDef(this.value) && this.value !== '';
+        const trigger =
+          this.clearTrigger === 'always' ||
+          (this.clearTrigger === 'focus' && this.focused);
+
+        return hasValue && trigger;
+      }
     },
 
     showError() {
       if (this.error !== null) {
         return this.error;
       }
-      if (this.vanForm && this.vanForm.showError && this.validateMessage) {
+      if (this.vanForm && this.vanForm.showError && this.validateFailed) {
         return true;
       }
     },
@@ -180,7 +190,9 @@ export default createComponent({
       if (Array.isArray(value)) {
         return !value.length;
       }
-
+      if (value === 0) {
+        return false;
+      }
       return !value;
     },
 
@@ -208,7 +220,7 @@ export default createComponent({
       return rules.reduce(
         (promise, rule) =>
           promise.then(() => {
-            if (this.validateMessage) {
+            if (this.validateFailed) {
               return;
             }
 
@@ -219,6 +231,7 @@ export default createComponent({
             }
 
             if (!this.runSyncRule(value, rule)) {
+              this.validateFailed = true;
               this.validateMessage = this.getRuleMessage(value, rule);
               return;
             }
@@ -226,6 +239,7 @@ export default createComponent({
             if (rule.validator) {
               return this.runValidator(value, rule).then((result) => {
                 if (result === false) {
+                  this.validateFailed = true;
                   this.validateMessage = this.getRuleMessage(value, rule);
                 }
               });
@@ -241,8 +255,9 @@ export default createComponent({
           resolve();
         }
 
+        this.resetValidation();
         this.runRules(rules).then(() => {
-          if (this.validateMessage) {
+          if (this.validateFailed) {
             resolve({
               name: this.name,
               message: this.validateMessage,
@@ -270,17 +285,14 @@ export default createComponent({
     },
 
     resetValidation() {
-      if (this.validateMessage) {
+      if (this.validateFailed) {
+        this.validateFailed = false;
         this.validateMessage = '';
       }
     },
 
-    updateValue(value) {
-      value = String(value);
-
-      if (value === this.currentValue) {
-        return;
-      }
+    updateValue(value, trigger = 'onChange') {
+      value = isDef(value) ? String(value) : '';
 
       // native maxlength not work when type is number
       const { maxlength } = this;
@@ -289,11 +301,11 @@ export default createComponent({
       }
 
       if (this.type === 'number' || this.type === 'digit') {
-        const allowDot = this.type === 'number';
-        value = formatNumber(value, allowDot);
+        const isNumber = this.type === 'number';
+        value = formatNumber(value, isNumber, isNumber);
       }
 
-      if (this.formatter) {
+      if (this.formatter && trigger === this.formatTrigger) {
         value = this.formatter(value);
       }
 
@@ -331,6 +343,7 @@ export default createComponent({
 
     onBlur(event) {
       this.focused = false;
+      this.updateValue(this.value, 'onBlur');
       this.$emit('blur', event);
       this.validateWithTrigger('onBlur');
       resetScroll();
@@ -493,12 +506,10 @@ export default createComponent({
     genWordLimit() {
       if (this.showWordLimit && this.maxlength) {
         const count = (this.value || '').length;
-        const full = count >= this.maxlength;
 
         return (
           <div class={bem('word-limit')}>
-            <span class={bem('word-num', { full })}>{count}</span>/
-            {this.maxlength}
+            <span class={bem('word-num')}>{count}</span>/{this.maxlength}
           </div>
         );
       }
@@ -577,6 +588,7 @@ export default createComponent({
         arrowDirection={this.arrowDirection}
         class={bem({
           error: this.showError,
+          disabled: this.disabled,
           [`label-${labelAlign}`]: labelAlign,
           'min-height': this.type === 'textarea' && !this.autosize,
         })}

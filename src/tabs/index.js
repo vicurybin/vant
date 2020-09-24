@@ -5,6 +5,7 @@ import { route } from '../utils/router';
 import { isHidden } from '../utils/dom/style';
 import { on, off } from '../utils/dom/event';
 import { BORDER_TOP_BOTTOM } from '../utils/constant';
+import { callInterceptor } from '../utils/interceptor';
 import {
   getScroller,
   getVisibleTop,
@@ -46,6 +47,7 @@ export default createComponent({
 
   props: {
     color: String,
+    border: Boolean,
     sticky: Boolean,
     animated: Boolean,
     swipeable: Boolean,
@@ -53,6 +55,7 @@ export default createComponent({
     background: String,
     lineWidth: [Number, String],
     lineHeight: [Number, String],
+    beforeChange: Function,
     titleActiveColor: String,
     titleInactiveColor: String,
     type: {
@@ -62,10 +65,6 @@ export default createComponent({
     active: {
       type: [Number, String],
       default: 0,
-    },
-    border: {
-      type: Boolean,
-      default: true,
     },
     ellipsis: {
       type: Boolean,
@@ -85,7 +84,7 @@ export default createComponent({
     },
     swipeThreshold: {
       type: [Number, String],
-      default: 4,
+      default: 5,
     },
   },
 
@@ -206,11 +205,10 @@ export default createComponent({
 
         const title = titles[this.currentIndex].$el;
         const { lineWidth, lineHeight } = this;
-        const width = isDef(lineWidth) ? lineWidth : title.offsetWidth / 2;
         const left = title.offsetLeft + title.offsetWidth / 2;
 
         const lineStyle = {
-          width: addUnit(width),
+          width: addUnit(lineWidth),
           backgroundColor: this.color,
           transform: `translateX(${left}px) translateX(-50%)`,
         };
@@ -267,14 +265,22 @@ export default createComponent({
     },
 
     // emit event when clicked
-    onClick(index) {
+    onClick(item, index) {
       const { title, disabled, computedName } = this.children[index];
       if (disabled) {
         this.$emit('disabled', computedName, title);
       } else {
-        this.setCurrentIndex(index);
-        this.scrollToCurrentContent();
+        callInterceptor({
+          interceptor: this.beforeChange,
+          args: [computedName],
+          done: () => {
+            this.setCurrentIndex(index);
+            this.scrollToCurrentContent();
+          },
+        });
+
         this.$emit('click', computedName, title);
+        route(item.$router, item);
       }
     },
 
@@ -298,7 +304,15 @@ export default createComponent({
       this.$emit('scroll', params);
     },
 
-    scrollToCurrentContent() {
+    // @exposed-api
+    scrollTo(name) {
+      this.$nextTick(() => {
+        this.setCurrentIndexByName(name);
+        this.scrollToCurrentContent(true);
+      });
+    },
+
+    scrollToCurrentContent(immediate = false) {
       if (this.scrollspy) {
         const target = this.children[this.currentIndex];
         const el = target?.$el;
@@ -307,7 +321,7 @@ export default createComponent({
           const to = getElementTop(el, this.scroller) - this.scrollOffset;
 
           this.lockScroll = true;
-          scrollTopTo(this.scroller, to, +this.duration, () => {
+          scrollTopTo(this.scroller, to, immediate ? 0 : +this.duration, () => {
             this.lockScroll = false;
           });
         }
@@ -337,7 +351,7 @@ export default createComponent({
   },
 
   render() {
-    const { type, ellipsis, animated, scrollable } = this;
+    const { type, animated, scrollable } = this;
 
     const Nav = this.children.map((item, index) => (
       <Title
@@ -345,12 +359,11 @@ export default createComponent({
         refInFor
         type={type}
         dot={item.dot}
-        info={isDef(item.badge) ? item.badge : item.info}
+        info={item.badge ?? item.info}
         title={item.title}
         color={this.color}
         style={item.titleStyle}
         isActive={index === this.currentIndex}
-        ellipsis={ellipsis}
         disabled={item.disabled}
         scrollable={scrollable}
         activeColor={this.titleActiveColor}
@@ -360,8 +373,7 @@ export default createComponent({
           default: () => item.slots('title'),
         }}
         onClick={() => {
-          this.onClick(index);
-          route(item.$router, item);
+          this.onClick(item, index);
         }}
       />
     ));
@@ -377,7 +389,7 @@ export default createComponent({
         <div
           ref="nav"
           role="tablist"
-          class={bem('nav', [type])}
+          class={bem('nav', [type, { complete: this.scrollable }])}
           style={this.navStyle}
         >
           {this.slots('nav-left')}

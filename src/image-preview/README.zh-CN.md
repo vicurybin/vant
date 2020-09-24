@@ -46,9 +46,9 @@ ImagePreview([
 ]);
 ```
 
-### 传入配置项
+### 指定初始位置
 
-通过传入配置对象，可以指定初始图片的位置、监听关闭事件。
+ImagePreview 支持传入配置对象，并通过 `startPosition` 选项指定图片的初始位置（索引值）。
 
 ```js
 ImagePreview({
@@ -57,9 +57,6 @@ ImagePreview({
     'https://img.yzcdn.cn/vant/apple-2.jpg',
   ],
   startPosition: 1,
-  onClose() {
-    // do something
-  },
 });
 ```
 
@@ -74,6 +71,24 @@ ImagePreview({
     'https://img.yzcdn.cn/vant/apple-2.jpg',
   ],
   closeable: true,
+});
+```
+
+### 监听关闭事件
+
+通过 `onClose` 选项监听图片预览的关闭事件。
+
+```js
+import { Toast } from 'vant';
+
+ImagePreview({
+  images: [
+    'https://img.yzcdn.cn/vant/apple-1.jpg',
+    'https://img.yzcdn.cn/vant/apple-2.jpg',
+  ],
+  onClose() {
+    Toast('关闭');
+  },
 });
 ```
 
@@ -92,7 +107,7 @@ const instance = ImagePreview({
 
 setTimeout(() => {
   instance.close();
-}, 1000);
+}, 2000);
 ```
 
 ### 组件调用
@@ -117,7 +132,6 @@ export default {
       ],
     };
   },
-
   methods: {
     onChange(index) {
       this.index = index;
@@ -141,16 +155,17 @@ export default {
 | showIndicators | 是否显示轮播指示器 | _boolean_ | `false` |
 | loop | 是否开启循环播放 | _boolean_ | `true` |
 | onClose | 关闭时的回调函数 | _Function_ | - |
-| onChange `v2.0.3` | 切换图片时的回调函数，回调参数为当前索引 | _Function_ | - |
+| onChange | 切换图片时的回调函数，回调参数为当前索引 | _Function_ | - |
 | onScale | 缩放图片时的回调函数，回调参数为当前索引和当前缩放值组成的对象 | _Function_ | - |
 | asyncClose | 是否开启异步关闭 | _boolean_ | `false` |
-| closeOnPopstate | 是否在页面回退时自动关闭 | _boolean_ | `false` |
+| closeOnPopstate | 是否在页面回退时自动关闭 | _boolean_ | `true` |
 | className | 自定义类名 | _any_ | - |
 | maxZoom | 手势缩放时，最大缩放比例 | _number \| string_ | `3` |
 | minZoom | 手势缩放时，最小缩放比例 | _number \| string_ | `1/3` |
-| closeable | 是否显示关闭图标 | _boolean_ | `false` |
-| closeIcon | 关闭图标名称或图片链接 | _string_ | `clear` |
-| closeIconPosition | 关闭图标位置，可选值为`top-left`<br>`bottom-left` `bottom-right` | _string_ | `top-right` |
+| closeable `v2.5.0` | 是否显示关闭图标 | _boolean_ | `false` |
+| closeIcon `v2.5.0` | 关闭图标名称或图片链接 | _string_ | `clear` |
+| closeIconPosition `v2.5.0` | 关闭图标位置，可选值为`top-left`<br>`bottom-left` `bottom-right` | _string_ | `top-right` |
+| getContainer | 指定挂载的节点，[用法示例](#/zh-CN/popup#zhi-ding-gua-zai-wei-zhi) | _string \| () => Element_ | - |
 
 ### Props
 
@@ -165,13 +180,14 @@ export default {
 | show-indicators | 是否显示轮播指示器 | _boolean_ | `false` |
 | loop | 是否开启循环播放 | _boolean_ | `true` |
 | async-close | 是否开启异步关闭 | _boolean_ | `false` |
-| close-on-popstate | 是否在页面回退时自动关闭 | _boolean_ | `false` |
+| close-on-popstate | 是否在页面回退时自动关闭 | _boolean_ | `true` |
 | class-name | 自定义类名 | _any_ | - |
 | max-zoom | 手势缩放时，最大缩放比例 | _number \| string_ | `3` |
 | min-zoom | 手势缩放时，最小缩放比例 | _number \| string_ | `1/3` |
 | closeable `v2.5.0` | 是否显示关闭图标 | _boolean_ | `false` |
 | close-icon `v2.5.0` | 关闭图标名称或图片链接 | _string_ | `clear` |
 | close-icon-position `v2.5.0` | 关闭图标位置，可选值为`top-left`<br>`bottom-left` `bottom-right` | _string_ | `top-right` |
+| get-container | 指定挂载的节点，[用法示例](#/zh-CN/popup#zhi-ding-gua-zai-wei-zhi) | _string \| () => Element_ | - |
 
 ### Events
 
@@ -183,6 +199,7 @@ export default {
 | closed `v2.5.6` | 关闭且且动画结束后触发 | - |
 | change | 切换当前图片时触发 | index: 当前图片的索引 |
 | scale `v2.5.0` | 缩放当前图片时触发 | { index: 当前图片的索引, scale: 当前缩放的值 } |
+| swipeTo `2.9.0` | 切换到指定位置 | index: number, options: Options | void |
 
 ### Slots
 

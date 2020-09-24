@@ -6,21 +6,22 @@ let instance;
 
 const defaultConfig = {
   loop: true,
-  images: [],
   value: true,
-  minZoom: 1 / 3,
+  images: [],
   maxZoom: 3,
-  className: '',
+  minZoom: 1 / 3,
   onClose: null,
   onChange: null,
+  className: '',
   showIndex: true,
   closeable: false,
   closeIcon: 'clear',
   asyncClose: false,
+  getContainer: 'body',
   startPosition: 0,
   swipeDuration: 500,
   showIndicators: false,
-  closeOnPopstate: false,
+  closeOnPopstate: true,
   closeIconPosition: 'top-right',
 };
 

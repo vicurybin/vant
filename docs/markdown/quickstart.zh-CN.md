@@ -31,6 +31,8 @@ npm i vant -S
 yarn add vant
 ```
 
+> Tips: Vue 3 项目请安装 Vant 3.0，参见 [issue#7035](https://github.com/youzan/vant/issues/7035)
+
 ### 示例工程
 
 我们提供了一个基于 Vue Cli 的[示例工程](https://github.com/youzan/vant-demo)，示例工程会帮助你了解如下内容：
@@ -116,12 +118,12 @@ Vue.use(Vant);
 <!-- 引入样式文件 -->
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/vant@2.8/lib/index.css"
+  href="https://cdn.jsdelivr.net/npm/vant@2.10/lib/index.css"
 />
 
 <!-- 引入 Vue 和 Vant 的 JS 文件 -->
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vant@2.8/lib/vant.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6/dist/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@2.10/lib/vant.min.js"></script>
 
 <script>
   // 在 #app 标签下渲染一个按钮组件
