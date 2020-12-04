@@ -189,7 +189,7 @@ export default createComponent({
         };
 
         return (
-          <div class={bem('content')}>
+          <div class={bem('content', { isolated: !hasTitle })}>
             <div {...data} />
           </div>
         );

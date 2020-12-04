@@ -1,5 +1,9 @@
 # Circle 环形进度条
 
+### 介绍
+
+圆环形的进度条组件，支持进度渐变动画。
+
 ### 引入
 
 ```js
@@ -13,7 +17,7 @@ Vue.use(Circle);
 
 ### 基础用法
 
-`rate`属性表示进度条的目标进度，`v-model`表示动画过程中的实时进度。当`rate`发生变化时，`v-model`会以`speed`的速度变化，直至达到`rate`设定的值。
+`rate` 属性表示进度条的目标进度，`v-model` 表示动画过程中的实时进度。当 `rate` 发生变化时，`v-model` 会以 `speed` 的速度变化，直至达到 `rate` 设定的值。
 
 ```html
 <van-circle v-model="currentRate" :rate="30" :speed="100" :text="text" />
@@ -36,7 +40,7 @@ export default {
 
 ### 宽度定制
 
-通过`stroke-width`属性来控制进度条宽度
+通过 `stroke-width` 属性来控制进度条宽度。
 
 ```html
 <van-circle
@@ -49,7 +53,7 @@ export default {
 
 ### 颜色定制
 
-通过`color`属性来控制进度条颜色，`layer-color`属性来控制轨道颜色
+通过 `color` 属性来控制进度条颜色，`layer-color` 属性来控制轨道颜色。
 
 ```html
 <van-circle
@@ -62,7 +66,7 @@ export default {
 
 ### 渐变色
 
-`color`属性支持传入对象格式来定义渐变色
+`color` 属性支持传入对象格式来定义渐变色。
 
 ```html
 <van-circle
@@ -89,7 +93,7 @@ export default {
 
 ### 逆时针方向
 
-将`clockwise`设置为`false`，进度会从逆时针方向开始
+将 `clockwise` 设置为 `false`，进度会从逆时针方向开始。
 
 ```html
 <van-circle
@@ -102,7 +106,7 @@ export default {
 
 ### 大小定制
 
-通过`size`属性设置圆环直径
+通过 `size` 属性设置圆环直径。
 
 ```html
 <van-circle v-model="currentRate" :rate="rate" size="120px" text="大小定制" />
@@ -131,3 +135,14 @@ export default {
 | 名称    | 说明           |
 | ------- | -------------- |
 | default | 自定义文字内容 |
+
+### 样式变量
+
+组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
+
+| 名称                     | 默认值              | 描述 |
+| ------------------------ | ------------------- | ---- |
+| @circle-text-color       | `@text-color`       | -    |
+| @circle-text-font-weight | `@font-weight-bold` | -    |
+| @circle-text-font-size   | `@font-size-md`     | -    |
+| @circle-text-line-height | `@line-height-md`   | -    |

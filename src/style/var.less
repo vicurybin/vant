@@ -53,7 +53,7 @@
 @line-height-md: 20px;
 @line-height-lg: 22px;
 @base-font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue',
-  Helvetica, Segoe UI, Arial, Roboto, 'PingFang SC', 'Hiragino Sans GB',
+  Helvetica, Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB',
   'Microsoft Yahei', sans-serif;
 @price-integer-font-family: Avenir-Heavy, PingFang SC, Helvetica Neue, Arial,
   sans-serif;
@@ -117,6 +117,18 @@
 @address-list-item-line-height: @line-height-sm;
 @address-list-item-radio-icon-color: @red;
 @address-list-edit-icon-size: 20px;
+
+// Badge
+@badge-size: 16px;
+@badge-color: @white;
+@badge-padding: 0 3px;
+@badge-font-size: @font-size-sm;
+@badge-font-weight: @font-weight-bold;
+@badge-border-width: @border-width-base;
+@badge-background-color: @red;
+@badge-dot-color: @red;
+@badge-dot-size: 8px;
+@badge-font-family: -apple-system-font, Helvetica Neue, Arial, sans-serif;
 
 // Button
 @button-mini-height: 24px;
@@ -319,8 +331,10 @@
 @dialog-message-line-height: @line-height-md;
 @dialog-message-max-height: 60vh;
 @dialog-has-title-message-text-color: @gray-7;
-@dialog-has-title-message-padding-top: @padding-sm;
+@dialog-has-title-message-padding-top: @padding-xs;
 @dialog-confirm-button-text-color: @white;
+@dialog-button-height: 48px;
+@dialog-round-button-height: 36px;
 
 // Divider
 @divider-margin: @padding-md 0;
@@ -559,10 +573,25 @@
 @picker-loading-icon-color: @blue;
 @picker-loading-mask-color: rgba(255, 255, 255, 0.9);
 
+// Popover
+@popover-arrow-size: 6px;
+@popover-border-radius: @border-radius-lg;
+@popover-action-width: 128px;
+@popover-action-height: 44px;
+@popover-action-font-size: @font-size-md;
+@popover-action-line-height: @line-height-md;
+@popover-action-icon-size: 20px;
+@popover-light-text-color: @text-color;
+@popover-light-background-color: @white;
+@popover-light-action-disabled-text-color: @gray-5;
+@popover-dark-text-color: @white;
+@popover-dark-background-color: #4a4a4a;
+@popover-dark-action-disabled-text-color: @gray-6;
+
 // Popup
 @popup-background-color: @white;
 @popup-transition: transform @animation-duration-base;
-@popup-round-border-radius: 20px;
+@popup-round-border-radius: 16px;
 @popup-close-icon-size: 22px;
 @popup-close-icon-color: @gray-5;
 @popup-close-icon-active-color: @gray-6;
@@ -652,6 +681,8 @@
 @skeleton-row-height: 16px;
 @skeleton-row-background-color: @active-color;
 @skeleton-row-margin-top: @padding-sm;
+@skeleton-title-width: 40%;
+@skeleton-avatar-size: 32px;
 @skeleton-avatar-background-color: @active-color;
 @skeleton-animation-duration: 1.2s;
 
@@ -735,7 +766,6 @@
 @switch-width: 2em;
 @switch-height: 1em;
 @switch-node-size: 1em;
-@switch-node-z-index: 1;
 @switch-node-background-color: @white;
 @switch-node-box-shadow: 0 3px 1px 0 rgba(0, 0, 0, 0.05),
   0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 3px 3px 0 rgba(0, 0, 0, 0.05);
@@ -760,6 +790,7 @@
 @tabbar-item-font-size: @font-size-sm;
 @tabbar-item-text-color: @gray-7;
 @tabbar-item-active-color: @blue;
+@tabbar-item-active-background-color: @tabbar-background-color;
 @tabbar-item-line-height: 1;
 @tabbar-item-icon-size: 22px;
 @tabbar-item-margin-bottom: 4px;

@@ -78,12 +78,33 @@ export default {
 
 ### IndexBar Events
 
-| Event  | Description                 | Arguments |
-| ------ | --------------------------- | --------- |
-| select | Triggered when select index | index     |
+| Event | Description | Arguments |
+| --- | --- | --- |
+| select | Emitted when an index is selected | _index: number \| string_ |
+| change `v2.10.10` | Emitted when active index changed | _index: number \| string_ |
 
 ### IndexAnchor Slots
 
 | Name    | Description                           |
 | ------- | ------------------------------------- |
 | default | Anchor content, show index by default |
+
+### Less Variables
+
+How to use: [Custom Theme](#/en-US/theme).
+
+| Name                                  | Default Value       | Description |
+| ------------------------------------- | ------------------- | ----------- |
+| @index-bar-sidebar-z-index            | `2`                 | -           |
+| @index-bar-index-font-size            | `@font-size-xs`     | -           |
+| @index-bar-index-line-height          | `@line-height-xs`   | -           |
+| @index-bar-index-active-color         | `@green`            | -           |
+| @index-anchor-z-index                 | `1`                 | -           |
+| @index-anchor-padding                 | `0 @padding-md`     | -           |
+| @index-anchor-text-color              | `@text-color`       | -           |
+| @index-anchor-font-weight             | `@font-weight-bold` | -           |
+| @index-anchor-font-size               | `@font-size-md`     | -           |
+| @index-anchor-line-height             | `32px`              | -           |
+| @index-anchor-background-color        | `transparent`       | -           |
+| @index-anchor-sticky-text-color       | `@green`            | -           |
+| @index-anchor-sticky-background-color | `@white`            | -           |

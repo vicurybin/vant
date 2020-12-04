@@ -143,6 +143,7 @@
   &__confirm,
   &__cancel {
     flex: 1;
+    height: @dialog-button-height;
     margin: 0;
     border: 0;
     border-radius: 0;
@@ -171,6 +172,11 @@
     .van-dialog__message {
       padding-bottom: @padding-md;
       color: @text-color;
+    }
+
+    .van-dialog__confirm,
+    .van-dialog__cancel {
+      height: @dialog-round-button-height;
     }
 
     .van-dialog__confirm {

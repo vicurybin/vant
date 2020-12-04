@@ -2,7 +2,7 @@
 
 ### 介绍
 
-宫格可以在水平方向上把页面分隔成等宽度的区块，用于展示内容或进行页面导航
+宫格可以在水平方向上把页面分隔成等宽度的区块，用于展示内容或进行页面导航。
 
 ### 引入
 
@@ -18,7 +18,7 @@ Vue.use(GridItem);
 
 ### 基础用法
 
-通过`icon`属性设置格子内的图标，`text`属性设置文字内容
+通过 `icon` 属性设置格子内的图标，`text` 属性设置文字内容。
 
 ```html
 <van-grid>
@@ -31,7 +31,7 @@ Vue.use(GridItem);
 
 ### 自定义列数
 
-默认一行展示四个格子，可以通过`column-num`自定义列数
+默认一行展示四个格子，可以通过 `column-num` 自定义列数。
 
 ```html
 <van-grid :column-num="3">
@@ -41,7 +41,7 @@ Vue.use(GridItem);
 
 ### 自定义内容
 
-通过插槽可以自定义格子展示的内容
+通过插槽可以自定义格子展示的内容。
 
 ```html
 <van-grid :border="false" :column-num="3">
@@ -59,7 +59,7 @@ Vue.use(GridItem);
 
 ### 正方形格子
 
-设置`square`属性后，格子的高度会和宽度保持一致
+设置 `square` 属性后，格子的高度会和宽度保持一致。
 
 ```html
 <van-grid square>
@@ -69,7 +69,7 @@ Vue.use(GridItem);
 
 ### 格子间距
 
-通过`gutter`属性设置格子之间的距离
+通过 `gutter` 属性设置格子之间的距离。
 
 ```html
 <van-grid :gutter="10">
@@ -79,7 +79,7 @@ Vue.use(GridItem);
 
 ### 内容横排
 
-将`direction`属性设置为`horizontal`，可以让宫格的内容呈横向排列
+将 `direction` 属性设置为 `horizontal`，可以让宫格的内容呈横向排列。
 
 ```html
 <van-grid direction="horizontal" :column-num="2">
@@ -91,7 +91,7 @@ Vue.use(GridItem);
 
 ### 页面导航
 
-通过`to`属性设置`vue-router`跳转链接，通过`url`属性设置 URL 跳转链接
+通过 `to` 属性设置 `vue-router` 跳转链接，通过 `url` 属性设置 URL 跳转链接。
 
 ```html
 <van-grid clickable :column-num="2">
@@ -102,7 +102,7 @@ Vue.use(GridItem);
 
 ### 徽标提示
 
-设置`dot`属性后，会在图标右上角展示一个小红点。设置`badge`属性后，会在图标右上角展示相应的徽标
+设置 `dot` 属性后，会在图标右上角展示一个小红点。设置 `badge` 属性后，会在图标右上角展示相应的徽标。
 
 ```html
 <van-grid :column-num="2">
@@ -153,3 +153,16 @@ Vue.use(GridItem);
 | default | 自定义宫格的所有内容 |
 | icon    | 自定义图标           |
 | text    | 自定义文字           |
+
+### 样式变量
+
+组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
+
+| 名称                                | 默认值                    | 描述 |
+| ----------------------------------- | ------------------------- | ---- |
+| @grid-item-content-padding          | `@padding-md @padding-xs` | -    |
+| @grid-item-content-background-color | `@white`                  | -    |
+| @grid-item-content-active-color     | `@active-color`           | -    |
+| @grid-item-icon-size                | `28px`                    | -    |
+| @grid-item-text-color               | `@gray-7`                 | -    |
+| @grid-item-text-font-size           | `@font-size-sm`           | -    |

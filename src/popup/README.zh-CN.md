@@ -2,7 +2,7 @@
 
 ### 介绍
 
-弹出层容器，用于展示弹窗、信息提示等内容，支持多个弹出层叠加展示
+弹出层容器，用于展示弹窗、信息提示等内容，支持多个弹出层叠加展示。
 
 ### 引入
 
@@ -17,7 +17,7 @@ Vue.use(Popup);
 
 ### 基础用法
 
-通过`v-model`控制弹出层是否展示
+通过 `v-model` 控制弹出层是否展示。
 
 ```html
 <van-cell is-link @click="showPopup">展示弹出层</van-cell>
@@ -42,7 +42,7 @@ export default {
 
 ### 弹出位置
 
-通过`position`属性设置弹出位置，默认居中弹出，可以设置为`top`、`bottom`、`left`、`right`
+通过 `position` 属性设置弹出位置，默认居中弹出，可以设置为 `top`、`bottom`、`left`、`right`。
 
 ```html
 <van-popup v-model="show" position="top" :style="{ height: '30%' }" />
@@ -50,7 +50,7 @@ export default {
 
 ### 关闭图标
 
-设置`closeable`属性后，会在弹出层的右上角显示关闭图标，并且可以通过`close-icon`属性自定义图标，使用`close-icon-position`属性可以自定义图标位置
+设置 `closeable` 属性后，会在弹出层的右上角显示关闭图标，并且可以通过 `close-icon` 属性自定义图标，使用 `close-icon-position` 属性可以自定义图标位置。
 
 ```html
 <van-popup
@@ -79,7 +79,7 @@ export default {
 
 ### 圆角弹窗
 
-设置`round`属性后，弹窗会根据弹出位置添加不同的圆角样式
+设置 `round` 属性后，弹窗会根据弹出位置添加不同的圆角样式。
 
 ```html
 <van-popup v-model="show" round position="bottom" :style="{ height: '30%' }" />
@@ -87,7 +87,7 @@ export default {
 
 ### 指定挂载位置
 
-弹出层默认挂载到组件所在位置，可以通过`get-container`属性指定挂载位置
+弹出层默认挂载到组件所在位置，可以通过 `get-container` 属性指定挂载位置。
 
 ```html
 <!-- 挂载到 body 节点下 -->
@@ -134,16 +134,33 @@ export default {
 | close-icon | 关闭图标名称或图片链接 | _string_ | `cross` |
 | close-icon-position | 关闭图标位置，可选值为`top-left`<br>`bottom-left` `bottom-right` | _string_ | `top-right` |
 | transition | 动画类名，等价于 [transtion](https://cn.vuejs.org/v2/api/index.html#transition) 的`name`属性 | _string_ | - |
+| transition-appear `v2.10.14` | 是否在初始渲染时启用过渡动画 | _boolean_ | `false` |
 | get-container | 指定挂载的节点 | _string \| () => Element_ | - |
-| safe-area-inset-bottom | 是否开启[底部安全区适配](#/zh-CN/quickstart#di-bu-an-quan-qu-gua-pei) | _boolean_ | `false` |
+| safe-area-inset-bottom | 是否开启[底部安全区适配](#/zh-CN/advanced-usage#di-bu-an-quan-qu-gua-pei) | _boolean_ | `false` |
 
 ### Events
 
-| 事件名        | 说明                       | 回调参数       |
-| ------------- | -------------------------- | -------------- |
-| click         | 点击弹出层时触发           | _event: Event_ |
-| open          | 打开弹出层时触发           | -              |
-| close         | 关闭弹出层时触发           | -              |
-| opened        | 打开弹出层且动画结束后触发 | -              |
-| closed        | 关闭弹出层且动画结束后触发 | -              |
-| click-overlay | 点击遮罩层时触发           | -              |
+| 事件名                     | 说明                       | 回调参数       |
+| -------------------------- | -------------------------- | -------------- |
+| click                      | 点击弹出层时触发           | _event: Event_ |
+| click-overlay              | 点击遮罩层时触发           | -              |
+| click-close-icon `v2.11.0` | 点击关闭图标时触发         | _event: Event_ |
+| open                       | 打开弹出层时触发           | -              |
+| close                      | 关闭弹出层时触发           | -              |
+| opened                     | 打开弹出层且动画结束后触发 | -              |
+| closed                     | 关闭弹出层且动画结束后触发 | -              |
+
+### 样式变量
+
+组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
+
+| 名称                           | 默认值                               | 描述 |
+| ------------------------------ | ------------------------------------ | ---- |
+| @popup-background-color        | `@white`                             | -    |
+| @popup-transition              | `transform @animation-duration-base` | -    |
+| @popup-round-border-radius     | `16px`                               | -    |
+| @popup-close-icon-size         | `22px`                               | -    |
+| @popup-close-icon-color        | `@gray-5`                            | -    |
+| @popup-close-icon-active-color | `@gray-6`                            | -    |
+| @popup-close-icon-margin       | `16px`                               | -    |
+| @popup-close-icon-z-index      | `1`                                  | -    |
